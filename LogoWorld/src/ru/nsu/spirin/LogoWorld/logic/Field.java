@@ -31,7 +31,7 @@ public class Field {
     }
 
     public void setDrawn(int r, int c, boolean isDrawn) {
-        map[r * this.height + c] = isDrawn;
+        map[normalizeRow(r)  * this.height + normalizeCol(c)] = isDrawn;
     }
 
     private int normalizeRow(int r) {

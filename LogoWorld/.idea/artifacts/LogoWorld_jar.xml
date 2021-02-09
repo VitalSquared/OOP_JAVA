@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="LogoWorld:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/LogoWorld_jar</output-path>
+    <root id="archive" name="LogoWorld.jar">
+      <element id="module-output" name="LogoWorld" />
+      <element id="directory" name="properties">
+        <element id="dir-copy" path="$PROJECT_DIR$/properties" />
+      </element>
+    </root>
+  </artifact>
+</component>
