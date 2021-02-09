@@ -1,2 +1,2 @@
-java -jar LogoWorld.jar
+java -jar LogoWorld.jar prog.txt
 pause

@@ -2,10 +2,12 @@ package ru.nsu.spirin.LogoWorld.drawing;
 
 import ru.nsu.spirin.LogoWorld.logic.Executor;
 import ru.nsu.spirin.LogoWorld.logic.Game;
+import ru.nsu.spirin.LogoWorld.logic.Program;
 import ru.nsu.spirin.LogoWorld.math.Pair;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class ConsoleView {
@@ -13,36 +15,43 @@ public class ConsoleView {
     private final int TEXTURE_SIZE = 2;
 
     private final Game game;
+    private final Program program;
 
     private final Texture backgroundTexture;
     private final Texture executorTexture;
     private final Texture drawingTexture;
 
-    public ConsoleView() throws IOException {
+    public ConsoleView(String programFileName) throws IOException {
         game = new Game();
         backgroundTexture = new Texture("    ", "");
         executorTexture = new Texture("Exec", "");
         drawingTexture = new Texture("####", "");
+        program = new Program(programFileName);
     }
 
     public void run() throws InterruptedException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Scanner scanner = new Scanner(System.in);
         String[] command;
         do {
-            command = scanner.nextLine().split(" +");
-            if (command.length == 0) {
-                renderMap();
-                Thread.sleep(300);
+            command = program.nextCommand().trim().split(" +");
+            if (command.length == 0 || command.length == 1 && command[0].equals("")) {
                 continue;
             }
-            if (command[0].equals("EXIT")) break;
             if (game.parseCommand(command)) {
                 while (game.step()) {
                     renderMap();
                     Thread.sleep(300);
                 }
             }
-        } while (true);
+            else if (program.requestContinuation()) {
+                System.out.println("Invalid command. Do you want to continue executing program? (Y/N)");
+                String ans = scanner.next();
+                if (!ans.toUpperCase(Locale.ROOT).equals("Y")) {
+                    break;
+                }
+            }
+        } while (!program.isFinished());
+        program.close();
     }
 
     private void renderMap() throws IOException, InterruptedException {

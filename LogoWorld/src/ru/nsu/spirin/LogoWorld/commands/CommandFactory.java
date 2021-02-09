@@ -15,7 +15,7 @@ public class CommandFactory {
     Map<String, Command> instances;
 
     public CommandFactory(Executor executor) throws IOException {
-        InputStream stream = ClassLoader.getSystemResourceAsStream("properties/commands.properties");
+        InputStream stream = ClassLoader.getSystemResourceAsStream("commands.properties");
         if (stream == null) throw new IOException("Couldn't locate commands properties file\n");
         Properties properties = new Properties();
         properties.load(stream);
