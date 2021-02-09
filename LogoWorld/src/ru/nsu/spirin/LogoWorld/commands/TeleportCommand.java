@@ -15,9 +15,11 @@ public class TeleportCommand implements Command {
     public boolean validateArgs(String[] args) {
         if (args.length != 2) return false;
         try {
-            Integer.parseInt(args[0]);
-            Integer.parseInt(args[1]);
-            return true;
+            int x = Integer.parseInt(args[0]);
+            int y = Integer.parseInt(args[1]);
+            int width = executor.getField().getWidth();
+            int height = executor.getField().getHeight();
+            return 0 <= x && x < width && 0 <= y && y < height;
         }
         catch (NumberFormatException e) {
             return false;
@@ -26,10 +28,11 @@ public class TeleportCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (steps >= 1) {
+        if (steps >= 1 || !executor.isValid()) {
             steps = 0;
             return false;
         }
+        steps++;
         int x = Integer.parseInt(args[0]);
         int y = Integer.parseInt(args[1]);
         executor.setPosition(y, x);

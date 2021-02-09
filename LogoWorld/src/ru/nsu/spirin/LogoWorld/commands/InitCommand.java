@@ -5,12 +5,10 @@ import ru.nsu.spirin.LogoWorld.logic.Field;
 
 public class InitCommand implements Command {
     private Executor executor;
-    private Field field;
     private int steps;
 
-    public InitCommand(Executor executor, Field field) {
+    public InitCommand(Executor executor) {
         this.executor = executor;
-        this.field = field;
         this.steps = 0;
     }
 
@@ -18,11 +16,11 @@ public class InitCommand implements Command {
     public boolean validateArgs(String[] args) {
         if (args.length != 4) return false;
         try {
-            int w = Integer.parseInt(args[0]);
-            int h = Integer.parseInt(args[1]);
+            int width = Integer.parseInt(args[0]);
+            int height = Integer.parseInt(args[1]);
             int x = Integer.parseInt(args[2]);
             int y = Integer.parseInt(args[3]);
-            return true;
+            return 0 <= x && x < width && 0 <= y && y < height;
         }
         catch (NumberFormatException e) {
             return false;
@@ -40,8 +38,7 @@ public class InitCommand implements Command {
         int height = Integer.parseInt(args[1]);
         int x = Integer.parseInt(args[2]);
         int y = Integer.parseInt(args[3]);
-        field.setSize(width, height);
-        executor.setPosition(y, x);
+        executor.initField(width, height, x, y);
         return true;
     }
 }

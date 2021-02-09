@@ -16,7 +16,7 @@ public class WardCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (!executor.getIsDrawing()) return false;
+        if (!executor.getIsDrawing() || !executor.isValid()) return false;
         executor.setIsDrawing(false);
         return true;
     }
