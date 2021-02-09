@@ -1,3 +1,7 @@
+package ru.nsu.spirin.MorseCoder;
+
+import ru.nsu.spirin.MorseCoder.character.CharacterCase;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +20,11 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        if (args.length > 1) {
+            System.out.println("Too many arguments. Use file name with alphabet or nothing.\n");
+            return;
+        }
+
         Scanner scanner = new Scanner(System.in);
         String command = scanner.next();
         String fileName = scanner.next();
@@ -28,8 +37,13 @@ public class Main {
         try {
             reader = new InputStreamReader(new FileInputStream(fileName));
             stats = new OutputStreamWriter(new FileOutputStream(file[0] + "_stats" + file[1]));
-            MorseCoder morseCoder = new MorseCoder("properties/morse_code.properties");
-
+            MorseCoder morseCoder;
+            if (args.length == 1) {
+                morseCoder = new MorseCoder(args[0]);
+            }
+            else {
+                morseCoder = new MorseCoder();
+            }
             switch (command) {
                 case "code" -> morseCoder.encodeFile(reader);
                 case "decode" -> morseCoder.decodeFile(reader);
