@@ -1,19 +1,32 @@
 package ru.nsu.spirin.LogoWorld.math;
 
 public class Pair {
-    private int x;
-    private int y;
+    private final int first;
+    private final int second;
 
-    public Pair(int x, int y) {
-        this.x = x;
-        this.y = y;
+    /**
+     * Creates pair of integers
+     * @param first first element of pair
+     * @param second second element of pair
+     */
+    public Pair(int first, int second) {
+        this.first = first;
+        this.second = second;
     }
 
-    public int getX() {
-        return x;
+    /**
+     * Returns first element of pair
+     * @return first element of pair
+     */
+    public int getFirst() {
+        return first;
     }
 
-    public int getY() {
-        return y;
+    /**
+     * Returns second element of pair
+     * @return second element of pair
+     */
+    public int getSecond() {
+        return second;
     }
 }

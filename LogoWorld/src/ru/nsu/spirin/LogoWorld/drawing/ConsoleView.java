@@ -1,5 +1,6 @@
 package ru.nsu.spirin.LogoWorld.drawing;
 
+import ru.nsu.spirin.LogoWorld.exceptions.InvalidTextureSizeException;
 import ru.nsu.spirin.LogoWorld.logic.Executor;
 import ru.nsu.spirin.LogoWorld.logic.Game;
 import ru.nsu.spirin.LogoWorld.logic.Program;
@@ -12,7 +13,7 @@ import java.util.Scanner;
 
 public class ConsoleView {
 
-    private final int TEXTURE_SIZE = 2;
+    private final int TEXTURE_SIZE = 1;
 
     private final Game game;
     private final Program program;
@@ -21,23 +22,34 @@ public class ConsoleView {
     private final Texture executorTexture;
     private final Texture drawingTexture;
 
-    public ConsoleView(String programFileName) throws IOException {
+    /**
+     * Creates new {@code ConsoleView} controller which shows an execution of given program
+     * @param programFileName file name which contains program to be exectued
+     * @throws IOException if file doesn't exist
+     * @throws InvalidTextureSizeException if textures are being created with wrong size
+     */
+    public ConsoleView(String programFileName) throws IOException, InvalidTextureSizeException {
         game = new Game();
-        backgroundTexture = new Texture("    ", "");
-        executorTexture = new Texture("Exec", "");
-        drawingTexture = new Texture("####", "");
+        backgroundTexture = new Texture(" ", "");
+        executorTexture = new Texture("@", "");
+        drawingTexture = new Texture("#", "");
         program = new Program(programFileName);
     }
 
+    /**
+     * Starts to display an execution of program
+     * @throws InterruptedException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
     public void run() throws InterruptedException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         Scanner scanner = new Scanner(System.in);
-        String[] command;
         do {
-            command = program.nextCommand().trim().split(" +");
-            if (command.length == 0 || command.length == 1 && command[0].equals("")) {
-                continue;
-            }
-            if (game.parseCommand(command)) {
+            if (game.parseCommand(program.nextCommand().trim())) {
                 while (game.step()) {
                     renderMap();
                     Thread.sleep(300);
@@ -72,8 +84,8 @@ public class ConsoleView {
 
             Pair executorCoords = executor.getPosition();
 
-            int top_left_r = executorCoords.getX() - map_height / 2;
-            int top_left_c = executorCoords.getY() - map_width / 2;
+            int top_left_r = executorCoords.getFirst() - map_height / 2;
+            int top_left_c = executorCoords.getSecond() - map_width / 2;
 
             String[][] buffer = new String[map_height * TEXTURE_SIZE][map_width * TEXTURE_SIZE];
 
@@ -86,8 +98,8 @@ public class ConsoleView {
                 }
             }
 
-            int pos_r = executorCoords.getX();
-            int pos_c = executorCoords.getY();
+            int pos_r = executorCoords.getFirst();
+            int pos_c = executorCoords.getSecond();
             putTextureInBuffer(buffer, executorTexture, new Pair(TEXTURE_SIZE * (pos_r - top_left_r), TEXTURE_SIZE * (pos_c - top_left_c)));
 
             StringBuilder output = new StringBuilder();
@@ -125,8 +137,8 @@ public class ConsoleView {
     private void putTextureInBuffer(String[][] buffer, Texture texture, Pair top_left) {
         for (int tr = 0; tr < texture.getSize(); tr++) {
             for (int tc = 0; tc < texture.getSize(); tc++) {
-                int r = top_left.getX() + tr;
-                int c = top_left.getY() + tc;
+                int r = top_left.getFirst() + tr;
+                int c = top_left.getSecond() + tc;
                 buffer[r][c] = texture.getPixel(tr, tc);
             }
         }

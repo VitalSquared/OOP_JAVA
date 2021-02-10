@@ -4,10 +4,10 @@ import ru.nsu.spirin.LogoWorld.math.Direction;
 import ru.nsu.spirin.LogoWorld.math.Pair;
 
 public class Executor {
-    int pos_r;
-    int pos_c;
-    boolean isDrawing;
-    Field field;
+    private int pos_r;
+    private int pos_c;
+    private boolean isDrawing;
+    private Field field;
 
     public Executor(Field field) {
         this.isDrawing = false;
@@ -33,17 +33,9 @@ public class Executor {
     }
 
     public void move(Direction dir) {
-        if (this.isDrawing) {
-            field.setDrawn(this.pos_r, this.pos_c, true);
-        }
-        Pair delta = Direction.dirToDelta(dir);
-        this.pos_r += delta.getX();
-        this.pos_c += delta.getY();
-        if (this.isDrawing) {
-            field.setDrawn(this.pos_r, this.pos_c, true);
-        }
-
-        normalizeCoords();
+        Pair delta = Direction.convertDirectionToDelta(dir);
+        this.pos_r += delta.getFirst();
+        this.pos_c += delta.getSecond();
     }
 
     public Pair getPosition() {
@@ -56,13 +48,5 @@ public class Executor {
 
     public Field getField() {
         return field;
-    }
-
-    private void normalizeCoords() {
-        while (pos_r < 0) pos_r += field.getHeight();
-        while (pos_r >= field.getHeight()) pos_r -= field.getHeight();
-
-        while (pos_c < 0) pos_c += field.getWidth();
-        while (pos_c >= field.getWidth()) pos_c -= field.getWidth();
     }
 }

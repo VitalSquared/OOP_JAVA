@@ -7,23 +7,35 @@ public enum Direction {
     RIGHT,
     UNKNOWN;
 
-    public static Pair dirToDelta(Direction dir) {
+    /**
+     * Converts given {@code Direction} to delta vector
+     * @param direction {@code Direction} to be converted
+     * @return delta vector which represents direction
+     */
+    public static Pair convertDirectionToDelta(Direction direction) {
         int dr = 0, dc = 0;
-        switch (dir) {
-            case UP: dr = -1; dc = 0; break;
-            case DOWN: dr = 1; dc = 0; break;
-            case LEFT: dr = 0; dc = -1; break;
-            case RIGHT: dr = 0; dc = 1; break;
+        if (direction != null) {
+            switch (direction) {
+                case UP -> dr = -1;
+                case DOWN -> dr = 1;
+                case LEFT -> dc = -1;
+                case RIGHT -> dc = 1;
+            }
         }
         return new Pair(dr, dc);
     }
 
-    public static Direction stringToDir(String str) {
-        return switch(str) {
-            case "U" -> UP;
-            case "D" -> DOWN;
-            case "L" -> LEFT;
-            case "R" -> RIGHT;
+    /**
+     * Converts given character (U, D, L, R) to {@code Direction}
+     * @param ch character to be converted
+     * @return direction which represents character
+     */
+    public static Direction convertCharacterToDirection(char ch) {
+        return switch(ch) {
+            case 'U' -> UP;
+            case 'D' -> DOWN;
+            case 'L' -> LEFT;
+            case 'R' -> RIGHT;
             default -> UNKNOWN;
         };
     }

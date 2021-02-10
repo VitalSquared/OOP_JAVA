@@ -14,8 +14,8 @@ public class MoveCommand implements Command {
 
     @Override
     public boolean validateArgs(String[] args) {
-        if (args.length != 2) return false;
-        if (Direction.stringToDir(args[0]) == Direction.UNKNOWN) return false;
+        if (args.length != 2 || args[0].length() != 1) return false;
+        if (Direction.convertCharacterToDirection(args[0].charAt(0)) == Direction.UNKNOWN) return false;
         try {
             int s = Integer.parseInt(args[1]);
             return s > 0;
@@ -32,7 +32,7 @@ public class MoveCommand implements Command {
             return false;
         }
         steps++;
-        executor.move(Direction.stringToDir(args[0]));
+        executor.move(Direction.convertCharacterToDirection(args[0].charAt(0)));
         return true;
     }
 }
