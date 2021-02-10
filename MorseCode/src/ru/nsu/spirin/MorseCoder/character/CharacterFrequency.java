@@ -1,7 +1,7 @@
 package ru.nsu.spirin.MorseCoder.character;
 
 public class CharacterFrequency implements Comparable<CharacterFrequency> {
-    private char character;
+    private final char character;
     private int frequency;
 
     public CharacterFrequency(char ch) {
@@ -23,9 +23,9 @@ public class CharacterFrequency implements Comparable<CharacterFrequency> {
 
     @Override
     public int compareTo(CharacterFrequency o) {
-        if (this.character == o.character) return 0;
+        int comp = CharacterCase.CASE_INSENSITIVE_ORDER.compare(this.character, o.character);
+        if (comp == 0) return 0;
         int diff = this.frequency - o.frequency;
-        if (diff != 0) return diff;
-        else return this.character - o.character;
+        return diff != 0 ? diff : comp;
     }
 }
