@@ -3,7 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/MorseCode_jar</output-path>
     <root id="archive" name="MorseCode.jar">
       <element id="module-output" name="MorseCode" />
-      <element id="file-copy" path="$PROJECT_DIR$/default_alphabet.properties" />
     </root>
   </artifact>
 </component>

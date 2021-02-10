@@ -44,9 +44,10 @@ public class Main {
             else {
                 morseCoder = new MorseCoder();
             }
+            morseCoder.setOutputCharacterCase(CharacterCase.UPPER);
             switch (command) {
-                case "code" -> morseCoder.encodeFile(reader);
-                case "decode" -> morseCoder.decodeFile(reader);
+                case "code" -> morseCoder.encode(reader);
+                case "decode" -> morseCoder.decode(reader);
                 default -> System.out.println("Unknown command!");
             }
 
