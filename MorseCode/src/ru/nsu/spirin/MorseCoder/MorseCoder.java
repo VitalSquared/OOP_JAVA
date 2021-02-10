@@ -5,6 +5,7 @@ import ru.nsu.spirin.MorseCoder.character.CharacterCase;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -14,39 +15,49 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class MorseCoder {
-    private final char UNKNOWN_CHAR = '#';
+    private char unknownCharacter = '#';
+    private char lettersSeparator = ' ';
+    private char wordsSeparator = '/';
+    private CharacterCase charCase = CharacterCase.LOWER;
 
-    private HashMap<Character, String> encodeMap = null;
-    private HashMap<String, Character> decodeMap = null;
+    private final Map<Character, String> encodeMap;
+    private final Map<String, Character> decodeMap;
     private Set<CharacterFrequency> stats = null;
-    private Writer output = null;
-    private final CharacterCase charCase = CharacterCase.LOWER;
+
+    private Writer output;
 
     /**
      * Creates a MorseCoder, which uses <b>default alphabet</b>
-     * @throws IOException thrown when default alphabet file is not found
+     * @throws IOException if default alphabet file is not found or invalid
+     * @see ru.nsu.spirin.MorseCoder.MorseCoder#MorseCoder(String)
      */
     public MorseCoder() throws IOException {
-        this("default_alphabet.properties");
+        this(ClassLoader.getSystemResourceAsStream("default_alphabet.properties"));
     }
 
     /**
-     * Creates a MorseCoder, which uses alphabet specified in <b>alphabetFileName</b>.
-     * @param alphabetFileName name of the file where morse alphabet is stored.
-     * @throws IOException thrown when file is not found or file contains invalid content
+     * Creates a MorseCoder, which uses alphabet specified in <b>alphabetFileName</b>
+     * @param alphabetFileName name of the file where Morse alphabet is stored
+     * @throws IOException if file is not found or invalid
+     * @see ru.nsu.spirin.MorseCoder.MorseCoder#MorseCoder()
      */
     public MorseCoder(String alphabetFileName) throws IOException {
-        Reader reader = new InputStreamReader(new FileInputStream(alphabetFileName));
+        this(new FileInputStream(alphabetFileName));
+    }
+
+    private MorseCoder(InputStream stream) throws IOException {
+        Reader reader = new InputStreamReader(stream);
         Properties properties = new Properties();
 
         properties.load(reader);
         reader.close();
 
-        encodeMap = new HashMap<>();
-        decodeMap = new HashMap<>();
+        encodeMap = new TreeMap<>(CharacterCase.CASE_INSENSITIVE_ORDER);
+        decodeMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
         for (String text : properties.stringPropertyNames()) {
             if (text.length() != 1) throw new IOException("File contained invalid content");
@@ -61,7 +72,7 @@ public class MorseCoder {
     }
 
     /**
-     * Sets a new output, where encoded or decoded texts will be written.
+     * Sets a new output, where encoded or decoded texts will be written
      * @param outputStream new stream to store output.
      */
     public void setOutput(OutputStream outputStream) {
@@ -69,27 +80,63 @@ public class MorseCoder {
     }
 
     /**
-     * Encodes text in <b>reader</b> into Morse code.
-     * @param reader Reader to read text from
-     * @throws IOException thrown when reader is null or fails
+     * Sets a new case of characters in output
+     * @param newCase new case of characters in output
      */
-    public void encodeFile(Reader reader) throws IOException {
+    public void setOutputCharacterCase(CharacterCase newCase) {
+        charCase = newCase;
+    }
+
+    /**
+     * Sets new unknown character.
+     * Unknown characters will be written when they are not specified in alphabet
+     * @param unknownCharacter new unknown character
+     */
+    public void setUnknownCharacter(char unknownCharacter) {
+        this.unknownCharacter = unknownCharacter;
+    }
+
+    /**
+     * Sets new letters separator.
+     * This character will split letters in Morse code
+     * @param separator new letters separator
+     */
+    public void setLettersSeparator(char separator) {
+        lettersSeparator = separator;
+    }
+
+    /**
+     * Sets new words separator.
+     * This character will split words in Morse code
+     * @param separator new words separator
+     */
+    public void setWordsSeparator(char separator) {
+        wordsSeparator = separator;
+    }
+
+    /**
+     * Encodes text in {@code Reader} into Morse code
+     * @param reader {@code Reader} to read text from
+     * @throws IOException if {@code Reader} is null or fails
+     * @see ru.nsu.spirin.MorseCoder.MorseCoder#decode(Reader)
+     */
+    public void encode(Reader reader) throws IOException {
         if (reader == null) throw new IOException("Specified reader was null");
 
         Map<Character, CharacterFrequency> mapStats = new HashMap<>();
-        String encoded = "";
+        String encoded;
 
         while (reader.ready()) {
-            char ch = getCasedCharacter(reader.read());
-            if (ch != ' ') {
-                encoded = encodeMap.getOrDefault(ch, UNKNOWN_CHAR + "") + " ";
-                if (!encoded.startsWith(UNKNOWN_CHAR + "")) {
+            char ch = (char) reader.read();
+            if (!Character.isWhitespace(ch)) {
+                encoded = encodeMap.getOrDefault(ch, unknownCharacter + "") + lettersSeparator;
+                if (!encoded.startsWith(unknownCharacter + "")) {
                     if (mapStats.containsKey(ch)) mapStats.get(ch).increaseFrequency();
                     else mapStats.put(ch, new CharacterFrequency(ch));
                 }
             }
-            else encoded = " / ";
-            output.write(encoded);
+            else encoded = wordsSeparator + "" + lettersSeparator;
+            output.write(getCasedString(encoded));
         }
 
         output.flush();
@@ -97,11 +144,12 @@ public class MorseCoder {
     }
 
     /**
-     * Decodes text in <b>reader</b> from Morse code.
-     * @param reader Reader to read text from
-     * @throws IOException thrown when reader is null or fails
+     * Decodes text in {@code Reader} from Morse code.
+     * @param reader {@code Reader} to read text from
+     * @throws IOException if {@code Reader} is null or fails
+     * @see ru.nsu.spirin.MorseCoder.MorseCoder#encode(Reader)
      */
-    public void decodeFile(Reader reader) throws IOException {
+    public void decode(Reader reader) throws IOException {
         if (reader == null) throw new IOException("Specified reader was null");
 
         Map<Character, CharacterFrequency> mapStats = new HashMap<>();
@@ -109,11 +157,11 @@ public class MorseCoder {
         char decoded;
 
         while (reader.ready()) {
-            char ch = getCasedCharacter(reader.read());
-            if (ch == ' ') {
+            char ch = (char) reader.read();
+            if (ch == lettersSeparator) {
                 if (!letter.isEmpty()) {
-                    decoded = getCasedCharacter(decodeMap.getOrDefault(letter.toString(), UNKNOWN_CHAR));
-                    if (decoded != UNKNOWN_CHAR) {
+                    decoded = decodeMap.getOrDefault(letter.toString(), unknownCharacter);
+                    if (decoded != unknownCharacter) {
                         if (mapStats.containsKey(decoded)) mapStats.get(decoded).increaseFrequency();
                         else mapStats.put(decoded, new CharacterFrequency(decoded));
                     }
@@ -121,21 +169,21 @@ public class MorseCoder {
                 }
                 else continue;
             }
-            else if (ch == '/') decoded = ' ';
+            else if (ch == wordsSeparator) decoded = ' ';
             else {
                 letter.append(ch);
                 continue;
             }
-            output.write(decoded);
+            output.write(getCasedCharacter(decoded));
         }
 
         if (!letter.isEmpty()) {
-            decoded = getCasedCharacter(decodeMap.getOrDefault(letter.toString(), UNKNOWN_CHAR));
-            if (decoded != UNKNOWN_CHAR) {
+            decoded = decodeMap.getOrDefault(letter.toString(), unknownCharacter);
+            if (decoded != unknownCharacter) {
                 if (mapStats.containsKey(decoded)) mapStats.get(decoded).increaseFrequency();
                 else mapStats.put(decoded, new CharacterFrequency(decoded));
             }
-            output.write(decoded);
+            output.write(getCasedCharacter(decoded));
         }
 
         output.flush();
@@ -143,10 +191,12 @@ public class MorseCoder {
     }
 
     /**
-     * Writes characters frequencies inside <b>writer</b>.
-     * Stats are generated after using <b>encodeFile</b> or <b>decodeFile</b>.
-     * @param writer Writer where stats will be stored.
-     * @throws IOException thrown when writer is null or fails
+     * Writes characters frequencies inside {@code Writer}.
+     * Stats are generated after using <b>encodeFile</b> or <b>decodeFile</b>
+     * @param writer {@code Writer} where stats will be stored
+     * @throws IOException if {@code Writer} is null or fails
+     * @see ru.nsu.spirin.MorseCoder.MorseCoder#encode(Reader)
+     * @see ru.nsu.spirin.MorseCoder.MorseCoder#decode(Reader)
      */
     public void generateStats(Writer writer) throws IOException {
         if (writer == null) throw new IOException("Specified writer was null");
@@ -160,10 +210,17 @@ public class MorseCoder {
         }
     }
 
-    private char getCasedCharacter(int code) {
+    private char getCasedCharacter(char ch) {
         return switch (charCase) {
-            case LOWER -> (char) Character.toLowerCase(code);
-            case UPPER -> (char) Character.toUpperCase(code);
+            case LOWER -> Character.toLowerCase(ch);
+            case UPPER -> Character.toUpperCase(ch);
+        };
+    }
+
+    private String getCasedString(String str) {
+        return switch (charCase) {
+            case LOWER -> str.toLowerCase();
+            case UPPER -> str.toUpperCase();
         };
     }
 }
