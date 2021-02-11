@@ -1,7 +1,7 @@
-package ru.nsu.spirin.MorseCoder;
+package ru.nsu.spirin.morsecoder;
 
-import ru.nsu.spirin.MorseCoder.character.CharacterFrequency;
-import ru.nsu.spirin.MorseCoder.character.CharacterCase;
+import ru.nsu.spirin.morsecoder.character.CharacterFrequency;
+import ru.nsu.spirin.morsecoder.character.CharacterCase;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,7 +33,7 @@ public class MorseCoder {
     /**
      * Creates a MorseCoder, which uses <b>default alphabet</b>
      * @throws IOException if default alphabet file is not found or invalid
-     * @see ru.nsu.spirin.MorseCoder.MorseCoder#MorseCoder(String)
+     * @see ru.nsu.spirin.morsecoder.MorseCoder#MorseCoder(String)
      */
     public MorseCoder() throws IOException {
         this(ClassLoader.getSystemResourceAsStream("default_alphabet.properties"));
@@ -43,7 +43,7 @@ public class MorseCoder {
      * Creates a MorseCoder, which uses alphabet specified in <b>alphabetFileName</b>
      * @param alphabetFileName name of the file where Morse alphabet is stored
      * @throws IOException if file is not found or invalid
-     * @see ru.nsu.spirin.MorseCoder.MorseCoder#MorseCoder()
+     * @see ru.nsu.spirin.morsecoder.MorseCoder#MorseCoder()
      */
     public MorseCoder(String alphabetFileName) throws IOException {
         this(new FileInputStream(alphabetFileName));
@@ -118,13 +118,14 @@ public class MorseCoder {
      * Encodes text in {@code Reader} into Morse code
      * @param reader {@code Reader} to read text from
      * @throws IOException if {@code Reader} is null or fails
-     * @see ru.nsu.spirin.MorseCoder.MorseCoder#decode(Reader)
+     * @see ru.nsu.spirin.morsecoder.MorseCoder#decode(Reader)
      */
     public void encode(Reader reader) throws IOException {
         if (reader == null) throw new IOException("Specified reader was null");
 
         Map<Character, CharacterFrequency> mapStats = new HashMap<>();
         String encoded;
+        Character prev = null;
 
         while (reader.ready()) {
             char ch = (char) reader.read();
@@ -132,11 +133,17 @@ public class MorseCoder {
                 encoded = encodeMap.getOrDefault(ch, unknownCharacter + "") + lettersSeparator;
                 if (!encoded.startsWith(unknownCharacter + "")) {
                     if (mapStats.containsKey(ch)) mapStats.get(ch).increaseFrequency();
-                    else mapStats.put(ch, new CharacterFrequency(ch));
+                    else mapStats.put(ch, new CharacterFrequency(getCasedCharacter(ch)));
                 }
             }
-            else encoded = wordsSeparator + "" + lettersSeparator;
+            else {
+                if (prev == null || !Character.isWhitespace(prev)) {
+                    encoded = wordsSeparator + "" + lettersSeparator;
+                }
+                else continue;
+            }
             output.write(getCasedString(encoded));
+            prev = ch;
         }
 
         output.flush();
@@ -147,7 +154,7 @@ public class MorseCoder {
      * Decodes text in {@code Reader} from Morse code.
      * @param reader {@code Reader} to read text from
      * @throws IOException if {@code Reader} is null or fails
-     * @see ru.nsu.spirin.MorseCoder.MorseCoder#encode(Reader)
+     * @see ru.nsu.spirin.morsecoder.MorseCoder#encode(Reader)
      */
     public void decode(Reader reader) throws IOException {
         if (reader == null) throw new IOException("Specified reader was null");
@@ -163,7 +170,7 @@ public class MorseCoder {
                     decoded = decodeMap.getOrDefault(letter.toString(), unknownCharacter);
                     if (decoded != unknownCharacter) {
                         if (mapStats.containsKey(decoded)) mapStats.get(decoded).increaseFrequency();
-                        else mapStats.put(decoded, new CharacterFrequency(decoded));
+                        else mapStats.put(decoded, new CharacterFrequency(getCasedCharacter(decoded)));
                     }
                     letter.setLength(0);
                 }
@@ -181,7 +188,7 @@ public class MorseCoder {
             decoded = decodeMap.getOrDefault(letter.toString(), unknownCharacter);
             if (decoded != unknownCharacter) {
                 if (mapStats.containsKey(decoded)) mapStats.get(decoded).increaseFrequency();
-                else mapStats.put(decoded, new CharacterFrequency(decoded));
+                else mapStats.put(decoded, new CharacterFrequency(getCasedCharacter(decoded)));
             }
             output.write(getCasedCharacter(decoded));
         }
@@ -195,8 +202,8 @@ public class MorseCoder {
      * Stats are generated after using <b>encodeFile</b> or <b>decodeFile</b>
      * @param writer {@code Writer} where stats will be stored
      * @throws IOException if {@code Writer} is null or fails
-     * @see ru.nsu.spirin.MorseCoder.MorseCoder#encode(Reader)
-     * @see ru.nsu.spirin.MorseCoder.MorseCoder#decode(Reader)
+     * @see ru.nsu.spirin.morsecoder.MorseCoder#encode(Reader)
+     * @see ru.nsu.spirin.morsecoder.MorseCoder#decode(Reader)
      */
     public void generateStats(Writer writer) throws IOException {
         if (writer == null) throw new IOException("Specified writer was null");

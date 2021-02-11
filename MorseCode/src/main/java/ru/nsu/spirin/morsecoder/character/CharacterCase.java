@@ -1,4 +1,4 @@
-package ru.nsu.spirin.MorseCoder.character;
+package ru.nsu.spirin.morsecoder.character;
 
 import java.util.Comparator;
 

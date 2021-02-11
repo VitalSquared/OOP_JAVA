@@ -1,4 +1,4 @@
-package ru.nsu.spirin.MorseCoder.character;
+package ru.nsu.spirin.morsecoder.character;
 
 public class CharacterFrequency implements Comparable<CharacterFrequency> {
     private final char character;

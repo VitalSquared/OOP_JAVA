@@ -1,6 +1,6 @@
-package ru.nsu.spirin.MorseCoder;
+package ru.nsu.spirin.morsecoder;
 
-import ru.nsu.spirin.MorseCoder.character.CharacterCase;
+import ru.nsu.spirin.morsecoder.character.CharacterCase;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
