@@ -34,7 +34,7 @@ public class Game {
      * @throws InvocationTargetException
      * @throws InstantiationException
      * @throws IllegalAccessException
-     * @see ru.nsu.spirin.LogoWorld.logic.Game#step()
+     * @see Game#step()
      */
     public boolean parseCommand(String command) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         String[] cmd = command == null ? null : command.split(" +");
@@ -64,7 +64,7 @@ public class Game {
      * @throws InvocationTargetException
      * @throws InstantiationException
      * @throws IllegalAccessException
-     * @see ru.nsu.spirin.LogoWorld.logic.Game#parseCommand(String)
+     * @see Game#parseCommand(String)
      */
     public boolean step() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         if (curCmd.equals("")) return false;

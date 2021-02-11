@@ -1,7 +1,6 @@
 package ru.nsu.spirin.LogoWorld.commands;
 
 import ru.nsu.spirin.LogoWorld.logic.Executor;
-import ru.nsu.spirin.LogoWorld.logic.Field;
 
 public class InitCommand implements Command {
     private Executor executor;
