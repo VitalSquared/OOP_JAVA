@@ -1,11 +1,13 @@
 package ru.nsu.spirin.morsecoder.character;
 
-public class CharacterFrequency implements Comparable<CharacterFrequency> {
+import java.util.Objects;
+
+public class CharacterFrequency {
     private final char character;
     private int frequency;
 
     public CharacterFrequency(char ch) {
-        this.character = ch;
+        this.character = Character.toLowerCase(ch);
         this.frequency = 1;
     }
 
@@ -17,15 +19,21 @@ public class CharacterFrequency implements Comparable<CharacterFrequency> {
         return this.frequency;
     }
 
-    public void increaseFrequency() {
-        this.frequency++;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CharacterFrequency that = (CharacterFrequency) o;
+        if (this.character == that.character) {
+            that.frequency++;
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public int compareTo(CharacterFrequency o) {
-        int comp = CharacterCase.CASE_INSENSITIVE_ORDER.compare(this.character, o.character);
-        if (comp == 0) return 0;
-        int diff = this.frequency - o.frequency;
-        return diff != 0 ? diff : comp;
+    public int hashCode() {
+        return Objects.hash(character);
     }
 }
