@@ -1,13 +1,13 @@
 package ru.nsu.spirin.logoworld.commands;
 
-import ru.nsu.spirin.logoworld.logic.Executor;
+import ru.nsu.spirin.logoworld.logic.World;
 
 public class InitCommand implements Command {
-    private Executor executor;
+    private World world;
     private int steps;
 
-    public InitCommand(Executor executor) {
-        this.executor = executor;
+    public InitCommand(World world) {
+        this.world = world;
         this.steps = 0;
     }
 
@@ -37,7 +37,7 @@ public class InitCommand implements Command {
         int height = Integer.parseInt(args[1]);
         int x = Integer.parseInt(args[2]);
         int y = Integer.parseInt(args[3]);
-        executor.initField(width, height, x, y);
+        world.initWorld(this, width, height, x, y);
         return true;
     }
 }

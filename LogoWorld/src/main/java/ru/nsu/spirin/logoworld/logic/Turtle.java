@@ -3,20 +3,13 @@ package ru.nsu.spirin.logoworld.logic;
 import ru.nsu.spirin.logoworld.math.Direction;
 import ru.nsu.spirin.logoworld.math.Pair;
 
-public class Executor {
+public class Turtle {
     private int pos_r;
     private int pos_c;
     private boolean isDrawing;
-    private Field field;
 
-    public Executor(Field field) {
+    public Turtle() {
         this.isDrawing = false;
-        this.field = field;
-    }
-
-    public void initField(int width, int height, int x, int y) {
-        field.setSize(width, height);
-        setPosition(y, x);
     }
 
     public boolean getIsDrawing() {
@@ -40,13 +33,5 @@ public class Executor {
 
     public Pair getPosition() {
         return new Pair(pos_r, pos_c);
-    }
-
-    public boolean isValid() {
-        return field.getWidth() != 0 && field.getHeight() != 0;
-    }
-
-    public Field getField() {
-        return field;
     }
 }

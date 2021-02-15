@@ -1,13 +1,14 @@
 package ru.nsu.spirin.logoworld.commands;
 
-import ru.nsu.spirin.logoworld.logic.Executor;
+import ru.nsu.spirin.logoworld.logic.World;
+import ru.nsu.spirin.logoworld.math.Pair;
 
 public class TeleportCommand implements Command {
-    private Executor executor;
+    private World world;
     private int steps;
 
-    public TeleportCommand(Executor executor) {
-        this.executor = executor;
+    public TeleportCommand(World world) {
+        this.world = world;
         this.steps = 0;
     }
 
@@ -17,8 +18,9 @@ public class TeleportCommand implements Command {
         try {
             int x = Integer.parseInt(args[0]);
             int y = Integer.parseInt(args[1]);
-            int width = executor.getField().getWidth();
-            int height = executor.getField().getHeight();
+            Pair fieldSize = world.getFieldSize();;
+            int width = fieldSize.getFirst();
+            int height = fieldSize.getSecond();
             return 0 <= x && x < width && 0 <= y && y < height;
         }
         catch (NumberFormatException e) {
@@ -28,14 +30,14 @@ public class TeleportCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (steps >= 1 || !executor.isValid()) {
+        if (steps >= 1 || !world.isValid()) {
             steps = 0;
             return false;
         }
         steps++;
         int x = Integer.parseInt(args[0]);
         int y = Integer.parseInt(args[1]);
-        executor.setPosition(y, x);
+        world.setTurtlePosition(this, y, x);
         return true;
     }
 }

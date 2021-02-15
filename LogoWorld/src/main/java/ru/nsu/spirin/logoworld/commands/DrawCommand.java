@@ -1,12 +1,12 @@
 package ru.nsu.spirin.logoworld.commands;
 
-import ru.nsu.spirin.logoworld.logic.Executor;
+import ru.nsu.spirin.logoworld.logic.World;
 
 public class DrawCommand implements Command {
-    private Executor executor;
+    private World world;
 
-    public DrawCommand(Executor executor) {
-        this.executor = executor;
+    public DrawCommand(World world) {
+        this.world = world;
     }
 
     @Override
@@ -16,8 +16,8 @@ public class DrawCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (executor.getIsDrawing() || !executor.isValid()) return false;
-        executor.setIsDrawing(true);
+        if (world.getIsTurtleDrawing() || !world.isValid()) return false;
+        world.setIsTurtleDrawing(this,true);
         return true;
     }
 }

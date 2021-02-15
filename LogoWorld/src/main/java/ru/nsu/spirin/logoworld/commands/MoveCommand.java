@@ -1,14 +1,14 @@
 package ru.nsu.spirin.logoworld.commands;
 
-import ru.nsu.spirin.logoworld.logic.Executor;
+import ru.nsu.spirin.logoworld.logic.World;
 import ru.nsu.spirin.logoworld.math.Direction;
 
 public class MoveCommand implements Command {
-    private Executor executor;
+    private World world;
     private int steps;
 
-    public MoveCommand(Executor executor) {
-        this.executor = executor;
+    public MoveCommand(World world) {
+        this.world = world;
         this.steps = 0;
     }
 
@@ -27,12 +27,12 @@ public class MoveCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (steps >= Integer.parseInt(args[1]) || !executor.isValid()) {
+        if (steps >= Integer.parseInt(args[1]) || !world.isValid()) {
             steps = 0;
             return false;
         }
         steps++;
-        executor.move(Direction.convertCharacterToDirection(args[0].charAt(0)));
+        world.moveTurtle(this, Direction.convertCharacterToDirection(args[0].charAt(0)));
         return true;
     }
 }

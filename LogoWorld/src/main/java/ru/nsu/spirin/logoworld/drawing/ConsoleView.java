@@ -1,78 +1,47 @@
 package ru.nsu.spirin.logoworld.drawing;
 
 import ru.nsu.spirin.logoworld.exceptions.InvalidTextureSizeException;
-import ru.nsu.spirin.logoworld.logic.Executor;
-import ru.nsu.spirin.logoworld.logic.Game;
-import ru.nsu.spirin.logoworld.logic.Program;
+import ru.nsu.spirin.logoworld.exceptions.RenderException;
+import ru.nsu.spirin.logoworld.logic.Interpreter;
+import ru.nsu.spirin.logoworld.logic.World;
 import ru.nsu.spirin.logoworld.math.Pair;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Locale;
 import java.util.Scanner;
 
-public class ConsoleView {
+public class ConsoleView implements GraphicsView{
 
     private final int TEXTURE_SIZE = 1;
-
-    private final Game game;
-    private final Program program;
 
     private final Texture backgroundTexture;
     private final Texture executorTexture;
     private final Texture drawingTexture;
 
-    /**
-     * Creates new {@code ConsoleView} controller which shows an execution of given program
-     * @param programFileName file name which contains program to be exectued
-     * @throws IOException if file doesn't exist
-     * @throws InvalidTextureSizeException if textures are being created with wrong size
-     */
-    public ConsoleView(String programFileName) throws IOException, InvalidTextureSizeException {
-        game = new Game();
+    private final Scanner scanner;
+
+    public ConsoleView() throws InvalidTextureSizeException {
+        scanner = new Scanner(System.in);
         backgroundTexture = new Texture(" ", "");
         executorTexture = new Texture("@", "");
         drawingTexture = new Texture("#", "");
-        program = new Program(programFileName);
     }
 
-    /**
-     * Starts to display an execution of program
-     * @throws InterruptedException
-     * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     */
-    public void run() throws InterruptedException, IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        Scanner scanner = new Scanner(System.in);
-        do {
-            if (game.parseCommand(program.nextCommand().trim())) {
-                while (game.step()) {
-                    renderMap();
-                    Thread.sleep(300);
-                }
-            }
-            else if (program.requestContinuation()) {
-                System.out.println("Invalid command. Do you want to continue executing program? (Y/N)");
-                String ans = scanner.next();
-                if (!ans.toUpperCase(Locale.ROOT).equals("Y")) {
-                    break;
-                }
-            }
-        } while (!program.isFinished());
-        program.close();
+    public void writeInformation(String info) {
+        System.out.println(info);
     }
 
-    private void renderMap() throws IOException, InterruptedException {
+    public boolean getContinuationSignal() {
+        String answer = scanner.next();
+        return answer.equalsIgnoreCase("Y");
+    }
+
+    public void render(World world) throws RenderException {
         clearScreen();
-        Executor executor = game.getExecutor();
 
-        if (executor.isValid()) {
-            int width = Math.min(200, game.getField().getWidth() * (TEXTURE_SIZE + 1));
-            int height = Math.min(50, game.getField().getHeight() * (TEXTURE_SIZE + 1));
+        if (world.isValid()) {
+            Pair fieldSize = world.getFieldSize();
+
+            int width = Math.min(200, fieldSize.getFirst() * (TEXTURE_SIZE + 1));
+            int height = Math.min(50, fieldSize.getSecond() * (TEXTURE_SIZE + 1));
 
             int padding_top = TEXTURE_SIZE + 1;
             int padding_btm = 2 * (TEXTURE_SIZE + 1);
@@ -82,7 +51,7 @@ public class ConsoleView {
             int map_width = (width - (padding_lft + padding_rgt)) / (TEXTURE_SIZE + 1);
             int map_height = (height - (padding_top + padding_btm)) / (TEXTURE_SIZE + 1);
 
-            Pair executorCoords = executor.getPosition();
+            Pair executorCoords = world.getTurtlePosition();
 
             int top_left_r = executorCoords.getFirst() - map_height / 2;
             int top_left_c = executorCoords.getSecond() - map_width / 2;
@@ -93,7 +62,7 @@ public class ConsoleView {
                 for (int c = 0; c < map_width; c++) {
                     int coords_r = r + top_left_r;
                     int coords_c = c + top_left_c;
-                    boolean isDrawn = game.getField().isDrawn(coords_r, coords_c);
+                    boolean isDrawn = world.isCellDrawn(coords_r, coords_c);
                     putTextureInBuffer(buffer, isDrawn ? drawingTexture : backgroundTexture, new Pair(TEXTURE_SIZE * r, TEXTURE_SIZE * c));
                 }
             }
@@ -130,8 +99,13 @@ public class ConsoleView {
         }
     }
 
-    private void clearScreen() throws IOException, InterruptedException {
-        new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+    private void clearScreen() throws RenderException {
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        }
+        catch (Exception e) {
+            throw new RenderException(e.getLocalizedMessage());
+        }
     }
 
     private void putTextureInBuffer(String[][] buffer, Texture texture, Pair top_left) {

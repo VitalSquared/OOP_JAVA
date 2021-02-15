@@ -5,37 +5,21 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Program {
-    private String prevCommand = "";
     private Scanner scanner = null;
-    private boolean isFile = false;
 
-    public Program(String fileName) {
-        try {
-            scanner = new Scanner(new FileInputStream(fileName));
-            isFile = true;
-        }
-        catch (FileNotFoundException e) {
-            scanner = new Scanner(System.in);
-            isFile = false;
-        }
+    public Program(String fileName) throws FileNotFoundException {
+        scanner = new Scanner(new FileInputStream(fileName));
     }
 
     public String nextCommand() {
-        prevCommand = scanner.nextLine();
-        return prevCommand;
+        return scanner.nextLine().trim();
     }
 
     public boolean isFinished() {
-        return isFile ? !scanner.hasNext() : prevCommand.equals("EXIT");
-    }
-
-    public boolean requestContinuation() {
-        return isFile;
+        return !scanner.hasNext();
     }
 
     public void close() {
-        if (isFile) {
-            scanner.close();
-        }
+        if (scanner != null) scanner.close();
     }
 }
