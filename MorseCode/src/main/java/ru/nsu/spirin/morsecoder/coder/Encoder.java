@@ -42,10 +42,10 @@ public class Encoder implements Coder {
                         }
                         sb.append((alphabet.getMorseCodeFromCharacter(letter))).append(" ");
                     }
-                    sb.append(" / ");
+                    sb.append("/ ");
                 }
             }
-
+            sb.setLength(sb.length() - 2);
             output = new FileWriter(outputFileName);
             output.write(alphabet.getCasedString(sb.toString()));
             output.flush();

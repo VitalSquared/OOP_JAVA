@@ -10,25 +10,25 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Alphabet {
-    private final Map<Character, String> encodeMap;
-    private final Map<String, Character> decodeMap;
+    private final Map<Character, String> encodeMap = new HashMap<>();
+    private final Map<String, Character> decodeMap = new HashMap<>();
 
     private CharacterCase charCase = CharacterCase.UPPER;
 
     public Alphabet() throws IOException {
-        this(ClassLoader.getSystemResourceAsStream("default_alphabet.properties"));
+        this.setNewAlphabet(ClassLoader.getSystemResourceAsStream("default_alphabet.properties"));
     }
 
-    public Alphabet(String fileName) throws IOException {
-        this(new FileInputStream(fileName));
+    public void setNewAlphabet(String fileName) throws IOException {
+        this.setNewAlphabet(new FileInputStream(fileName));
     }
 
-    private Alphabet(InputStream stream) throws IOException {
+    private void setNewAlphabet(InputStream stream) throws IOException {
         Properties properties = new Properties();
         properties.load(stream);
 
-        encodeMap = new HashMap<>();
-        decodeMap = new HashMap<>();
+        encodeMap.clear();
+        decodeMap.clear();
 
         for (String text : properties.stringPropertyNames()) {
             if (text.length() != 1) throw new IOException("File contained invalid content");

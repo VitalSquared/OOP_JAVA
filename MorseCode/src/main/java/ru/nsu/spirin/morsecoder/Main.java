@@ -1,8 +1,15 @@
 package ru.nsu.spirin.morsecoder;
 
+import java.io.IOException;
+
 public class Main {
     public static void main(String[] args) {
-        MorseCoder morseCoder = new MorseCoder();
-        morseCoder.run();
+        try {
+            MorseCoder morseCoder = new MorseCoder();
+            morseCoder.run();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
