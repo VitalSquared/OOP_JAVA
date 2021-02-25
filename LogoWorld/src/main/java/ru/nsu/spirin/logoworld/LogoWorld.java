@@ -1,6 +1,7 @@
 package ru.nsu.spirin.logoworld;
 
 import org.apache.log4j.Logger;
+import ru.nsu.spirin.logoworld.commands.CommandError;
 import ru.nsu.spirin.logoworld.drawing.ConsoleView;
 import ru.nsu.spirin.logoworld.drawing.GraphicsView;
 import ru.nsu.spirin.logoworld.drawing.SwingView;
@@ -20,6 +21,13 @@ public class LogoWorld {
     private final GraphicsView graphicsView;
     private final Interpreter interpreter;
 
+    /**
+     * Create Logo World instance.
+     * @param programFileName program to run. Use <b>null</b> if you want to type commands manually.
+     * @param useSwing If true, render in swing window. If false, render in console.
+     * @throws IOException if program file, commands-properties file are missing
+     * @throws InvalidTextureSizeException if console uses wrong sizes of textures
+     */
     public LogoWorld(String programFileName, boolean useSwing) throws IOException, InvalidTextureSizeException {
         logger.debug("Logo World Initialization...");
         world = new World();
@@ -27,6 +35,12 @@ public class LogoWorld {
         interpreter = new Interpreter(programFileName, world);
     }
 
+    /**
+     * Run Logo World
+     * @throws CommandsWorkflowException if command factory fails
+     * @throws RenderException if rendering fails
+     * @throws RuntimeException other related issues
+     */
     public void run() throws CommandsWorkflowException, RenderException, RuntimeException {
         while (!interpreter.isFinished()) {
             if (interpreter.parseNextCommand()) {
@@ -41,9 +55,14 @@ public class LogoWorld {
                 }
             }
             else {
-                logger.debug("Invalid command.");
-                graphicsView.writeInformation("Invalid command. Do you want to continue executing program? (Y/N)");
-                if (graphicsView.getContinuationSignal()) break;
+                String error = CommandError.getError();
+                logger.debug("Error encountered: " + error);
+                graphicsView.writeInformation(error);
+                if (interpreter.shouldAskForContinuation()) {
+                    if (!graphicsView.getContinuationSignal()) {
+                        break;
+                    }
+                }
             }
         }
     }

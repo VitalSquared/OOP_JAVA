@@ -1,7 +1,6 @@
 package ru.nsu.spirin.logoworld.drawing;
 
 import org.apache.log4j.Logger;
-import ru.nsu.spirin.logoworld.drawing.GraphicsView;
 import ru.nsu.spirin.logoworld.exceptions.RenderException;
 import ru.nsu.spirin.logoworld.logic.World;
 import ru.nsu.spirin.logoworld.math.Pair;
@@ -77,10 +76,10 @@ public class SwingView extends Canvas implements GraphicsView {
             int map_width = Math.min((width - (padding_lft + padding_rgt)) / TEXTURE_SIZE, fieldSize.getFirst());
             int map_height = Math.min((height - (padding_top + padding_btm)) / TEXTURE_SIZE, fieldSize.getSecond());
 
-            Pair executorCoords = world.getTurtlePosition();
+            Pair turtlePos = world.getTurtlePosition();
 
-            int top_left_r = executorCoords.getFirst() - map_height / 2;
-            int top_left_c = executorCoords.getSecond() - map_width / 2;
+            int top_left_r = turtlePos.getSecond() - map_height / 2;
+            int top_left_c = turtlePos.getFirst() - map_width / 2;
 
             for (int r = 0; r < map_height; r++) {
                 for (int c = 0; c < map_width; c++) {
@@ -97,8 +96,8 @@ public class SwingView extends Canvas implements GraphicsView {
                 }
             }
 
-            int pos_r = executorCoords.getFirst();
-            int pos_c = executorCoords.getSecond();
+            int pos_r = turtlePos.getSecond();
+            int pos_c = turtlePos.getFirst();
             g.setColor(Color.CYAN);
             g.fillArc((pos_c - top_left_c) * TEXTURE_SIZE, (pos_r - top_left_r) * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, 0, 360);
 

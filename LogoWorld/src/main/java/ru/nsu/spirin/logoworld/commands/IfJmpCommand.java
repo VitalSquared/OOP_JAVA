@@ -1,7 +1,7 @@
 package ru.nsu.spirin.logoworld.commands;
 
+import input.Input;
 import ru.nsu.spirin.logoworld.exceptions.InvalidConditionException;
-import ru.nsu.spirin.logoworld.logic.Program;
 import ru.nsu.spirin.logoworld.logic.World;
 
 import java.util.ArrayList;
@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Stack;
 
 public class IfJmpCommand implements Command {
-    private final Program program;
+    private final Input input;
     private final World world;
     private boolean lastConditionState = false;
     private int nextCommand = 0;
 
-    public IfJmpCommand(Program program, World world) {
-        this.program = program;
+    public IfJmpCommand(Input input, World world) {
+        this.input = input;
         this.world = world;
     }
 
@@ -27,17 +27,23 @@ public class IfJmpCommand implements Command {
      */
     @Override
     public boolean validateArgs(String[] args) {
-        if (args.length != 2) return false;
-
+        if (args.length != 2) {
+            CommandError.setError("Wrong number of arguments! Use IF_JMP (condition) <dest>");
+            return false;
+        }
         try {
             lastConditionState = parseCondition(args[0]);
             nextCommand = Integer.parseInt(args[1]);
             return true;
         }
-        catch (InvalidConditionException | NumberFormatException e) {
-            lastConditionState = false;
-            return false;
+        catch (InvalidConditionException e) {
+            CommandError.setError("Could not parse the condition.");
         }
+        catch (NumberFormatException e) {
+            CommandError.setError("Invalid destination value.");
+        }
+        lastConditionState = false;
+        return false;
     }
 
     /**
@@ -48,8 +54,10 @@ public class IfJmpCommand implements Command {
      */
     @Override
     public boolean execute(String[] args) {
-        if (lastConditionState) program.setNextCommand(nextCommand);
-        else program.setNextCommand();
+        if (input.allowJump()) {
+            if (lastConditionState) input.setNextCommand(nextCommand);
+            else input.setNextCommand();
+        }
         return false;
     }
 
@@ -85,8 +93,8 @@ public class IfJmpCommand implements Command {
 
     private String getConstant(String constant) throws InvalidConditionException {
         switch(constant) {
-            case "POS_X" -> { return world.getTurtlePosition().getSecond() + ""; }
-            case "POS_Y" -> { return world.getTurtlePosition().getFirst() + ""; }
+            case "POS_X" -> { return world.getTurtlePosition().getFirst() + ""; }
+            case "POS_Y" -> { return world.getTurtlePosition().getSecond() + ""; }
             case "FIELD_WIDTH" -> { return world.getFieldSize().getFirst() + ""; }
             case "FIELD_HEIGHT" -> { return world.getFieldSize().getSecond() + ""; }
             case "IS_DRAWING" -> { return world.getIsTurtleDrawing() ? "TRUE" : "FALSE"; }

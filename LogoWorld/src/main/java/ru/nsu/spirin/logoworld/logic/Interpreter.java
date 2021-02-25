@@ -1,5 +1,8 @@
 package ru.nsu.spirin.logoworld.logic;
 
+import input.ConsoleInput;
+import input.Input;
+import input.ProgramInput;
 import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.commands.Command;
 import ru.nsu.spirin.logoworld.commands.CommandFactory;
@@ -15,32 +18,37 @@ public class Interpreter {
 
     private String curCmd = "";
     private String[] curArgs = null;
-    private final Program program;
+    private final Input input;
     private final CommandFactory commandFactory;
 
     /**
-     * Creates new {@code Interpreter} instance
-     * @throws IOException if commands properties file is not found or invalid
+     * Creates Interpreter instance
+     * @throws IOException if commands-properties file or program file are not found or invalid
      */
     public Interpreter(String programFileName, World world) throws IOException {
-        logger.debug("Interpreter started initialization.");
-        this.program = new Program(programFileName);
-        this.commandFactory = new CommandFactory(program, world);
-        logger.debug("Interpreter finished initialization.");
+        logger.debug("Interpreter initialization.");
+        if (programFileName == null) {
+            this.input = new ConsoleInput();
+        }
+        else {
+            this.input = new ProgramInput(programFileName);
+        }
+        this.commandFactory = new CommandFactory(input, world);
     }
 
     /**
-     * Parses given command and its arguments.
+     * Parses next command and its arguments.
      * @return true if command is parsed successfully and is valid.
-     * @throws CommandsWorkflowException
+     * @throws CommandsWorkflowException if command factory fails
      * @see Interpreter#step()
      */
     public boolean parseNextCommand() throws CommandsWorkflowException {
-        String command = program.nextCommand();
+        String command = input.nextCommand();
+        logger.debug("Interpreter parsing command: " + command);
         String[] cmd = command == null ? null : tokenizeCommand(command);
         boolean validArgs;
 
-        if (cmd == null || cmd.length == 0 || command.equals("")) {
+        if (cmd == null || cmd.length == 0 || command.equals("") || command.equals("EXIT")) {
             curArgs = null;
             curCmd = "";
             validArgs = true;
@@ -49,9 +57,14 @@ public class Interpreter {
             curCmd = cmd[0];
             curArgs = Arrays.copyOfRange(cmd, 1, cmd.length);
             Command instance = commandFactory.getCommand(curCmd);
-            if (instance != null) validArgs = instance.validateArgs(curArgs);
-            else validArgs = false;
+            if (instance != null) {
+                validArgs = instance.validateArgs(curArgs);
+            }
+            else {
+                validArgs = false;
+            }
         }
+        logger.debug("Result of parsing: " + validArgs);
         return validArgs;
     }
 
@@ -59,15 +72,17 @@ public class Interpreter {
      * Steps through the command execution.
      * Needs to parse command first
      * @return true if stepped successfully
-     * @throws CommandsWorkflowException
+     * @throws CommandsWorkflowException if commands factory fails
      * @see Interpreter#parseNextCommand()
      */
     public boolean step() throws CommandsWorkflowException {
         if (curCmd.equals("")) {
-            program.setNextCommand();
+            logger.debug("Empty command. Skipping...");
+            if (input.allowJump()) input.setNextCommand();
             return false;
         }
 
+        logger.debug("Stepping through command...");
         Command instance = commandFactory.getCommand(curCmd);
         if (instance != null) {
             return instance.execute(curArgs);
@@ -75,10 +90,25 @@ public class Interpreter {
         else return false;
     }
 
+    /**
+     * Check if interpreter finished running program
+     * @return true if finished
+     */
     public boolean isFinished() {
-        boolean finished = program.isFinished();
-        if (finished) program.close();
+        boolean finished = input.isFinished();
+        if (finished) {
+            logger.debug("Interpreter finished working. Program file will be closed.");
+            input.close();
+        }
         return finished;
+    }
+
+    /**
+     * If you run program and encounter invalid command, you will be prompted to stop running.
+     * @return true if you are running program
+     */
+    public boolean shouldAskForContinuation() {
+        return input instanceof ProgramInput;
     }
 
     private String[] tokenizeCommand(String command) {

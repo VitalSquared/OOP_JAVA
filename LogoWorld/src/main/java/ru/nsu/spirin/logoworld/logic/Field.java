@@ -26,12 +26,12 @@ public class Field {
         return this.height;
     }
 
-    public boolean isDrawn(int r, int c) {
-        return map[normalizeRow(r) * this.height + normalizeCol(c)];
+    public boolean isDrawn(int x, int y) {
+        return map[normalizeRow(y) * this.height + normalizeCol(x)];
     }
 
-    public void setDrawn(int r, int c, boolean isDrawn) {
-        map[normalizeRow(r)  * this.height + normalizeCol(c)] = isDrawn;
+    public void setDrawn(int x, int y, boolean isDrawn) {
+        map[normalizeRow(y)  * this.height + normalizeCol(x)] = isDrawn;
     }
 
     private int normalizeRow(int r) {

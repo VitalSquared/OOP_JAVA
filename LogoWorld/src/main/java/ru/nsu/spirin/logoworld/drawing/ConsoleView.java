@@ -3,7 +3,6 @@ package ru.nsu.spirin.logoworld.drawing;
 import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.exceptions.InvalidTextureSizeException;
 import ru.nsu.spirin.logoworld.exceptions.RenderException;
-import ru.nsu.spirin.logoworld.logic.Interpreter;
 import ru.nsu.spirin.logoworld.logic.World;
 import ru.nsu.spirin.logoworld.math.Pair;
 
@@ -34,6 +33,7 @@ public class ConsoleView implements GraphicsView{
     }
 
     public boolean getContinuationSignal() {
+        System.out.println("Do you want to continue program execution? (Y/N)");
         String answer = scanner.next();
         return answer.equalsIgnoreCase("Y");
     }
@@ -55,10 +55,10 @@ public class ConsoleView implements GraphicsView{
             int map_width = (width - (padding_lft + padding_rgt)) / (TEXTURE_SIZE + 1);
             int map_height = (height - (padding_top + padding_btm)) / (TEXTURE_SIZE + 1);
 
-            Pair executorCoords = world.getTurtlePosition();
+            Pair turtlePos = world.getTurtlePosition();
 
-            int top_left_r = executorCoords.getFirst() - map_height / 2;
-            int top_left_c = executorCoords.getSecond() - map_width / 2;
+            int top_left_r = turtlePos.getSecond() - map_height / 2;
+            int top_left_c = turtlePos.getFirst() - map_width / 2;
 
             String[][] buffer = new String[map_height * TEXTURE_SIZE][map_width * TEXTURE_SIZE];
 
@@ -71,8 +71,8 @@ public class ConsoleView implements GraphicsView{
                 }
             }
 
-            int pos_r = executorCoords.getFirst();
-            int pos_c = executorCoords.getSecond();
+            int pos_r = turtlePos.getSecond();
+            int pos_c = turtlePos.getFirst();
             putTextureInBuffer(buffer, executorTexture, new Pair(TEXTURE_SIZE * (pos_r - top_left_r), TEXTURE_SIZE * (pos_c - top_left_c)));
 
             StringBuilder output = new StringBuilder();

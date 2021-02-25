@@ -4,8 +4,8 @@ import ru.nsu.spirin.logoworld.math.Direction;
 import ru.nsu.spirin.logoworld.math.Pair;
 
 public class Turtle {
-    private int pos_r;
-    private int pos_c;
+    private int xPos;
+    private int yPos;
     private boolean isDrawing;
 
     public Turtle() {
@@ -20,18 +20,18 @@ public class Turtle {
         this.isDrawing = isDrawing;
     }
 
-    public void setPosition(int pos_r, int pos_c) {
-        this.pos_r = pos_r;
-        this.pos_c = pos_c;
+    public void setPosition(int x, int y) {
+        this.xPos = x;
+        this.yPos = y;
     }
 
     public void move(Direction dir) {
         Pair delta = Direction.convertDirectionToDelta(dir);
-        this.pos_r += delta.getFirst();
-        this.pos_c += delta.getSecond();
+        this.xPos += delta.getFirst();
+        this.yPos += delta.getSecond();
     }
 
     public Pair getPosition() {
-        return new Pair(pos_r, pos_c);
+        return new Pair(xPos, yPos);
     }
 }

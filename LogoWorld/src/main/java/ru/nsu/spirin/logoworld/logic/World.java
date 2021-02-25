@@ -10,71 +10,117 @@ public class World {
     private final Turtle turtle;
     private final Field field;
 
+    /**
+     *  Create World instance, which contains field and turtle
+     */
     public World() {
-        logger.debug("World started initialization.");
+        logger.debug("World initialization.");
         this.field = new Field();
         this.turtle = new Turtle();
-        logger.debug("World finished initialization.");
     }
 
+    /**
+     * Init world parameters.
+     * @param width Field width
+     * @param height Field height
+     * @param x Turtle x-position
+     * @param y Turtle y-position
+     */
     public void initWorld(int width, int height, int x, int y) {
-        logger.debug("Initializing world parameters");
+        logger.debug("Initializing world parameters: " + width + " " + height + " " + x + " " + y);
         field.setSize(width, height);
-        turtle.setPosition(y, x);
+        turtle.setPosition(x, y);
     }
 
+    /**
+     * Check if turtle is currently drawing
+     * @return true if turtle is drawing
+     * @see World#setIsTurtleDrawing(boolean)
+     */
     public boolean getIsTurtleDrawing() {
         return turtle.getIsDrawing();
     }
 
+    /**
+     * Set turtle drawing state
+     * @param isDrawing whether turtle should draw or not
+     * @see World#getIsTurtleDrawing() (boolean)
+     */
     public void setIsTurtleDrawing(boolean isDrawing) {
         logger.debug("Switch turtle drawing mode");
         turtle.setIsDrawing(isDrawing);
-        updateExecutorAndField();
+        update();
     }
 
-    public void setTurtlePosition(int pos_r, int pos_c) {
-        logger.debug("Set turtle position: " + pos_r + " " + pos_c);
-        turtle.setPosition(pos_r, pos_c);
-        updateExecutorAndField();
+    /**
+     * Set new position of turtle
+     * @param x x-position
+     * @param y y-position
+     */
+    public void setTurtlePosition(int x, int y) {
+        logger.debug("Set turtle position: " + x + " " + y);
+        turtle.setPosition(x, y);
+        update();
     }
 
+    /**
+     * Move turtle in direction
+     * @param dir direction
+     */
     public void moveTurtle(Direction dir) {
         logger.debug("Move turtle in direction " + dir.toString());
         turtle.move(dir);
-        updateExecutorAndField();
+        update();
     }
 
+    /**
+     * Check if world is valid
+     * @return true if turtle and field have been initialized
+     */
     public boolean isValid() {
         return field.getWidth() != 0 && field.getHeight() != 0;
     }
 
+    /**
+     * Get turtle position
+     * @return (x,y) - turtle position
+     */
     public Pair getTurtlePosition() {
         return turtle.getPosition();
     }
 
+    /**
+     * Get field size
+     * @return (width, height) - field size
+     */
     public Pair getFieldSize() {
         return new Pair(field.getWidth(), field.getHeight());
     }
 
-    public boolean isCellDrawn(int r, int c) {
-        return field.isDrawn(r, c);
+    /**
+     * Check if this cell is drawn by turtle
+     * @param x x-position
+     * @param y y-position
+     * @return true if cell is drawn
+     */
+    public boolean isCellDrawn(int x, int y) {
+        return field.isDrawn(x, y);
     }
 
-    private void updateExecutorAndField() {
+    private void update() {
         Pair pos = turtle.getPosition();
-        int r = pos.getFirst(), c = pos.getSecond();
+        int x = pos.getFirst(), y = pos.getSecond();
 
-        while (r < 0) r += field.getHeight();
-        while (r >= field.getHeight()) r -= field.getHeight();
+        while (y < 0) y += field.getHeight();
+        while (y >= field.getHeight()) y -= field.getHeight();
 
-        while (c < 0) c += field.getWidth();
-        while (c >= field.getWidth()) c -= field.getWidth();
+        while (x < 0) x += field.getWidth();
+        while (x >= field.getWidth()) x -= field.getWidth();
 
-        turtle.setPosition(r, c);
+        turtle.setPosition(x, y);
 
         if (turtle.getIsDrawing()) {
-            field.setDrawn(r, c, true);
+            field.setDrawn(x, y, true);
         }
     }
 }

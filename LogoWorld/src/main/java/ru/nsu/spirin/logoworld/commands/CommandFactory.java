@@ -1,8 +1,8 @@
 package ru.nsu.spirin.logoworld.commands;
 
+import input.Input;
 import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.exceptions.CommandsWorkflowException;
-import ru.nsu.spirin.logoworld.logic.Program;
 import ru.nsu.spirin.logoworld.logic.World;
 
 import java.io.IOException;
@@ -15,11 +15,11 @@ public class CommandFactory {
     private static final Logger logger = Logger.getLogger(CommandFactory.class);
 
     private final World world;
-    private final Program program;
+    private final Input input;
     private final Map<String, String> commands;
     private final Map<String, Command> instances;
 
-    public CommandFactory(Program program, World world) throws IOException {
+    public CommandFactory(Input input, World world) throws IOException {
         logger.debug("Command Factory started initialization.");
         InputStream stream = ClassLoader.getSystemResourceAsStream("commands.properties");
         if (stream == null) {
@@ -39,7 +39,7 @@ public class CommandFactory {
         }
 
         this.world = world;
-        this.program = program;
+        this.input = input;
         logger.debug("Command Factory finished initialization");
     }
 
@@ -51,7 +51,8 @@ public class CommandFactory {
      */
     public Command getCommand(String command) throws CommandsWorkflowException {
         if (!commands.containsKey(command)) {
-            logger.debug("Invalid command request: " + command);
+            CommandError.setError("Unknown command: " + command);
+            logger.debug("Unknown command: " + command);
             return null;
         }
         if (instances.containsKey(command)) return instances.get(command);
@@ -60,7 +61,7 @@ public class CommandFactory {
         try {
             logger.debug("Command request: " + command);
             logger.debug("Creating instance of class: " + commands.get(command));
-            instance = (Command) Class.forName(commands.get(command)).getConstructor(Program.class, World.class).newInstance(program, world);
+            instance = (Command) Class.forName(commands.get(command)).getConstructor(Input.class, World.class).newInstance(input, world);
             instances.put(command, instance);
             logger.debug("Successfully created instance of class.");
         }

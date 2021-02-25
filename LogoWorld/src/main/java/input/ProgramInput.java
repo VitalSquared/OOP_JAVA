@@ -1,4 +1,4 @@
-package ru.nsu.spirin.logoworld.logic;
+package input;
 
 import org.apache.log4j.Logger;
 
@@ -8,13 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Program {
+public class ProgramInput implements Input {
     private Scanner scanner = null;
-    private static final Logger logger = Logger.getLogger(Program.class);
+    private static final Logger logger = Logger.getLogger(ProgramInput.class);
     private final List<String> commandsOrder = new ArrayList<>();
     private int curCommand = 0;
 
-    public Program(String fileName) throws FileNotFoundException {
+    public ProgramInput(String fileName) throws FileNotFoundException {
         logger.debug("Loading program: " + fileName + " ...");
         scanner = new Scanner(new FileInputStream(fileName));
         while (scanner.hasNext()) {
@@ -38,8 +38,13 @@ public class Program {
         return curCommand >= commandsOrder.size();
     }
 
+    @Override
+    public boolean allowJump() {
+        return true;
+    }
+
     public void close() {
-        logger.debug("Program closing.");
+        logger.debug("ProgramInput closing.");
         if (scanner != null) scanner.close();
     }
 }
