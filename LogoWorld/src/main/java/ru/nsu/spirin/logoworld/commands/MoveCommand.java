@@ -1,13 +1,16 @@
 package ru.nsu.spirin.logoworld.commands;
 
+import ru.nsu.spirin.logoworld.logic.Program;
 import ru.nsu.spirin.logoworld.logic.World;
 import ru.nsu.spirin.logoworld.math.Direction;
 
 public class MoveCommand implements Command {
-    private World world;
+    private final World world;
+    private final Program program;
     private int steps;
 
-    public MoveCommand(World world) {
+    public MoveCommand(Program program, World world) {
+        this.program = program;
         this.world = world;
         this.steps = 0;
     }
@@ -29,10 +32,11 @@ public class MoveCommand implements Command {
     public boolean execute(String[] args) {
         if (steps >= Integer.parseInt(args[1]) || !world.isValid()) {
             steps = 0;
+            program.setNextCommand();
             return false;
         }
         steps++;
-        world.moveTurtle(this, Direction.convertCharacterToDirection(args[0].charAt(0)));
+        world.moveTurtle(Direction.convertCharacterToDirection(args[0].charAt(0)));
         return true;
     }
 }

@@ -1,11 +1,14 @@
 package ru.nsu.spirin.logoworld.commands;
 
+import ru.nsu.spirin.logoworld.logic.Program;
 import ru.nsu.spirin.logoworld.logic.World;
 
 public class DrawCommand implements Command {
-    private World world;
+    private final World world;
+    private final Program program;
 
-    public DrawCommand(World world) {
+    public DrawCommand(Program program, World world) {
+        this.program = program;
         this.world = world;
     }
 
@@ -16,8 +19,11 @@ public class DrawCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (world.getIsTurtleDrawing() || !world.isValid()) return false;
-        world.setIsTurtleDrawing(this,true);
+        if (world.getIsTurtleDrawing() || !world.isValid()) {
+            program.setNextCommand();
+            return false;
+        }
+        world.setIsTurtleDrawing(true);
         return true;
     }
 }

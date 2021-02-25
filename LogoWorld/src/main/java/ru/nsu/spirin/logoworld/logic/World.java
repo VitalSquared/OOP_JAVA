@@ -1,20 +1,24 @@
 package ru.nsu.spirin.logoworld.logic;
 
-import ru.nsu.spirin.logoworld.commands.Command;
+import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.math.Direction;
 import ru.nsu.spirin.logoworld.math.Pair;
 
 public class World {
+    private static final Logger logger = Logger.getLogger(World.class);
+
     private final Turtle turtle;
     private final Field field;
 
     public World() {
+        logger.debug("World started initialization.");
         this.field = new Field();
         this.turtle = new Turtle();
+        logger.debug("World finished initialization.");
     }
 
-    public void initWorld(Object sender, int width, int height, int x, int y) {
-        if (!validateSender(sender)) return;
+    public void initWorld(int width, int height, int x, int y) {
+        logger.debug("Initializing world parameters");
         field.setSize(width, height);
         turtle.setPosition(y, x);
     }
@@ -23,20 +27,20 @@ public class World {
         return turtle.getIsDrawing();
     }
 
-    public void setIsTurtleDrawing(Object sender, boolean isDrawing) {
-        if (!validateSender(sender)) return;
+    public void setIsTurtleDrawing(boolean isDrawing) {
+        logger.debug("Switch turtle drawing mode");
         turtle.setIsDrawing(isDrawing);
         updateExecutorAndField();
     }
 
-    public void setTurtlePosition(Object sender, int pos_r, int pos_c) {
-        if (!validateSender(sender)) return;
+    public void setTurtlePosition(int pos_r, int pos_c) {
+        logger.debug("Set turtle position: " + pos_r + " " + pos_c);
         turtle.setPosition(pos_r, pos_c);
         updateExecutorAndField();
     }
 
-    public void moveTurtle(Object sender, Direction dir) {
-        if (!validateSender(sender)) return;
+    public void moveTurtle(Direction dir) {
+        logger.debug("Move turtle in direction " + dir.toString());
         turtle.move(dir);
         updateExecutorAndField();
     }
@@ -72,9 +76,5 @@ public class World {
         if (turtle.getIsDrawing()) {
             field.setDrawn(r, c, true);
         }
-    }
-
-    private boolean validateSender(Object sender) {
-        return sender instanceof Command;
     }
 }

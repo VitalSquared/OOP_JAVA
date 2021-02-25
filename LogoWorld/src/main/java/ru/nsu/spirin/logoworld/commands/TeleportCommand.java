@@ -1,13 +1,16 @@
 package ru.nsu.spirin.logoworld.commands;
 
+import ru.nsu.spirin.logoworld.logic.Program;
 import ru.nsu.spirin.logoworld.logic.World;
 import ru.nsu.spirin.logoworld.math.Pair;
 
 public class TeleportCommand implements Command {
-    private World world;
+    private final World world;
+    private final Program program;
     private int steps;
 
-    public TeleportCommand(World world) {
+    public TeleportCommand(Program program, World world) {
+        this.program = program;
         this.world = world;
         this.steps = 0;
     }
@@ -32,12 +35,13 @@ public class TeleportCommand implements Command {
     public boolean execute(String[] args) {
         if (steps >= 1 || !world.isValid()) {
             steps = 0;
+            program.setNextCommand();
             return false;
         }
         steps++;
         int x = Integer.parseInt(args[0]);
         int y = Integer.parseInt(args[1]);
-        world.setTurtlePosition(this, y, x);
+        world.setTurtlePosition(y, x);
         return true;
     }
 }

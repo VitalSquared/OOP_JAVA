@@ -1,5 +1,6 @@
 package ru.nsu.spirin.logoworld.drawing;
 
+import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.exceptions.InvalidTextureSizeException;
 import ru.nsu.spirin.logoworld.exceptions.RenderException;
 import ru.nsu.spirin.logoworld.logic.Interpreter;
@@ -10,6 +11,8 @@ import java.util.Scanner;
 
 public class ConsoleView implements GraphicsView{
 
+    private static final Logger logger = Logger.getLogger(ConsoleView.class);
+
     private final int TEXTURE_SIZE = 1;
 
     private final Texture backgroundTexture;
@@ -19,6 +22,7 @@ public class ConsoleView implements GraphicsView{
     private final Scanner scanner;
 
     public ConsoleView() throws InvalidTextureSizeException {
+        logger.debug("Console View initialization.");
         scanner = new Scanner(System.in);
         backgroundTexture = new Texture(" ", "");
         executorTexture = new Texture("@", "");

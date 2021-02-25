@@ -1,12 +1,15 @@
 package ru.nsu.spirin.logoworld.commands;
 
+import ru.nsu.spirin.logoworld.logic.Program;
 import ru.nsu.spirin.logoworld.logic.World;
 
 public class InitCommand implements Command {
-    private World world;
+    private final World world;
+    private final Program program;
     private int steps;
 
-    public InitCommand(World world) {
+    public InitCommand(Program program, World world) {
+        this.program = program;
         this.world = world;
         this.steps = 0;
     }
@@ -30,6 +33,7 @@ public class InitCommand implements Command {
     public boolean execute(String[] args) {
         if (steps >= 1) {
             steps = 0;
+            program.setNextCommand();
             return false;
         }
         steps++;
@@ -37,7 +41,7 @@ public class InitCommand implements Command {
         int height = Integer.parseInt(args[1]);
         int x = Integer.parseInt(args[2]);
         int y = Integer.parseInt(args[3]);
-        world.initWorld(this, width, height, x, y);
+        world.initWorld(width, height, x, y);
         return true;
     }
 }
