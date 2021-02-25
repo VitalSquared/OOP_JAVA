@@ -1,8 +1,8 @@
 package ru.nsu.spirin.logoworld.logic;
 
-import input.ConsoleInput;
-import input.Input;
-import input.ProgramInput;
+import ru.nsu.spirin.logoworld.input.ConsoleInput;
+import ru.nsu.spirin.logoworld.input.Input;
+import ru.nsu.spirin.logoworld.input.ProgramInput;
 import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.commands.Command;
 import ru.nsu.spirin.logoworld.commands.CommandFactory;

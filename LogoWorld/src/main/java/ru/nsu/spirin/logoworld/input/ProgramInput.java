@@ -1,4 +1,4 @@
-package input;
+package ru.nsu.spirin.logoworld.input;
 
 import org.apache.log4j.Logger;
 

@@ -1,6 +1,6 @@
 package ru.nsu.spirin.logoworld.commands;
 
-import input.Input;
+import ru.nsu.spirin.logoworld.input.Input;
 import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.exceptions.CommandsWorkflowException;
 import ru.nsu.spirin.logoworld.logic.World;

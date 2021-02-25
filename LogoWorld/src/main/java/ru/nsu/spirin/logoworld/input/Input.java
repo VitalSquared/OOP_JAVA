@@ -1,4 +1,4 @@
-package input;
+package ru.nsu.spirin.logoworld.input;
 
 public interface Input {
     String nextCommand();

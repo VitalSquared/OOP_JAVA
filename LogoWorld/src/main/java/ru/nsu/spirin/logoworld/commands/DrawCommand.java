@@ -1,6 +1,6 @@
 package ru.nsu.spirin.logoworld.commands;
 
-import input.Input;
+import ru.nsu.spirin.logoworld.input.Input;
 import ru.nsu.spirin.logoworld.logic.World;
 
 public class DrawCommand implements Command {

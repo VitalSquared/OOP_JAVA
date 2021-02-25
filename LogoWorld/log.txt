@@ -5,7 +5,7 @@
 2021-02-26 00:59:46.555 [main] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World finished initialization.
 2021-02-26 00:59:46.555 [main] DEBUG ru.nsu.spirin.logoworld.drawing.ConsoleView.<init>(ConsoleView.java:25) - Console View initialization.
 2021-02-26 00:59:46.555 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.<init>(Interpreter.java:30) - Interpreter started initialization.
-2021-02-26 00:59:46.571 [main] DEBUG input.ConsoleInput.<init>(ConsoleInput.java:14) - Console Input initialized.
+2021-02-26 00:59:46.571 [main] DEBUG ru.nsu.spirin.logoworld.input.ConsoleInput.<init>(ConsoleInput.java:14) - Console Input initialized.
 2021-02-26 00:59:46.571 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.<init>(CommandFactory.java:23) - Command Factory started initialization.
 2021-02-26 00:59:46.571 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.<init>(CommandFactory.java:43) - Command Factory finished initialization
 2021-02-26 00:59:46.571 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.<init>(Interpreter.java:38) - Interpreter finished initialization.
@@ -25,8 +25,39 @@
 2021-02-26 01:00:02.592 [main] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World finished initialization.
 2021-02-26 01:00:02.592 [main] DEBUG ru.nsu.spirin.logoworld.drawing.ConsoleView.<init>(ConsoleView.java:25) - Console View initialization.
 2021-02-26 01:00:02.608 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.<init>(Interpreter.java:30) - Interpreter started initialization.
-2021-02-26 01:00:02.608 [main] DEBUG input.ConsoleInput.<init>(ConsoleInput.java:14) - Console Input initialized.
+2021-02-26 01:00:02.608 [main] DEBUG ru.nsu.spirin.logoworld.input.ConsoleInput.<init>(ConsoleInput.java:14) - Console Input initialized.
 2021-02-26 01:00:02.608 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.<init>(CommandFactory.java:23) - Command Factory started initialization.
 2021-02-26 01:00:02.608 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.<init>(CommandFactory.java:43) - Command Factory finished initialization
 2021-02-26 01:00:02.608 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.<init>(Interpreter.java:38) - Interpreter finished initialization.
 2021-02-26 01:00:05.374 [main] DEBUG ru.nsu.spirin.logoworld.Main.main(Main.java:19) - Finishing...
+2021-02-26 01:29:37.871 [main] DEBUG ru.nsu.spirin.logoworld.Main.main(Main.java:9) - Startup...
+2021-02-26 01:29:37.888 [main] DEBUG ru.nsu.spirin.logoworld.LogoWorld.<init>(LogoWorld.java:32) - Logo World Initialization...
+2021-02-26 01:29:37.888 [main] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-02-26 01:29:37.888 [main] DEBUG ru.nsu.spirin.logoworld.drawing.ConsoleView.<init>(ConsoleView.java:24) - Console View initialization.
+2021-02-26 01:29:37.888 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.<init>(Interpreter.java:29) - Interpreter initialization.
+2021-02-26 01:29:37.888 [main] DEBUG ru.nsu.spirin.logoworld.input.ConsoleInput.<init>(ConsoleInput.java:14) - Console Input initialized.
+2021-02-26 01:29:37.904 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.<init>(CommandFactory.java:23) - Command Factory started initialization.
+2021-02-26 01:29:37.904 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.<init>(CommandFactory.java:43) - Command Factory finished initialization
+2021-02-26 01:29:45.693 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.parseNextCommand(Interpreter.java:47) - Interpreter parsing command: INIT 20 20 2 2
+2021-02-26 01:29:45.693 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.getCommand(CommandFactory.java:62) - Command request: INIT
+2021-02-26 01:29:45.693 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.getCommand(CommandFactory.java:63) - Creating instance of class: ru.nsu.spirin.logoworld.commands.InitCommand
+2021-02-26 01:29:45.693 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.getCommand(CommandFactory.java:66) - Successfully created instance of class.
+2021-02-26 01:29:45.708 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.parseNextCommand(Interpreter.java:67) - Result of parsing: true
+2021-02-26 01:29:45.708 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.step(Interpreter.java:85) - Stepping through command...
+2021-02-26 01:29:45.708 [main] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:30) - Initializing world parameters: 20 20 2 2
+2021-02-26 01:29:46.061 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.step(Interpreter.java:85) - Stepping through command...
+2021-02-26 01:29:47.709 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.parseNextCommand(Interpreter.java:47) - Interpreter parsing command: MOVE U 2
+2021-02-26 01:29:47.709 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.getCommand(CommandFactory.java:62) - Command request: MOVE
+2021-02-26 01:29:47.709 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.getCommand(CommandFactory.java:63) - Creating instance of class: ru.nsu.spirin.logoworld.commands.MoveCommand
+2021-02-26 01:29:47.709 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.getCommand(CommandFactory.java:66) - Successfully created instance of class.
+2021-02-26 01:29:47.709 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.parseNextCommand(Interpreter.java:67) - Result of parsing: true
+2021-02-26 01:29:47.709 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.step(Interpreter.java:85) - Stepping through command...
+2021-02-26 01:29:47.709 [main] DEBUG ru.nsu.spirin.logoworld.logic.World.moveTurtle(World.java:71) - Move turtle in direction UP
+2021-02-26 01:29:48.053 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.step(Interpreter.java:85) - Stepping through command...
+2021-02-26 01:29:48.053 [main] DEBUG ru.nsu.spirin.logoworld.logic.World.moveTurtle(World.java:71) - Move turtle in direction UP
+2021-02-26 01:29:48.394 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.step(Interpreter.java:85) - Stepping through command...
+2021-02-26 01:29:50.732 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.parseNextCommand(Interpreter.java:47) - Interpreter parsing command: EXIT
+2021-02-26 01:29:50.732 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.parseNextCommand(Interpreter.java:67) - Result of parsing: true
+2021-02-26 01:29:50.732 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.step(Interpreter.java:80) - Empty command. Skipping...
+2021-02-26 01:29:50.732 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.isFinished(Interpreter.java:100) - Interpreter finished working. Program file will be closed.
+2021-02-26 01:29:50.732 [main] DEBUG ru.nsu.spirin.logoworld.Main.main(Main.java:18) - Finishing...
