@@ -1,21 +1,20 @@
 package ru.nsu.spirin.morsecoder.coder;
 
+import ru.nsu.spirin.morsecoder.character.CharacterFrequency;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Encoder implements Coder {
-    Alphabet alphabet;
+public final class Encoder implements Coder {
+    private final Alphabet alphabet;
 
     public Encoder(Alphabet alphabet) {
         this.alphabet = alphabet;
-    }
-
-    @Override
-    public void setAlphabet(Alphabet newAlphabet) {
-        this.alphabet = newAlphabet;
     }
 
     @Override
@@ -28,7 +27,7 @@ public class Encoder implements Coder {
         Writer output = null;
         Writer stats = null;
 
-        Coder.clearStats();
+        Set<CharacterFrequency> statsSet = new HashSet<>();
 
         try {
             input = new BufferedReader(new FileReader(fileName));
@@ -38,7 +37,7 @@ public class Encoder implements Coder {
                 for (var word : line.split("\\s+")) {
                     for (var letter : word.toCharArray()) {
                         if (Character.isLetter(letter)) {
-                            Coder.addStat(letter);
+                            statsSet.add(new CharacterFrequency(letter));
                         }
                         sb.append((alphabet.getMorseCodeFromCharacter(letter))).append(" ");
                     }
@@ -51,8 +50,13 @@ public class Encoder implements Coder {
             output.flush();
             System.out.println("Done translating.");
 
+            sb.setLength(0);
             stats = new FileWriter(statsFileName);
-            Coder.writeStats(alphabet, stats);
+            for (var ch : statsSet) {
+                sb.append(ch.getChar()).append(" = ").append(ch.getFrequency()).append(System.lineSeparator());
+            }
+            stats.write(alphabet.getCasedString(sb.toString()));
+            stats.flush();
             System.out.println("Stats file generated.");
         }
         catch (IOException e) {

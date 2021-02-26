@@ -1,6 +1,5 @@
 package ru.nsu.spirin.morsecoder;
 
-import ru.nsu.spirin.morsecoder.character.CharacterCase;
 import ru.nsu.spirin.morsecoder.coder.Alphabet;
 import ru.nsu.spirin.morsecoder.coder.Coder;
 import ru.nsu.spirin.morsecoder.coder.Decoder;
@@ -19,16 +18,11 @@ import java.util.Scanner;
 public class MorseCoder {
 
     private final Map<String, Command> commandMap;
-    private final Alphabet alphabet;
-    private final Coder encoder;
-    private final Coder decoder;
+    private final Alphabet alphabet = new Alphabet();
+    private final Coder encoder = new Encoder(alphabet);;
+    private final Coder decoder = new Decoder(alphabet);;
 
     public MorseCoder() throws IOException {
-        alphabet = new Alphabet();
-
-        encoder = new Encoder(alphabet);
-        decoder = new Decoder(alphabet);
-
         commandMap = new HashMap<>();
         commandMap.put("code", new EncodeCommand(encoder));
         commandMap.put("decode", new DecodeCommand(decoder));
@@ -37,7 +31,6 @@ public class MorseCoder {
     }
 
     public void run() throws IOException {
-
         Scanner scanner = new Scanner(System.in);
         String cmd;
 

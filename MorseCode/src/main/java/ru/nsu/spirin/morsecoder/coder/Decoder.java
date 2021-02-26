@@ -1,21 +1,20 @@
 package ru.nsu.spirin.morsecoder.coder;
 
+import ru.nsu.spirin.morsecoder.character.CharacterFrequency;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashSet;
+import java.util.Set;
 
-public class Decoder implements Coder {
-    Alphabet alphabet;
+public final class Decoder implements Coder {
+    private final Alphabet alphabet;
 
     public Decoder(Alphabet alphabet) {
         this.alphabet = alphabet;
-    }
-
-    @Override
-    public void setAlphabet(Alphabet newAlphabet) {
-        this.alphabet = newAlphabet;
     }
 
     @Override
@@ -28,7 +27,7 @@ public class Decoder implements Coder {
         Writer output = null;
         Writer stats = null;
 
-        Coder.clearStats();
+        Set<CharacterFrequency> statsSet = new HashSet<>();
 
         try {
             input = new BufferedReader(new FileReader(fileName));
@@ -39,7 +38,7 @@ public class Decoder implements Coder {
                     for (var letter : word.trim().split(" +")) {
                         char decoded = alphabet.getCharacterFromMorseCode(letter);
                         if (Character.isLetter(decoded)) {
-                            Coder.addStat(decoded);
+                            statsSet.add(new CharacterFrequency(decoded));
                         }
                         sb.append(decoded);
                     }
@@ -52,8 +51,13 @@ public class Decoder implements Coder {
             output.flush();
             System.out.println("Done translating.");
 
+            sb.setLength(0);
             stats = new FileWriter(statsFileName);
-            Coder.writeStats(alphabet, stats);
+            for (var ch : statsSet) {
+                sb.append(ch.getChar()).append(" = ").append(ch.getFrequency()).append(System.lineSeparator());
+            }
+            stats.write(alphabet.getCasedString(sb.toString()));
+            stats.flush();
             System.out.println("Stats file generated.");
         }
         catch (IOException e) {
