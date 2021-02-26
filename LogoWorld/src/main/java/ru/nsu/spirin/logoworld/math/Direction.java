@@ -13,16 +13,16 @@ public enum Direction {
      * @return pair
      */
     public static Pair convertDirectionToDelta(Direction dir) {
-        int dr = 0, dc = 0;
+        int dx = 0, dy = 0;
         if (dir != null) {
             switch (dir) {
-                case UP -> dr = -1;
-                case DOWN -> dr = 1;
-                case LEFT -> dc = -1;
-                case RIGHT -> dc = 1;
+                case UP -> dy = -1;
+                case DOWN -> dy = 1;
+                case LEFT -> dx = -1;
+                case RIGHT -> dx = 1;
             }
         }
-        return new Pair(dr, dc);
+        return new Pair(dx, dy);
     }
 
     /**
