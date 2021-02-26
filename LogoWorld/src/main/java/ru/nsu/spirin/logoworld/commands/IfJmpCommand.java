@@ -11,6 +11,7 @@ import java.util.Stack;
 public class IfJmpCommand implements Command {
     private final Input input;
     private final World world;
+
     private boolean lastConditionState = false;
     private int nextCommand = 0;
 
@@ -19,12 +20,6 @@ public class IfJmpCommand implements Command {
         this.world = world;
     }
 
-    /**
-     * Validates arguments of command
-     *
-     * @param args arguments of command
-     * @return true if arguments are valid
-     */
     @Override
     public boolean validateArgs(String[] args) {
         if (args.length != 2) {
@@ -34,6 +29,10 @@ public class IfJmpCommand implements Command {
         try {
             lastConditionState = parseCondition(args[0]);
             nextCommand = Integer.parseInt(args[1]);
+            if (nextCommand <= 0) {
+                CommandError.setError("Invalid program location.");
+                return false;
+            }
             return true;
         }
         catch (InvalidConditionException e) {
@@ -46,17 +45,10 @@ public class IfJmpCommand implements Command {
         return false;
     }
 
-    /**
-     * Executes command
-     *
-     * @param args arguments of command
-     * @return true if command was executed successfully
-     */
     @Override
     public boolean execute(String[] args) {
         if (input.allowJump()) {
-            if (lastConditionState) input.setNextCommand(nextCommand);
-            else input.setNextCommand();
+            input.setNextCommand(lastConditionState ? nextCommand : null);
         }
         return false;
     }
@@ -69,12 +61,21 @@ public class IfJmpCommand implements Command {
 
             int firstValue = Integer.parseInt(first);
             int secondValue = Integer.parseInt(second);
-            switch(op) {
-                case ">" -> { return firstValue > secondValue; }
-                case ">=" -> { return firstValue >= secondValue; }
-                case "<" -> { return firstValue < secondValue; }
-                case "<=" -> { return firstValue <= secondValue; }
-                default -> { throw  new InvalidConditionException(""); }
+            switch (op) {
+                case ">" -> {
+                    return firstValue > secondValue;
+                }
+                case ">=" -> {
+                    return firstValue >= secondValue;
+                }
+                case "<" -> {
+                    return firstValue < secondValue;
+                }
+                case "<=" -> {
+                    return firstValue <= secondValue;
+                }
+                default -> throw new InvalidConditionException("");
+
             }
 
         }
@@ -84,20 +85,34 @@ public class IfJmpCommand implements Command {
     }
 
     private boolean logicOperation(boolean first, boolean second, String op) throws InvalidConditionException {
-        switch(op) {
-            case "and" -> { return first && second; }
-            case "or" -> { return first || second; }
-            default -> { throw  new InvalidConditionException(""); }
+        switch (op) {
+            case "and" -> {
+                return first && second;
+            }
+            case "or" -> {
+                return first || second;
+            }
+            default -> throw new InvalidConditionException("");
         }
     }
 
     private String getConstant(String constant) throws InvalidConditionException {
-        switch(constant) {
-            case "POS_X" -> { return world.getTurtlePosition().getFirst() + ""; }
-            case "POS_Y" -> { return world.getTurtlePosition().getSecond() + ""; }
-            case "FIELD_WIDTH" -> { return world.getFieldSize().getFirst() + ""; }
-            case "FIELD_HEIGHT" -> { return world.getFieldSize().getSecond() + ""; }
-            case "IS_DRAWING" -> { return world.getIsTurtleDrawing() ? "TRUE" : "FALSE"; }
+        switch (constant) {
+            case "POS_X" -> {
+                return world.getTurtlePosition().getFirst() + "";
+            }
+            case "POS_Y" -> {
+                return world.getTurtlePosition().getSecond() + "";
+            }
+            case "FIELD_WIDTH" -> {
+                return world.getFieldSize().getFirst() + "";
+            }
+            case "FIELD_HEIGHT" -> {
+                return world.getFieldSize().getSecond() + "";
+            }
+            case "IS_DRAWING" -> {
+                return world.getIsTurtleDrawing() ? "TRUE" : "FALSE";
+            }
         }
         throw new InvalidConditionException("");
     }
@@ -108,7 +123,7 @@ public class IfJmpCommand implements Command {
 
         Stack<String> stack = new Stack<>();
         for (String elem : notation) {
-            switch(elem) {
+            switch (elem) {
                 case ">=", ">", "<=", "<", "==" -> {
                     String second = stack.pop();
                     String first = stack.pop();
@@ -123,10 +138,8 @@ public class IfJmpCommand implements Command {
                     boolean value2 = stack.pop().equals("TRUE");
                     stack.push(logicOperation(value1, value2, elem) ? "TRUE" : "FALSE");
                 }
-                case "POS_X", "POS_Y", "FIELD_WIDTH", "FIELD_HEIGHT", "IS_DRAWING" -> {
-                    stack.push(getConstant(elem));
-                }
-                case "TRUE", "FALSE" -> { stack.push(elem); }
+                case "POS_X", "POS_Y", "FIELD_WIDTH", "FIELD_HEIGHT", "IS_DRAWING" -> stack.push(getConstant(elem));
+                case "TRUE", "FALSE" -> stack.push(elem);
                 default -> {
                     try {
                         Integer.parseInt(elem);
@@ -177,7 +190,7 @@ public class IfJmpCommand implements Command {
     }
 
     private int getOperationPriority(String op) {
-        switch(op) {
+        switch (op) {
             case ">=", ">", "<=", "<", "==" -> {
                 return 4;
             }
@@ -224,9 +237,7 @@ public class IfJmpCommand implements Command {
                     }
                     stack.push(token);
                 }
-                case "POS_X", "POS_Y", "FIELD_WIDTH", "FIELD_HEIGHT", "IS_DRAWING", "TRUE", "FALSE" -> {
-                    notation.add(token);
-                }
+                case "POS_X", "POS_Y", "FIELD_WIDTH", "FIELD_HEIGHT", "IS_DRAWING", "TRUE", "FALSE" -> notation.add(token);
                 default -> {
                     try {
                         Integer.parseInt(token);
@@ -242,9 +253,7 @@ public class IfJmpCommand implements Command {
         while (!stack.empty()) {
             notation.add(stack.pop());
         }
-
         if (bracketBalance != 0) throw new InvalidConditionException("");
-
         return notation;
     }
 }

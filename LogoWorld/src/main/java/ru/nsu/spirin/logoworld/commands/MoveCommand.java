@@ -48,7 +48,7 @@ public class MoveCommand implements Command {
     public boolean execute(String[] args) {
         if (steps >= Integer.parseInt(args[1]) || !world.isValid()) {
             steps = 0;
-            if (input.allowJump()) input.setNextCommand();
+            if (input.allowJump()) input.setNextCommand(null);
             return false;
         }
         steps++;

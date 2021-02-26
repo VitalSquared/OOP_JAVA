@@ -1,7 +1,6 @@
 package ru.nsu.spirin.logoworld.drawing;
 
 import org.apache.log4j.Logger;
-import ru.nsu.spirin.logoworld.exceptions.InvalidTextureSizeException;
 import ru.nsu.spirin.logoworld.exceptions.RenderException;
 import ru.nsu.spirin.logoworld.logic.World;
 import ru.nsu.spirin.logoworld.math.Pair;
@@ -20,7 +19,7 @@ public class ConsoleView implements GraphicsView{
 
     private final Scanner scanner;
 
-    public ConsoleView() throws InvalidTextureSizeException {
+    public ConsoleView() throws RenderException {
         logger.debug("Console View initialization.");
         scanner = new Scanner(System.in);
         backgroundTexture = new Texture(" ", "");
@@ -47,40 +46,40 @@ public class ConsoleView implements GraphicsView{
             int width = Math.min(200, fieldSize.getFirst() * (TEXTURE_SIZE + 1));
             int height = Math.min(50, fieldSize.getSecond() * (TEXTURE_SIZE + 1));
 
-            int padding_top = TEXTURE_SIZE + 1;
-            int padding_btm = 2 * (TEXTURE_SIZE + 1);
-            int padding_lft = TEXTURE_SIZE + 1;
-            int padding_rgt = 2 * (TEXTURE_SIZE + 1);
+            int paddingTop = TEXTURE_SIZE + 1;
+            int paddingBottom = 2 * (TEXTURE_SIZE + 1);
+            int paddingLeft = TEXTURE_SIZE + 1;
+            int paddingRight = 2 * (TEXTURE_SIZE + 1);
 
-            int map_width = (width - (padding_lft + padding_rgt)) / (TEXTURE_SIZE + 1);
-            int map_height = (height - (padding_top + padding_btm)) / (TEXTURE_SIZE + 1);
+            int renderMapWidth = (width - (paddingLeft + paddingRight)) / (TEXTURE_SIZE + 1);
+            int renderMapHeight = (height - (paddingTop + paddingBottom)) / (TEXTURE_SIZE + 1);
 
             Pair turtlePos = world.getTurtlePosition();
 
-            int top_left_r = turtlePos.getSecond() - map_height / 2;
-            int top_left_c = turtlePos.getFirst() - map_width / 2;
+            int topLeftX = turtlePos.getFirst() - renderMapWidth / 2;
+            int topLeftY = turtlePos.getSecond() - renderMapHeight / 2;
 
-            String[][] buffer = new String[map_height * TEXTURE_SIZE][map_width * TEXTURE_SIZE];
+            String[][] buffer = new String[renderMapHeight * TEXTURE_SIZE][renderMapWidth * TEXTURE_SIZE];
 
-            for (int r = 0; r < map_height; r++) {
-                for (int c = 0; c < map_width; c++) {
-                    int coords_r = r + top_left_r;
-                    int coords_c = c + top_left_c;
-                    boolean isDrawn = world.isCellDrawn(coords_r, coords_c);
-                    putTextureInBuffer(buffer, isDrawn ? drawingTexture : backgroundTexture, new Pair(TEXTURE_SIZE * r, TEXTURE_SIZE * c));
+            for (int y = 0; y < renderMapHeight; y++) {
+                for (int x = 0; x < renderMapWidth; x++) {
+                    int xPos = x + topLeftX;
+                    int yPos = y + topLeftY;
+                    boolean isDrawn = world.isCellDrawn(xPos, yPos);
+                    putTextureInBuffer(buffer, isDrawn ? drawingTexture : backgroundTexture, new Pair(TEXTURE_SIZE * x, TEXTURE_SIZE * y));
                 }
             }
 
-            int pos_r = turtlePos.getSecond();
-            int pos_c = turtlePos.getFirst();
-            putTextureInBuffer(buffer, executorTexture, new Pair(TEXTURE_SIZE * (pos_r - top_left_r), TEXTURE_SIZE * (pos_c - top_left_c)));
+            int turtleX = turtlePos.getFirst();
+            int turtleY = turtlePos.getSecond();
+            putTextureInBuffer(buffer, executorTexture, new Pair(TEXTURE_SIZE * (turtleX - topLeftX), TEXTURE_SIZE * (turtleY - topLeftY)));
 
             StringBuilder output = new StringBuilder();
             int i = 0;
-            output.append(System.lineSeparator().repeat(padding_top));
+            output.append(System.lineSeparator().repeat(paddingTop));
             for (var row : buffer) {
                 int j = 0;
-                output.append(" ".repeat(padding_lft));
+                output.append(" ".repeat(paddingLeft));
                 for (var col : row) {
                     output.append(col).append(j == TEXTURE_SIZE - 1 ? "|" : "");
                     j++;
@@ -88,7 +87,7 @@ public class ConsoleView implements GraphicsView{
                 }
                 output.append(System.lineSeparator());
                 if (i == TEXTURE_SIZE - 1) {
-                    output.append(" ".repeat(padding_lft));
+                    output.append(" ".repeat(paddingLeft));
                     output.append("-".repeat(row.length * (TEXTURE_SIZE + 1) / TEXTURE_SIZE));
                     output.append(System.lineSeparator());
                 }
@@ -112,12 +111,12 @@ public class ConsoleView implements GraphicsView{
         }
     }
 
-    private void putTextureInBuffer(String[][] buffer, Texture texture, Pair top_left) {
-        for (int tr = 0; tr < texture.getSize(); tr++) {
-            for (int tc = 0; tc < texture.getSize(); tc++) {
-                int r = top_left.getFirst() + tr;
-                int c = top_left.getSecond() + tc;
-                buffer[r][c] = texture.getPixel(tr, tc);
+    private void putTextureInBuffer(String[][] buffer, Texture texture, Pair topLeft) {
+        for (int ty = 0; ty < texture.getSize(); ty++) {
+            for (int tx = 0; tx < texture.getSize(); tx++) {
+                int x = topLeft.getFirst() + tx;
+                int y = topLeft.getSecond() + ty;
+                buffer[y][x] = texture.getPixel(tx, ty);
             }
         }
     }

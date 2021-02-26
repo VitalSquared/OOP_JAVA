@@ -1,11 +1,12 @@
 package ru.nsu.spirin.logoworld.exceptions;
 
-public class CommandsWorkflowException extends Exception {
+public class CommandFactoryException extends Exception {
     /**
      * When command factory reflection fails
+     *
      * @param errorMessage message
      */
-    public CommandsWorkflowException(String errorMessage) {
+    public CommandFactoryException(String errorMessage) {
         super(errorMessage);
     }
 }

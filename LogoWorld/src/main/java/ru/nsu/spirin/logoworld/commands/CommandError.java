@@ -6,5 +6,13 @@ public class CommandError {
     static void setError(String msg) {
         error = msg;
     }
-    public static String getError() { return error; }
+
+    /**
+     * Get error of the last executed command.
+     *
+     * @return message
+     */
+    public static String getError() {
+        return error;
+    }
 }

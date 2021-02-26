@@ -28,7 +28,9 @@ public class WardCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if (!world.getIsTurtleDrawing() || !world.isValid()) {
-            if (input.allowJump()) input.setNextCommand();
+            if (input.allowJump()) {
+                input.setNextCommand(null);
+            }
             return false;
         }
         world.setIsTurtleDrawing(false);

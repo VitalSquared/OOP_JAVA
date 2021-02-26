@@ -41,7 +41,7 @@ public class InitCommand implements Command {
     public boolean execute(String[] args) {
         if (steps >= 1) {
             steps = 0;
-            if (input.allowJump()) input.setNextCommand();
+            if (input.allowJump()) input.setNextCommand(null);
             return false;
         }
         steps++;

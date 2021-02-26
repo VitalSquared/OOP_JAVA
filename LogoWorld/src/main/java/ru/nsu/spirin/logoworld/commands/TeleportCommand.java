@@ -28,7 +28,7 @@ public class TeleportCommand implements Command {
         try {
             int x = Integer.parseInt(args[0]);
             int y = Integer.parseInt(args[1]);
-            Pair fieldSize = world.getFieldSize();;
+            Pair fieldSize = world.getFieldSize();
             int width = fieldSize.getFirst();
             int height = fieldSize.getSecond();
             boolean result = 0 <= x && x < width && 0 <= y && y < height;
@@ -47,13 +47,15 @@ public class TeleportCommand implements Command {
     public boolean execute(String[] args) {
         if (steps >= 1 || !world.isValid()) {
             steps = 0;
-            if (input.allowJump()) input.setNextCommand();
+            if (input.allowJump()) {
+                input.setNextCommand(null);
+            }
             return false;
         }
         steps++;
         int x = Integer.parseInt(args[0]);
         int y = Integer.parseInt(args[1]);
-        world.setTurtlePosition(y, x);
+        world.setTurtlePosition(x, y);
         return true;
     }
 }

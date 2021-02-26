@@ -1,6 +1,7 @@
 package ru.nsu.spirin.logoworld.input;
 
 import org.apache.log4j.Logger;
+import ru.nsu.spirin.logoworld.exceptions.InvalidInputException;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -9,31 +10,27 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ProgramInput implements Input {
-    private Scanner scanner = null;
     private static final Logger logger = Logger.getLogger(ProgramInput.class);
-    private final List<String> commandsOrder = new ArrayList<>();
-    private int curCommand = 0;
 
+    private int curCommand = 0;
+    private final List<String> commandsOrder = new ArrayList<>();
+
+    /**
+     * Initialize input from file with program
+     *
+     * @param fileName file name which contains program
+     * @throws FileNotFoundException file not found
+     */
     public ProgramInput(String fileName) throws FileNotFoundException {
         logger.debug("Loading program: " + fileName + " ...");
-        scanner = new Scanner(new FileInputStream(fileName));
+        Scanner scanner = new Scanner(new FileInputStream(fileName));
         while (scanner.hasNext()) {
             commandsOrder.add(scanner.nextLine());
         }
+        scanner.close();
     }
 
-    public String nextCommand() {
-       return commandsOrder.get(curCommand);
-    }
-
-    public void setNextCommand() {
-        curCommand++;
-    }
-
-    public void setNextCommand(int nextCommand) {
-        curCommand = nextCommand - 1;
-    }
-
+    @Override
     public boolean isFinished() {
         return curCommand >= commandsOrder.size();
     }
@@ -43,8 +40,21 @@ public class ProgramInput implements Input {
         return true;
     }
 
-    public void close() {
-        logger.debug("ProgramInput closing.");
-        if (scanner != null) scanner.close();
+    @Override
+    public String nextCommand() throws InvalidInputException {
+        if (curCommand < 0 || curCommand >= commandsOrder.size()) {
+            throw new InvalidInputException("");
+        }
+        return commandsOrder.get(curCommand);
+    }
+
+    @Override
+    public void setNextCommand(Integer nextCommand) {
+        if (nextCommand == null) {
+            curCommand++;
+        }
+        else {
+            curCommand = nextCommand - 1;
+        }
     }
 }

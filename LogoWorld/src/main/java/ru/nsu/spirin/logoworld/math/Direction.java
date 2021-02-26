@@ -8,14 +8,14 @@ public enum Direction {
     UNKNOWN;
 
     /**
-     * Converts given {@code Direction} to delta vector
-     * @param direction {@code Direction} to be converted
-     * @return delta vector which represents direction
+     * Converts given direction to delta vector
+     * @param dir direction to be converted
+     * @return pair
      */
-    public static Pair convertDirectionToDelta(Direction direction) {
+    public static Pair convertDirectionToDelta(Direction dir) {
         int dr = 0, dc = 0;
-        if (direction != null) {
-            switch (direction) {
+        if (dir != null) {
+            switch (dir) {
                 case UP -> dr = -1;
                 case DOWN -> dr = 1;
                 case LEFT -> dc = -1;
@@ -26,9 +26,9 @@ public enum Direction {
     }
 
     /**
-     * Converts given character (U, D, L, R) to {@code Direction}
-     * @param ch character to be converted
-     * @return direction which represents character
+     * Converts character to direction
+     * @param ch character
+     * @return direction
      */
     public static Direction convertCharacterToDirection(char ch) {
         return switch(ch) {

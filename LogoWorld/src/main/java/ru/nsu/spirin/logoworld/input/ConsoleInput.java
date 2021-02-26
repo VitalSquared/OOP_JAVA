@@ -1,31 +1,24 @@
 package ru.nsu.spirin.logoworld.input;
 
 import org.apache.log4j.Logger;
+import ru.nsu.spirin.logoworld.exceptions.InvalidInputException;
 
 import java.util.Scanner;
 
 public class ConsoleInput implements Input {
-    private static final Logger logger = Logger.getLogger(ProgramInput.class);
+    private static final Logger logger = Logger.getLogger(ConsoleInput.class);
 
-    private Scanner scanner = null;
-    private String prevCommand = null;
+    private final Scanner scanner;
+    private String prevCommand;
 
+    /**
+     * Initialize input from console
+     */
     public ConsoleInput() {
         logger.debug("Console Input initialized.");
         scanner = new Scanner(System.in);
+        prevCommand = "";
     }
-
-    @Override
-    public String nextCommand() {
-        prevCommand = scanner.nextLine().trim();
-        return prevCommand;
-    }
-
-    @Override
-    public void setNextCommand() {}
-
-    @Override
-    public void setNextCommand(int nextCommand) {}
 
     @Override
     public boolean isFinished() {
@@ -38,5 +31,15 @@ public class ConsoleInput implements Input {
     }
 
     @Override
-    public void close() {}
+    public String nextCommand() throws InvalidInputException {
+        if (prevCommand.equals("EXIT")) {
+            throw new InvalidInputException("");
+        }
+        prevCommand = scanner.nextLine().trim();
+        return prevCommand;
+    }
+
+    @Override
+    public void setNextCommand(Integer nextCommand) {
+    }
 }

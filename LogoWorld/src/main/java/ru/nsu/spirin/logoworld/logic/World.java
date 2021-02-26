@@ -11,7 +11,7 @@ public class World {
     private final Field field;
 
     /**
-     *  Create World instance, which contains field and turtle
+     * Create world, which contains field and turtle
      */
     public World() {
         logger.debug("World initialization.");
@@ -21,10 +21,11 @@ public class World {
 
     /**
      * Init world parameters.
-     * @param width Field width
+     *
+     * @param width  Field width
      * @param height Field height
-     * @param x Turtle x-position
-     * @param y Turtle y-position
+     * @param x      Turtle x-position
+     * @param y      Turtle y-position
      */
     public void initWorld(int width, int height, int x, int y) {
         logger.debug("Initializing world parameters: " + width + " " + height + " " + x + " " + y);
@@ -34,6 +35,7 @@ public class World {
 
     /**
      * Check if turtle is currently drawing
+     *
      * @return true if turtle is drawing
      * @see World#setIsTurtleDrawing(boolean)
      */
@@ -43,6 +45,7 @@ public class World {
 
     /**
      * Set turtle drawing state
+     *
      * @param isDrawing whether turtle should draw or not
      * @see World#getIsTurtleDrawing() (boolean)
      */
@@ -54,6 +57,7 @@ public class World {
 
     /**
      * Set new position of turtle
+     *
      * @param x x-position
      * @param y y-position
      */
@@ -65,6 +69,7 @@ public class World {
 
     /**
      * Move turtle in direction
+     *
      * @param dir direction
      */
     public void moveTurtle(Direction dir) {
@@ -75,15 +80,18 @@ public class World {
 
     /**
      * Check if world is valid
+     *
      * @return true if turtle and field have been initialized
      */
     public boolean isValid() {
-        return field.getWidth() != 0 && field.getHeight() != 0;
+        Pair size = field.getSize();
+        return (size.getFirst() != 0 && size.getSecond() != 0);
     }
 
     /**
      * Get turtle position
-     * @return (x,y) - turtle position
+     *
+     * @return (x, y) - turtle position
      */
     public Pair getTurtlePosition() {
         return turtle.getPosition();
@@ -91,14 +99,16 @@ public class World {
 
     /**
      * Get field size
+     *
      * @return (width, height) - field size
      */
     public Pair getFieldSize() {
-        return new Pair(field.getWidth(), field.getHeight());
+        return field.getSize();
     }
 
     /**
-     * Check if this cell is drawn by turtle
+     * Check if cell with given coordinates is drawn by turtle
+     *
      * @param x x-position
      * @param y y-position
      * @return true if cell is drawn
@@ -109,13 +119,14 @@ public class World {
 
     private void update() {
         Pair pos = turtle.getPosition();
+        Pair size = field.getSize();
         int x = pos.getFirst(), y = pos.getSecond();
 
-        while (y < 0) y += field.getHeight();
-        while (y >= field.getHeight()) y -= field.getHeight();
+        while (y < 0) y += size.getSecond();
+        while (y >= size.getSecond()) y -= size.getSecond();
 
-        while (x < 0) x += field.getWidth();
-        while (x >= field.getWidth()) x -= field.getWidth();
+        while (x < 0) x += size.getFirst();
+        while (x >= size.getFirst()) x -= size.getFirst();
 
         turtle.setPosition(x, y);
 

@@ -1,6 +1,6 @@
 package ru.nsu.spirin.logoworld.drawing;
 
-import ru.nsu.spirin.logoworld.exceptions.InvalidTextureSizeException;
+import ru.nsu.spirin.logoworld.exceptions.RenderException;
 
 public class Texture {
     private final int size;
@@ -11,25 +11,25 @@ public class Texture {
      * Creates texture with given {@code String} representation and color.
      * @param texture string representation of texture
      * @param color string representation of color in console
-     * @throws InvalidTextureSizeException if texture string length was not a square of integer number
+     * @throws RenderException if texture string length was not a square of integer number
      */
-    public Texture(String texture, String color) throws InvalidTextureSizeException {
+    public Texture(String texture, String color) throws RenderException {
         this.texture = texture;
         this.color = color;
         this.size = (int) Math.sqrt(texture.length());
         if (this.size * this.size != texture.length()) {
-            throw new InvalidTextureSizeException("Texture size was not a square of integer number");
+            throw new RenderException("Texture size was not a square of integer number");
         }
     }
 
     /**
      * Gets pixel as char
-     * @param r row of texture
-     * @param c column of texture
+     * @param x x-position of texture
+     * @param y y-position of texture
      * @return String representation of pixel with color
      */
-    public String getPixel(int r, int c) {
-        return this.texture.charAt(r * size + c) + "";
+    public String getPixel(int x, int y) {
+        return this.texture.charAt(y * size + x) + "";
     }
 
     /**

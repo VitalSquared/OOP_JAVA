@@ -15,7 +15,7 @@ public class Pair {
     }
 
     /**
-     * Returns first element of pair
+     * Get first element of pair
      * @return first element of pair
      */
     public int getFirst() {
@@ -23,7 +23,7 @@ public class Pair {
     }
 
     /**
-     * Returns second element of pair
+     * Get second element of pair
      * @return second element of pair
      */
     public int getSecond() {

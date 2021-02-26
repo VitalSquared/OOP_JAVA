@@ -8,11 +8,22 @@ public class Main {
     public static void main(String[] args) {
         logger.debug("Startup...");
         try {
-            LogoWorld logoWorld = new LogoWorld(args.length >= 1 ? args[0] : null, args.length == 2 && args[1].equals("--swing"));
+            String program = null;
+            boolean useSwing = false;
+
+            if (args.length >= 1) {
+                program = args[0];
+            }
+            if (args.length >= 2) {
+                useSwing = args[1].equals("--swing");
+            }
+
+            LogoWorld logoWorld = new LogoWorld(program, useSwing);
             logoWorld.run();
         }
         catch (Exception e) {
             logger.error("Exception: " + e.getLocalizedMessage() + "!");
+            System.err.println(e.getLocalizedMessage());
             e.printStackTrace();
         }
         logger.debug("Finishing...");

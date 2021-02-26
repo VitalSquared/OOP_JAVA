@@ -39,7 +39,6 @@ public class SwingView extends Canvas implements GraphicsView {
 
     @Override
     public void writeInformation(String info) {
-
     }
 
     @Override
@@ -63,43 +62,34 @@ public class SwingView extends Canvas implements GraphicsView {
 
             g.clearRect(0, 0, WIDTH, HEIGHT);
 
-            int width = WIDTH;
-            int height =  HEIGHT;
-
-            int padding_top = TEXTURE_SIZE;
-            int padding_btm = TEXTURE_SIZE;
-            int padding_lft = TEXTURE_SIZE;
-            int padding_rgt = TEXTURE_SIZE;
+            int paddingTop = TEXTURE_SIZE;
+            int paddingBottom = TEXTURE_SIZE;
+            int paddingLeft = TEXTURE_SIZE;
+            int paddingRight = TEXTURE_SIZE;
 
             Pair fieldSize = world.getFieldSize();
 
-            int map_width = Math.min((width - (padding_lft + padding_rgt)) / TEXTURE_SIZE, fieldSize.getFirst());
-            int map_height = Math.min((height - (padding_top + padding_btm)) / TEXTURE_SIZE, fieldSize.getSecond());
+            int map_width = Math.min((WIDTH - (paddingLeft + paddingRight)) / TEXTURE_SIZE, fieldSize.getFirst());
+            int map_height = Math.min((HEIGHT - (paddingTop + paddingBottom)) / TEXTURE_SIZE, fieldSize.getSecond());
 
             Pair turtlePos = world.getTurtlePosition();
 
-            int top_left_r = turtlePos.getSecond() - map_height / 2;
-            int top_left_c = turtlePos.getFirst() - map_width / 2;
+            int topLeftX = turtlePos.getFirst() - map_width / 2;
+            int topLeftY = turtlePos.getSecond() - map_height / 2;
 
-            for (int r = 0; r < map_height; r++) {
-                for (int c = 0; c < map_width; c++) {
-                    int coords_r = r + top_left_r;
-                    int coords_c = c + top_left_c;
-                    if (world.isCellDrawn(coords_r, coords_c)) {
-                        g.setColor(Color.GREEN);
-                        g.fillRect(c * TEXTURE_SIZE, r * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
-                    }
-                    else {
-                        g.setColor(Color.BLACK);
-                        g.drawRect(c * TEXTURE_SIZE, r * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
-                    }
+            for (int y = 0; y < map_height; y++) {
+                for (int x = 0; x < map_width; x++) {
+                    int xPos = x + topLeftX;
+                    int yPos = y + topLeftY;
+                    g.setColor(world.isCellDrawn(xPos, yPos) ? Color.GREEN : Color.BLACK);
+                    g.drawRect(xPos * TEXTURE_SIZE, yPos * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
                 }
             }
 
-            int pos_r = turtlePos.getSecond();
-            int pos_c = turtlePos.getFirst();
+            int turtleX = turtlePos.getFirst();
+            int turtleY = turtlePos.getSecond();
             g.setColor(Color.CYAN);
-            g.fillArc((pos_c - top_left_c) * TEXTURE_SIZE, (pos_r - top_left_r) * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, 0, 360);
+            g.fillArc((turtleX - topLeftX) * TEXTURE_SIZE, (turtleY - topLeftY) * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, 0, 360);
 
             g.dispose();
             bs.show();

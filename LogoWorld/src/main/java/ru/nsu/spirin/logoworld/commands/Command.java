@@ -1,10 +1,9 @@
 package ru.nsu.spirin.logoworld.commands;
 
 public interface Command {
-    StringBuilder error = null;
-
     /**
      * Validates arguments of command
+     *
      * @param args arguments of command
      * @return true if arguments are valid
      */
@@ -12,6 +11,7 @@ public interface Command {
 
     /**
      * Executes command
+     *
      * @param args arguments of command
      * @return true if command was executed successfully
      */

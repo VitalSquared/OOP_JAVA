@@ -5,8 +5,8 @@ import ru.nsu.spirin.logoworld.commands.CommandError;
 import ru.nsu.spirin.logoworld.drawing.ConsoleView;
 import ru.nsu.spirin.logoworld.drawing.GraphicsView;
 import ru.nsu.spirin.logoworld.drawing.SwingView;
-import ru.nsu.spirin.logoworld.exceptions.CommandsWorkflowException;
-import ru.nsu.spirin.logoworld.exceptions.InvalidTextureSizeException;
+import ru.nsu.spirin.logoworld.exceptions.CommandFactoryException;
+import ru.nsu.spirin.logoworld.exceptions.InvalidInputException;
 import ru.nsu.spirin.logoworld.exceptions.RenderException;
 import ru.nsu.spirin.logoworld.logic.Interpreter;
 import ru.nsu.spirin.logoworld.logic.World;
@@ -23,47 +23,59 @@ public class LogoWorld {
 
     /**
      * Create Logo World instance.
-     * @param programFileName program to run. Use <b>null</b> if you want to type commands manually.
-     * @param useSwing If true, render in swing window. If false, render in console.
-     * @throws IOException if program file, commands-properties file are missing
-     * @throws InvalidTextureSizeException if console uses wrong sizes of textures
+     *
+     * @param programFileName Program to run. Use <b>null</b> if you want to type commands manually.
+     * @param useSwing        Render in swing window, if true. Otherwise render in console.
+     * @throws IOException     If program file, commands-properties file are missing
+     * @throws RenderException If console uses wrong sizes of textures
      */
-    public LogoWorld(String programFileName, boolean useSwing) throws IOException, InvalidTextureSizeException {
-        logger.debug("Logo World Initialization...");
+    public LogoWorld(String programFileName, boolean useSwing) throws IOException, RenderException {
+        logger.debug("Logo World initialization...");
+
         world = new World();
-        graphicsView = useSwing ? new SwingView() : new ConsoleView();
         interpreter = new Interpreter(programFileName, world);
+        if (useSwing) {
+            graphicsView = new SwingView();
+        }
+        else {
+            graphicsView = new ConsoleView();
+        }
     }
 
     /**
      * Run Logo World
-     * @throws CommandsWorkflowException if command factory fails
-     * @throws RenderException if rendering fails
-     * @throws RuntimeException other related issues
+     *
+     * @throws CommandFactoryException If command factory fails
+     * @throws RenderException         If rendering fails
+     * @throws RuntimeException        Other related issues
      */
-    public void run() throws CommandsWorkflowException, RenderException, RuntimeException {
-        while (!interpreter.isFinished()) {
-            if (interpreter.parseNextCommand()) {
-                while (interpreter.step()) {
-                    graphicsView.render(world);
-                    try {
-                        Thread.sleep(300);
-                    }
-                    catch (Exception e) {
-                        throw new RuntimeException(e.getLocalizedMessage());
+    public void run() throws CommandFactoryException, RenderException, RuntimeException {
+        try {
+            while (!interpreter.isFinished()) {
+                if (interpreter.parseNextCommand()) {
+                    while (interpreter.step()) {
+                        graphicsView.render(world);
+                        try {
+                            Thread.sleep(300);
+                        }
+                        catch (Exception e) {
+                            throw new RuntimeException(e.getLocalizedMessage());
+                        }
                     }
                 }
-            }
-            else {
-                String error = CommandError.getError();
-                logger.debug("Error encountered: " + error);
-                graphicsView.writeInformation(error);
-                if (interpreter.shouldAskForContinuation()) {
-                    if (!graphicsView.getContinuationSignal()) {
+                else {
+                    String error = CommandError.getError();
+                    logger.debug(error);
+                    graphicsView.writeInformation(error);
+                    if (interpreter.shouldAskForContinuation() && !graphicsView.getContinuationSignal()) {
                         break;
                     }
                 }
             }
+        }
+        catch (InvalidInputException e) {
+            logger.debug("Invalid input. Shutting down...");
+            graphicsView.writeInformation("Invalid input. Shutting down...");
         }
     }
 }

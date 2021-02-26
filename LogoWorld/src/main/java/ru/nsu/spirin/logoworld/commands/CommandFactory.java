@@ -2,7 +2,7 @@ package ru.nsu.spirin.logoworld.commands;
 
 import ru.nsu.spirin.logoworld.input.Input;
 import org.apache.log4j.Logger;
-import ru.nsu.spirin.logoworld.exceptions.CommandsWorkflowException;
+import ru.nsu.spirin.logoworld.exceptions.CommandFactoryException;
 import ru.nsu.spirin.logoworld.logic.World;
 
 import java.io.IOException;
@@ -20,10 +20,10 @@ public class CommandFactory {
     private final Map<String, Command> instances;
 
     public CommandFactory(Input input, World world) throws IOException {
-        logger.debug("Command Factory started initialization.");
+        logger.debug("Command Factory initialization.");
         InputStream stream = ClassLoader.getSystemResourceAsStream("commands.properties");
         if (stream == null) {
-            logger.error("No commands.properties file found!");
+            logger.error("No 'commands.properties' file found!");
             throw new IOException("Couldn't locate commands properties file");
         }
 
@@ -40,16 +40,16 @@ public class CommandFactory {
 
         this.world = world;
         this.input = input;
-        logger.debug("Command Factory finished initialization");
     }
 
     /**
      * Gets a command by name
+     *
      * @param command command name
      * @return {@code Command} subclass instance
-     * @throws CommandsWorkflowException
+     * @throws CommandFactoryException if command factory fails
      */
-    public Command getCommand(String command) throws CommandsWorkflowException {
+    public Command getCommand(String command) throws CommandFactoryException {
         if (!commands.containsKey(command)) {
             CommandError.setError("Unknown command: " + command);
             logger.debug("Unknown command: " + command);
@@ -68,7 +68,7 @@ public class CommandFactory {
         catch (Exception e) {
             logger.error("Error encountered while creating new command instance:");
             logger.error(e.getLocalizedMessage());
-            throw new CommandsWorkflowException(e.getLocalizedMessage());
+            throw new CommandFactoryException(e.getLocalizedMessage());
         }
         return instance;
     }

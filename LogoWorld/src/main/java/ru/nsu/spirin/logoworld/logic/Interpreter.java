@@ -1,12 +1,13 @@
 package ru.nsu.spirin.logoworld.logic;
 
+import ru.nsu.spirin.logoworld.exceptions.InvalidInputException;
 import ru.nsu.spirin.logoworld.input.ConsoleInput;
 import ru.nsu.spirin.logoworld.input.Input;
 import ru.nsu.spirin.logoworld.input.ProgramInput;
 import org.apache.log4j.Logger;
 import ru.nsu.spirin.logoworld.commands.Command;
 import ru.nsu.spirin.logoworld.commands.CommandFactory;
-import ru.nsu.spirin.logoworld.exceptions.CommandsWorkflowException;
+import ru.nsu.spirin.logoworld.exceptions.CommandFactoryException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,11 +23,13 @@ public class Interpreter {
     private final CommandFactory commandFactory;
 
     /**
-     * Creates Interpreter instance
+     * Creates commands interpreter
+     *
      * @throws IOException if commands-properties file or program file are not found or invalid
      */
     public Interpreter(String programFileName, World world) throws IOException {
         logger.debug("Interpreter initialization.");
+
         if (programFileName == null) {
             this.input = new ConsoleInput();
         }
@@ -38,11 +41,12 @@ public class Interpreter {
 
     /**
      * Parses next command and its arguments.
+     *
      * @return true if command is parsed successfully and is valid.
-     * @throws CommandsWorkflowException if command factory fails
+     * @throws CommandFactoryException if command factory fails
      * @see Interpreter#step()
      */
-    public boolean parseNextCommand() throws CommandsWorkflowException {
+    public boolean parseNextCommand() throws CommandFactoryException, InvalidInputException {
         String command = input.nextCommand();
         logger.debug("Interpreter parsing command: " + command);
         String[] cmd = command == null ? null : tokenizeCommand(command);
@@ -71,14 +75,15 @@ public class Interpreter {
     /**
      * Steps through the command execution.
      * Needs to parse command first
+     *
      * @return true if stepped successfully
-     * @throws CommandsWorkflowException if commands factory fails
+     * @throws CommandFactoryException if commands factory fails
      * @see Interpreter#parseNextCommand()
      */
-    public boolean step() throws CommandsWorkflowException {
+    public boolean step() throws CommandFactoryException {
         if (curCmd.equals("")) {
             logger.debug("Empty command. Skipping...");
-            if (input.allowJump()) input.setNextCommand();
+            if (input.allowJump()) input.setNextCommand(null);
             return false;
         }
 
@@ -92,19 +97,16 @@ public class Interpreter {
 
     /**
      * Check if interpreter finished running program
+     *
      * @return true if finished
      */
     public boolean isFinished() {
-        boolean finished = input.isFinished();
-        if (finished) {
-            logger.debug("Interpreter finished working. Program file will be closed.");
-            input.close();
-        }
-        return finished;
+        return input.isFinished();
     }
 
     /**
      * If you run program and encounter invalid command, you will be prompted to stop running.
+     *
      * @return true if you are running program
      */
     public boolean shouldAskForContinuation() {
