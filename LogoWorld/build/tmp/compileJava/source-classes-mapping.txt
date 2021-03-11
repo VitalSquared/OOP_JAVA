@@ -8,8 +8,8 @@ ru/nsu/spirin/logoworld/commands/Command.java
  ru.nsu.spirin.logoworld.commands.Command
 ru/nsu/spirin/logoworld/input/ConsoleInput.java
  ru.nsu.spirin.logoworld.input.ConsoleInput
-ru/nsu/spirin/logoworld/LogoWorld.java
- ru.nsu.spirin.logoworld.LogoWorld
+ru/nsu/spirin/logoworld/commands/IfJmpCommand.java
+ ru.nsu.spirin.logoworld.commands.IfJmpCommand
 ru/nsu/spirin/logoworld/input/ProgramInput.java
  ru.nsu.spirin.logoworld.input.ProgramInput
 ru/nsu/spirin/logoworld/exceptions/RenderException.java
@@ -34,8 +34,8 @@ ru/nsu/spirin/logoworld/commands/DrawCommand.java
  ru.nsu.spirin.logoworld.commands.DrawCommand
 ru/nsu/spirin/logoworld/commands/TeleportCommand.java
  ru.nsu.spirin.logoworld.commands.TeleportCommand
-ru/nsu/spirin/logoworld/drawing/SwingView.java
- ru.nsu.spirin.logoworld.drawing.SwingView
+ru/nsu/spirin/logoworld/logic/World.java
+ ru.nsu.spirin.logoworld.logic.World
 ru/nsu/spirin/logoworld/commands/WardCommand.java
  ru.nsu.spirin.logoworld.commands.WardCommand
 ru/nsu/spirin/logoworld/drawing/GraphicsView.java
@@ -51,7 +51,7 @@ ru/nsu/spirin/logoworld/math/Direction.java
  ru.nsu.spirin.logoworld.math.Direction$1
 ru/nsu/spirin/logoworld/logic/Turtle.java
  ru.nsu.spirin.logoworld.logic.Turtle
-ru/nsu/spirin/logoworld/commands/IfJmpCommand.java
- ru.nsu.spirin.logoworld.commands.IfJmpCommand
-ru/nsu/spirin/logoworld/logic/World.java
- ru.nsu.spirin.logoworld.logic.World
+ru/nsu/spirin/logoworld/drawing/SwingView.java
+ ru.nsu.spirin.logoworld.drawing.SwingView
+ru/nsu/spirin/logoworld/LogoWorld.java
+ ru.nsu.spirin.logoworld.LogoWorld

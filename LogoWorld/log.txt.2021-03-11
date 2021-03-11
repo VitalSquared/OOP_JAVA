@@ -1,0 +1,79 @@
+2021-03-11 12:44:20.186 [main] DEBUG ru.nsu.spirin.logoworld.Main.main(Main.java:9) - Startup...
+2021-03-11 12:44:20.202 [main] DEBUG ru.nsu.spirin.logoworld.LogoWorld.<init>(LogoWorld.java:33) - Logo World initialization...
+2021-03-11 12:44:20.202 [main] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:44:20.202 [main] DEBUG ru.nsu.spirin.logoworld.logic.Interpreter.<init>(Interpreter.java:31) - Interpreter initialization.
+2021-03-11 12:44:20.202 [main] DEBUG ru.nsu.spirin.logoworld.input.ConsoleInput.<init>(ConsoleInput.java:18) - Console Input initialized.
+2021-03-11 12:44:20.218 [main] DEBUG ru.nsu.spirin.logoworld.commands.CommandFactory.<init>(CommandFactory.java:23) - Command Factory initialization.
+2021-03-11 12:44:20.233 [main] DEBUG ru.nsu.spirin.logoworld.drawing.ConsoleView.<init>(ConsoleView.java:23) - Console View initialization.
+2021-03-11 12:44:35.362 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:44:35.379 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:44:35.394 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:44:35.410 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:49:50.365 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:49:50.396 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:49:50.396 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:49:50.427 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:49:50.448 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:49:50.448 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:49:50.448 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:49:50.448 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:49:50.448 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:49:50.466 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.249 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.280 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:51:07.280 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.296 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.311 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.311 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:51:07.311 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.311 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.311 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:51:07.311 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.327 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:51:07.327 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:51:07.327 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.525 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.557 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:55:35.557 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.572 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.572 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:55:35.588 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.588 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.604 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:55:35.604 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.604 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.604 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:55:35.604 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.604 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:55:35.604 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:55:35.620 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.766 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.798 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:56:26.798 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.830 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.831 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:56:26.831 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.846 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.846 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:56:26.846 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.846 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.846 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:56:26.846 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.862 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 12:56:26.862 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 12:56:26.862 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.085 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.100 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 13:07:45.100 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.132 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.142 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 13:07:45.151 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.168 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.168 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 13:07:45.168 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.184 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.184 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 13:07:45.184 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.200 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.
+2021-03-11 13:07:45.200 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.initWorld(World.java:31) - Initializing world parameters: 10 10 2 2
+2021-03-11 13:07:45.200 [Test worker] DEBUG ru.nsu.spirin.logoworld.logic.World.<init>(World.java:17) - World initialization.

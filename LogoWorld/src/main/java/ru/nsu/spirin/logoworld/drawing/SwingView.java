@@ -81,15 +81,21 @@ public class SwingView extends Canvas implements GraphicsView {
                 for (int x = 0; x < map_width; x++) {
                     int xPos = x + topLeftX;
                     int yPos = y + topLeftY;
-                    g.setColor(world.isCellDrawn(xPos, yPos) ? Color.GREEN : Color.BLACK);
-                    g.drawRect(xPos * TEXTURE_SIZE, yPos * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+                    boolean isDrawn = world.isCellDrawn(xPos, yPos);
+                    g.setColor(isDrawn ? Color.GREEN : Color.BLACK);
+                    if (isDrawn) {
+                        g.fillRect(paddingLeft + x * TEXTURE_SIZE, paddingTop + y * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+                    }
+                    else {
+                        g.drawRect(paddingLeft + x * TEXTURE_SIZE, paddingTop + y * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
+                    }
                 }
             }
 
             int turtleX = turtlePos.getFirst();
             int turtleY = turtlePos.getSecond();
             g.setColor(Color.CYAN);
-            g.fillArc((turtleX - topLeftX) * TEXTURE_SIZE, (turtleY - topLeftY) * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, 0, 360);
+            g.fillArc(paddingLeft + (turtleX - topLeftX) * TEXTURE_SIZE, paddingTop + (turtleY - topLeftY) * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, 0, 360);
 
             g.dispose();
             bs.show();
