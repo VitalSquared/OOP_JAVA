@@ -2,7 +2,6 @@ package ru.nsu.spirin.logoworld.commands;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import ru.nsu.spirin.logoworld.input.ConsoleInput;
 import ru.nsu.spirin.logoworld.logic.World;
 
 class DrawCommandTest {
