@@ -46,13 +46,16 @@ public class MoveCommand implements Command {
 
     @Override
     public boolean execute(String[] args) {
-        if (steps >= Integer.parseInt(args[1]) || !world.isValid()) {
+        if (steps >= 1 || !world.isValid()) {
             steps = 0;
             if (input.allowJump()) input.setNextCommand(null);
             return false;
         }
         steps++;
-        world.moveTurtle(Direction.convertCharacterToDirection(args[0].charAt(0)));
+        int moveCount = Integer.parseInt(args[1]);
+        for (int i = 0; i < moveCount; i++) {
+            world.moveTurtle(Direction.convertCharacterToDirection(args[0].charAt(0)));
+        }
         return true;
     }
 }
