@@ -1,30 +1,34 @@
-ru/nsu/spirin/battlecity/model/map/BattleGrid.java
- ru.nsu.spirin.battlecity.model.map.BattleGrid
-ru/nsu/spirin/battlecity/BattleCityGame.java
- ru.nsu.spirin.battlecity.BattleCityGame
-ru/nsu/spirin/battlecity/view/GameView.java
- ru.nsu.spirin.battlecity.view.GameView
-ru/nsu/spirin/battlecity/model/World.java
- ru.nsu.spirin.battlecity.model.World
-ru/nsu/spirin/battlecity/model/map/Tile.java
- ru.nsu.spirin.battlecity.model.map.Tile
-ru/nsu/spirin/battlecity/Main.java
- ru.nsu.spirin.battlecity.Main
+ru/nsu/spirin/battlecity/math/Point2D.java
+ ru.nsu.spirin.battlecity.math.Point2D
 ru/nsu/spirin/battlecity/math/Direction.java
  ru.nsu.spirin.battlecity.math.Direction
  ru.nsu.spirin.battlecity.math.Direction$1
-ru/nsu/spirin/battlecity/model/tank/Tank.java
- ru.nsu.spirin.battlecity.model.tank.Tank
 ru/nsu/spirin/battlecity/exceptions/InvalidBattleGridException.java
  ru.nsu.spirin.battlecity.exceptions.InvalidBattleGridException
+ru/nsu/spirin/battlecity/model/map/BattleGrid.java
+ ru.nsu.spirin.battlecity.model.map.BattleGrid
+ru/nsu/spirin/battlecity/model/map/GridTile.java
+ ru.nsu.spirin.battlecity.model.map.GridTile
+ru/nsu/spirin/battlecity/model/Bullet.java
+ ru.nsu.spirin.battlecity.model.Bullet
+ru/nsu/spirin/battlecity/model/tank/Tank.java
+ ru.nsu.spirin.battlecity.model.tank.Tank
+ru/nsu/spirin/battlecity/model/Entity.java
+ ru.nsu.spirin.battlecity.model.Entity
+ru/nsu/spirin/battlecity/view/GameView.java
+ ru.nsu.spirin.battlecity.view.GameView
+ru/nsu/spirin/battlecity/controller/TankController.java
+ ru.nsu.spirin.battlecity.controller.TankController
+ru/nsu/spirin/battlecity/model/tank/PlayerTank.java
+ ru.nsu.spirin.battlecity.model.tank.PlayerTank
 ru/nsu/spirin/battlecity/view/SwingView.java
  ru.nsu.spirin.battlecity.view.InputHandler
  ru.nsu.spirin.battlecity.view.SwingView
  ru.nsu.spirin.battlecity.view.SwingView$1
  ru.nsu.spirin.battlecity.view.SwingView$2
-ru/nsu/spirin/battlecity/math/Point2D.java
- ru.nsu.spirin.battlecity.math.Point2D
-ru/nsu/spirin/battlecity/model/tank/PlayerTank.java
- ru.nsu.spirin.battlecity.model.tank.PlayerTank
-ru/nsu/spirin/battlecity/controller/TankController.java
- ru.nsu.spirin.battlecity.controller.TankController
+ru/nsu/spirin/battlecity/model/World.java
+ ru.nsu.spirin.battlecity.model.World
+ru/nsu/spirin/battlecity/BattleCityGame.java
+ ru.nsu.spirin.battlecity.BattleCityGame
+ru/nsu/spirin/battlecity/Main.java
+ ru.nsu.spirin.battlecity.Main

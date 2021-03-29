@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class BattleGrid {
-    private final Tile[] grid;
+    private final GridTile[] grid;
     private final int gridX;
     private final int gridY;
 
@@ -17,7 +17,7 @@ public class BattleGrid {
 
         gridX = scanner.nextInt();
         gridY = scanner.nextInt();
-        grid = new Tile[gridX * gridY];
+        grid = new GridTile[gridX * gridY];
         scanner.nextLine();
 
         int x = 0, y = 0;
@@ -31,17 +31,17 @@ public class BattleGrid {
             }
             for (x = 0; x < gridX; x++) {
                 char ch = line.charAt(x);
-                Tile tile = Tile.charToTile(ch);
-                if (tile == Tile.UNKNOWN) {
-                    throw new InvalidBattleGridException("Unrecognized tile");
+                GridTile gridTile = GridTile.charToTile(ch);
+                if (gridTile == GridTile.UNKNOWN) {
+                    throw new InvalidBattleGridException("Unrecognized gridTile");
                 }
-                grid[y * gridX + x] = tile;
+                grid[y * gridX + x] = gridTile;
             }
             y++;
         }
     }
 
-    public Tile getTileAt(int x, int y) {
+    public GridTile getTileAt(int x, int y) {
         return grid[y * gridX + x];
     }
 

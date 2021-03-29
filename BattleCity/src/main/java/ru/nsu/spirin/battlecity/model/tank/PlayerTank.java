@@ -19,7 +19,13 @@ public class PlayerTank extends Tank {
     }
 
     @Override
-    public void shoot() {
+    public boolean update() {
+        setShootNotificationPending(false);
+        return false;
+    }
 
+    @Override
+    public void shoot() {
+        setShootNotificationPending(true);
     }
 }

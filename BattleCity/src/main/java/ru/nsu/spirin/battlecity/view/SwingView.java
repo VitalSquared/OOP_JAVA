@@ -3,8 +3,10 @@ package ru.nsu.spirin.battlecity.view;
 import ru.nsu.spirin.battlecity.controller.TankController;
 import ru.nsu.spirin.battlecity.math.Direction;
 import ru.nsu.spirin.battlecity.math.Point2D;
+import ru.nsu.spirin.battlecity.model.Bullet;
+import ru.nsu.spirin.battlecity.model.Entity;
 import ru.nsu.spirin.battlecity.model.World;
-import ru.nsu.spirin.battlecity.model.map.Tile;
+import ru.nsu.spirin.battlecity.model.map.GridTile;
 import ru.nsu.spirin.battlecity.model.tank.Tank;
 
 import javax.imageio.ImageIO;
@@ -21,6 +23,7 @@ import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class SwingView extends Canvas implements GameView {
@@ -33,6 +36,7 @@ public class SwingView extends Canvas implements GameView {
     private final Image dirtImage;
     private final Image bricksImage;
     private final Image unknownImage;
+    private final Image bulletImage;
 
     public SwingView(TankController tankController) throws IOException {
         frame = new JFrame();
@@ -41,6 +45,7 @@ public class SwingView extends Canvas implements GameView {
         dirtImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Dirt.png")));
         bricksImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bricks.png")));
         unknownImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Unknown.png")));
+        bulletImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bullet.png")));
 
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
@@ -84,13 +89,28 @@ public class SwingView extends Canvas implements GameView {
 
         for (int y = 0; y < gridSize.getY(); y++) {
             for (int x = 0; x < gridSize.getX(); x++) {
-                Tile tile = world.getBattleGrid().getTileAt(x, y);
+                GridTile gridTile = world.getBattleGrid().getTileAt(x, y);
                 Image bufImage = unknownImage;
-                switch(tile) {
+                switch(gridTile) {
                     case BRICKS -> bufImage = bricksImage;
                     case BACKGROUND -> bufImage = dirtImage;
                 }
                 g.drawImage(bufImage, x * TEXTURE_SIZE, y * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, (img, infoflags, x1, y1, width, height) -> true);
+            }
+        }
+
+        List<Entity> entityList = world.getEntityList();
+        for (var entity : entityList) {
+            if (entity instanceof Bullet) {
+                Point2D bulletPos = entity.getPosition();
+                int x = bulletPos.getX();
+                int y = bulletPos.getY();
+                g.drawImage(bulletImage, x * TEXTURE_SIZE, y * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, (img, infoflags, x1, y1, width, height) -> true);
+            }
+        }
+        for (int y = 0; y < gridSize.getY(); y++) {
+            for (int x = 0; x < gridSize.getX(); x++) {
+
             }
         }
 
@@ -147,6 +167,7 @@ class InputHandler implements KeyListener {
             case KeyEvent.VK_S -> tankController.moveDown();
             case KeyEvent.VK_A -> tankController.moveLeft();
             case KeyEvent.VK_D -> tankController.moveRight();
+            case KeyEvent.VK_SPACE -> tankController.shoot();
         }
     }
 

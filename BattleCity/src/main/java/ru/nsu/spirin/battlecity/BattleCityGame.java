@@ -33,6 +33,7 @@ public class BattleCityGame {
             catch (Exception e) {
                 throw new RuntimeException(e.getLocalizedMessage());
             }
+            world.update();
         }
     }
 }

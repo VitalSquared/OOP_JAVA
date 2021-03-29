@@ -1,13 +1,13 @@
 package ru.nsu.spirin.battlecity.model.map;
 
-public enum Tile {
+public enum GridTile {
     BACKGROUND,
     BRICKS,
     LEAVES,
     WATER,
     UNKNOWN;
 
-    public static Tile charToTile(char ch) {
+    public static GridTile charToTile(char ch) {
         switch(ch) {
             case '#' -> {
                 return BRICKS;
