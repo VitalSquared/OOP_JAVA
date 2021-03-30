@@ -5,13 +5,17 @@ import ru.nsu.spirin.battlecity.math.Direction;
 import ru.nsu.spirin.battlecity.math.Point2D;
 import ru.nsu.spirin.battlecity.model.Bullet;
 import ru.nsu.spirin.battlecity.model.Entity;
+import ru.nsu.spirin.battlecity.model.EntityMovable;
 import ru.nsu.spirin.battlecity.model.World;
 import ru.nsu.spirin.battlecity.model.map.GridTile;
+import ru.nsu.spirin.battlecity.model.tank.PlayerTank;
 import ru.nsu.spirin.battlecity.model.tank.Tank;
+import ru.nsu.spirin.battlecity.model.tiles.TileBrick;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -33,7 +37,6 @@ public class SwingView extends Canvas implements GameView {
     private JFrame frame;
 
     private final Image playerTankImage;
-    private final Image dirtImage;
     private final Image bricksImage;
     private final Image unknownImage;
     private final Image bulletImage;
@@ -42,7 +45,6 @@ public class SwingView extends Canvas implements GameView {
         frame = new JFrame();
 
         playerTankImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Tank.png")));
-        dirtImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Dirt.png")));
         bricksImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bricks.png")));
         unknownImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Unknown.png")));
         bulletImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bullet.png")));
@@ -83,51 +85,41 @@ public class SwingView extends Canvas implements GameView {
 
         Graphics g = bs.getDrawGraphics();
 
-        g.clearRect(0, 0, WIDTH, HEIGHT);
-
-        Point2D gridSize = world.getBattleGrid().getGridSize();
-
-        for (int y = 0; y < gridSize.getY(); y++) {
-            for (int x = 0; x < gridSize.getX(); x++) {
-                GridTile gridTile = world.getBattleGrid().getTileAt(x, y);
-                Image bufImage = unknownImage;
-                switch(gridTile) {
-                    case BRICKS -> bufImage = bricksImage;
-                    case BACKGROUND -> bufImage = dirtImage;
-                }
-                g.drawImage(bufImage, x * TEXTURE_SIZE, y * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, (img, infoflags, x1, y1, width, height) -> true);
-            }
-        }
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
 
         List<Entity> entityList = world.getEntityList();
         for (var entity : entityList) {
-            if (entity instanceof Bullet) {
-                Point2D bulletPos = entity.getPosition();
-                int x = bulletPos.getX();
-                int y = bulletPos.getY();
-                g.drawImage(bulletImage, x * TEXTURE_SIZE, y * TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, (img, infoflags, x1, y1, width, height) -> true);
+            Image imageBuf = unknownImage;
+            Point2D pos = entity.getPosition();
+            Point2D size = entity.getSize();
+            if (entity instanceof EntityMovable) {
+                if (entity instanceof Bullet) {
+                    imageBuf = bulletImage;
+                }
+
+                if (entity instanceof PlayerTank) {
+                    imageBuf = playerTankImage;
+                }
+
+                Graphics2D g2d = (Graphics2D) g;
+                AffineTransform tr = new AffineTransform();
+                tr.translate(pos.getX(), pos.getY());
+                tr.rotate(
+                        Math.toRadians (Direction.convertDirectionToAngleDegrees(((EntityMovable) entity).getDirection())),
+                        TEXTURE_SIZE / 2.0,
+                        TEXTURE_SIZE / 2.0
+                );
+                g2d.drawImage(imageBuf, tr, (img, infoflags, x, y, width, height) -> true);
             }
-        }
-        for (int y = 0; y < gridSize.getY(); y++) {
-            for (int x = 0; x < gridSize.getX(); x++) {
-
+            else {
+                if (entity instanceof TileBrick) {
+                    imageBuf = bricksImage;
+                }
+                g.drawImage(imageBuf, pos.getX(), pos.getY(), size.getX(), size.getY(), (img, infoflags, x1, y1, width, height) -> true);
             }
+
         }
-
-        Tank playerTank = world.getPlayerTank();
-        Point2D playerTankPos = playerTank.getPosition();
-        int playerTankX = playerTankPos.getX() * TEXTURE_SIZE;
-        int playerTankY = playerTankPos.getY() * TEXTURE_SIZE;
-
-        Graphics2D g2d = (Graphics2D) g;
-        AffineTransform tr = new AffineTransform();
-        tr.translate(playerTankX, playerTankY);
-        tr.rotate(
-                Math.toRadians (Direction.convertDirectionToAngleDegrees(playerTank.getDirection())),
-                TEXTURE_SIZE / 2.0,
-                TEXTURE_SIZE / 2.0
-        );
-        g2d.drawImage(playerTankImage, tr, (img, infoflags, x, y, width, height) -> true);
 
         g.dispose();
         bs.show();

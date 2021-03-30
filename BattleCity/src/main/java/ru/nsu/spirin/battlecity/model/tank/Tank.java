@@ -1,17 +1,8 @@
 package ru.nsu.spirin.battlecity.model.tank;
 
-import ru.nsu.spirin.battlecity.model.Entity;
+import ru.nsu.spirin.battlecity.model.EntityMovable;
 
-public abstract class Tank extends Entity {
-    private boolean shootNotificationPending = false;
+public abstract class Tank extends EntityMovable {
 
     public abstract void shoot();
-
-    protected void setShootNotificationPending(boolean value) {
-        shootNotificationPending = value;
-    }
-
-    public boolean getShootNotificationPending() {
-        return shootNotificationPending;
-    }
 }

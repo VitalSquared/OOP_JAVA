@@ -1,11 +1,10 @@
-10 10
-##########
-#W       #
-#        #
-#        #
-#        #
-#        #
-#        #
-#        #
-#        #
-##########
+block brick 0 0 25 25
+block brick 25 0 25 25
+block brick 50 0 25 25
+block brick 75 0 25 25
+block brick 100 0 25 25
+block brick 0 25 25 25
+block brick 25 25 25 25
+block brick 50 25 25 25
+block brick 75 25 25 25
+block brick 100 25 25 25

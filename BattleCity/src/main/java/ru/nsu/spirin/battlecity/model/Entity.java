@@ -1,23 +1,20 @@
 package ru.nsu.spirin.battlecity.model;
 
-import ru.nsu.spirin.battlecity.math.Direction;
 import ru.nsu.spirin.battlecity.math.Point2D;
+import ru.nsu.spirin.battlecity.model.notification.Context;
+import ru.nsu.spirin.battlecity.model.notification.Notification;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Entity {
     private int posX;
     private int posY;
-    private Direction direction = Direction.UP;
-    private boolean destroyNotificationPending = false;
 
-    public abstract boolean move(Direction dir);
+    private int sizeX;
+    private int sizeY;
 
-    public Direction getDirection() {
-        return direction;
-    }
-
-    protected void setDirection(Direction newDir) {
-        this.direction = newDir;
-    }
+    private final List<Notification> notificationList = new ArrayList<>();
 
     public Point2D getPosition() {
         return new Point2D(posX, posY);
@@ -28,13 +25,26 @@ public abstract class Entity {
         this.posY = newPos.getY();
     }
 
-    public abstract boolean update();
-
-    protected void setDestroyNotificationPending(boolean value) {
-        destroyNotificationPending = value;
+    public Point2D getSize() {
+        return new Point2D(sizeX, sizeY);
     }
 
-    public boolean getDestroyNotificationPending() {
-        return destroyNotificationPending;
+    protected void setSize(Point2D newSize) {
+        this.sizeX = newSize.getX();
+        this.sizeY = newSize.getY();
+    }
+
+    public abstract boolean update();
+
+    protected void createNotification(Notification notification) {
+        notificationList.add(notification);
+    }
+
+    public void removeNotification(Notification notification) {
+        notificationList.remove(notification);
+    }
+
+    public List<Notification> getNotificationList() {
+        return notificationList;
     }
 }

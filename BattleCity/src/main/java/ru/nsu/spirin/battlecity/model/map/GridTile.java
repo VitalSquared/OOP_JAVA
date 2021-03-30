@@ -1,19 +1,15 @@
 package ru.nsu.spirin.battlecity.model.map;
 
 public enum GridTile {
-    BACKGROUND,
+    NOTHING,
     BRICKS,
     LEAVES,
-    WATER,
-    UNKNOWN;
+    WATER;
 
     public static GridTile charToTile(char ch) {
         switch(ch) {
             case '#' -> {
                 return BRICKS;
-            }
-            case ' ' -> {
-                return BACKGROUND;
             }
             case 'L' -> {
                 return LEAVES;
@@ -22,7 +18,7 @@ public enum GridTile {
                 return WATER;
             }
             default -> {
-                return UNKNOWN;
+                return NOTHING;
             }
         }
     }

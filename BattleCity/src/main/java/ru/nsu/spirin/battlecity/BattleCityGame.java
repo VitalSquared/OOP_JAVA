@@ -18,7 +18,7 @@ public class BattleCityGame {
     TankController tankController;
 
     public BattleCityGame() throws IOException, InvalidBattleGridException {
-        playerTank = new PlayerTank();
+        playerTank = new PlayerTank(100, 100, 50, 50);
         tankController = new TankController(playerTank);
         gameView = new SwingView(tankController);
         world = new World("maps/map1.txt", playerTank);
