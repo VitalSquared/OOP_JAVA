@@ -1,16 +1,15 @@
 package ru.nsu.spirin.battlecity.view;
 
-import ru.nsu.spirin.battlecity.controller.TankController;
+import ru.nsu.spirin.battlecity.controller.Action;
+import ru.nsu.spirin.battlecity.controller.Controller;
 import ru.nsu.spirin.battlecity.math.Direction;
 import ru.nsu.spirin.battlecity.math.Point2D;
-import ru.nsu.spirin.battlecity.model.Bullet;
-import ru.nsu.spirin.battlecity.model.Entity;
-import ru.nsu.spirin.battlecity.model.EntityMovable;
-import ru.nsu.spirin.battlecity.model.World;
-import ru.nsu.spirin.battlecity.model.map.GridTile;
-import ru.nsu.spirin.battlecity.model.tank.PlayerTank;
-import ru.nsu.spirin.battlecity.model.tank.Tank;
-import ru.nsu.spirin.battlecity.model.tiles.TileBrick;
+import ru.nsu.spirin.battlecity.model.scene.Scene;
+import ru.nsu.spirin.battlecity.model.scene.battle.Bullet;
+import ru.nsu.spirin.battlecity.model.scene.Entity;
+import ru.nsu.spirin.battlecity.model.scene.battle.EntityMovable;
+import ru.nsu.spirin.battlecity.model.scene.battle.tank.PlayerTank;
+import ru.nsu.spirin.battlecity.model.scene.battle.tiles.TileBrick;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -41,7 +40,7 @@ public class SwingView extends Canvas implements GameView {
     private final Image unknownImage;
     private final Image bulletImage;
 
-    public SwingView(TankController tankController) throws IOException {
+    public SwingView(Controller controller) throws IOException {
         frame = new JFrame();
 
         playerTankImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Tank.png")));
@@ -63,7 +62,7 @@ public class SwingView extends Canvas implements GameView {
                 repaint();
             }
         });
-        addKeyListener(new InputHandler(tankController));
+        addKeyListener(new InputHandler(controller));
 
         frame.add(this);
         frame.setTitle("Battle City");
@@ -75,7 +74,7 @@ public class SwingView extends Canvas implements GameView {
     }
 
     @Override
-    public void render(World world) {
+    public void render(Scene scene) {
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null)
         {
@@ -88,7 +87,7 @@ public class SwingView extends Canvas implements GameView {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        List<Entity> entityList = world.getEntityList();
+        List<Entity> entityList = scene.getEntityList();
         for (var entity : entityList) {
             Image imageBuf = unknownImage;
             Point2D pos = entity.getPosition();
@@ -127,10 +126,10 @@ public class SwingView extends Canvas implements GameView {
 }
 
 class InputHandler implements KeyListener {
-    private final TankController tankController;
+    private final Controller controller;
 
-    public InputHandler(TankController tankController) {
-        this.tankController = tankController;
+    public InputHandler(Controller controller) {
+        this.controller = controller;
     }
 
     /**
@@ -155,11 +154,11 @@ class InputHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         switch(e.getKeyCode()) {
-            case KeyEvent.VK_W -> tankController.moveUp();
-            case KeyEvent.VK_S -> tankController.moveDown();
-            case KeyEvent.VK_A -> tankController.moveLeft();
-            case KeyEvent.VK_D -> tankController.moveRight();
-            case KeyEvent.VK_SPACE -> tankController.shoot();
+            case KeyEvent.VK_W -> controller.action(Action.UP);
+            case KeyEvent.VK_S -> controller.action(Action.DOWN);
+            case KeyEvent.VK_A -> controller.action(Action.LEFT);
+            case KeyEvent.VK_D -> controller.action(Action.RIGHT);
+            case KeyEvent.VK_SPACE -> controller.action(Action.ACTION);
         }
     }
 
