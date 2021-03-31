@@ -49,7 +49,7 @@ public class Bullet extends EntityMovable {
     }
 
     @Override
-    public boolean detectCollision(Entity otherEntity) {
+    public boolean onCollideWith(Entity otherEntity) {
         if (otherEntity == null) {
             return false;
         }

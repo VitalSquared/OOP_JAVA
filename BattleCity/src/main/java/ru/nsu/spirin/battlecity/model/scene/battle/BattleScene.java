@@ -9,11 +9,14 @@ import ru.nsu.spirin.battlecity.model.scene.Scene;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.EnemyTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.PlayerTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.Tank;
-import ru.nsu.spirin.battlecity.model.scene.battle.tiles.TileBrick;
+import ru.nsu.spirin.battlecity.model.scene.battle.tile.Tile;
+import ru.nsu.spirin.battlecity.model.scene.battle.tile.TileType;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,32 +25,34 @@ public class BattleScene extends Scene {
 
 
     public BattleScene(String mapFileName) throws IOException, InvalidBattleGridException {
-        this.playerTank = new PlayerTank(100, 100, 50, 50);
+        this.playerTank = new PlayerTank(100, 100, 36, 36);
 
         Scanner scanner = new Scanner(new FileInputStream(mapFileName));
         while (scanner.hasNext()) {
             String[] line = scanner.nextLine().split(" ");
-            if (line.length == 0) {
+            if (line.length != 5) {
                 throw new InvalidBattleGridException("");
             }
-            switch(line[0]) {
-                case "block" -> {
-                    if (line.length != 6) {
-                        throw new InvalidBattleGridException("");
-                    }
-                    int posX = Integer.parseInt(line[2]);
-                    int posY = Integer.parseInt(line[3]);
-                    int sizeX = Integer.parseInt(line[4]);
-                    int sizeY = Integer.parseInt(line[5]);
-                    if (line[1].equals("brick")) {
-                        getEntityList().add(new TileBrick(posX, posY, sizeX, sizeY));
-                    }
-                }
+            int posX = Integer.parseInt(line[1]);
+            int posY = Integer.parseInt(line[2]);
+            int sizeX = Integer.parseInt(line[3]);
+            int sizeY = Integer.parseInt(line[4]);
+            if (line[0].equals("brick")) {
+                getEntityList().add(new Tile(TileType.BRICK, new Point2D(posX, posY), new Point2D(sizeX, sizeY)));
+            }
+            if (line[0].equals("border")) {
+                getEntityList().add(new Tile(TileType.BORDER, new Point2D(posX, posY), new Point2D(sizeX, sizeY)));
+            }
+            if (line[0].equals("eagle")) {
+                getEntityList().add(new Tile(TileType.EAGLE, new Point2D(posX, posY), new Point2D(sizeX, sizeY)));
+            }
+            if (line[0].equals("leaves")) {
+                getEntityList().add(new Tile(TileType.LEAVES, new Point2D(posX, posY), new Point2D(sizeX, sizeY)));
             }
         }
         getEntityList().add(playerTank);
-        getEntityList().add(new EnemyTank(200, 100, 50, 50));
-        getEntityList().add(new EnemyTank(300, 100, 50, 50));
+        getEntityList().add(new EnemyTank(200, 100, 36, 36));
+        getEntityList().add(new EnemyTank(300, 100, 36, 36));
     }
 
     public Tank getPlayerTank() {
@@ -89,6 +94,23 @@ public class BattleScene extends Scene {
         }
         toRemove.clear();
         getEntityList().addAll(newEntities);
+        getEntityList().sort(new Comparator<Entity>() {
+            @Override
+            public int compare(Entity lhs, Entity rhs) {
+                // -1 - less than, 1 - greater than, 0 - equal
+                boolean lhsSolid = true;
+                boolean rhsSolid = true;
+                if (lhs instanceof Tile) {
+                    Tile tile = (Tile) lhs;
+                    lhsSolid = tile.getTileType().isSolid();
+                }
+                if (rhs instanceof Tile) {
+                    Tile tile = (Tile) rhs;
+                    rhsSolid = tile.getTileType().isSolid();
+                }
+                return lhsSolid ? (rhsSolid ? 0 : -1) : (rhsSolid ? 1 : 0);
+            }
+        });
     }
 
     private boolean moveEntity(EntityMovable entity, Direction dir) {
@@ -100,6 +122,12 @@ public class BattleScene extends Scene {
             if (otherEntity == entity) {
                 continue;
             }
+            if (otherEntity instanceof Tile) {
+                Tile tile = (Tile) otherEntity;
+                if (!tile.getTileType().isSolid()) {
+                    continue;
+                }
+            }
             if (entity.canGoThrough(otherEntity)) {
                 continue;
             }
@@ -110,8 +138,8 @@ public class BattleScene extends Scene {
                 otherPos.getX() + otherSize.getX() > newPos.getX() &&
                 otherPos.getY() < newPos.getY() + curSize.getY() &&
                 otherPos.getY() + otherSize.getY() > newPos.getY()) {
-                otherEntity.detectCollision(entity);
-                entity.detectCollision(otherEntity);
+                otherEntity.onCollideWith(entity);
+                entity.onCollideWith(otherEntity);
                 return false;
             }
         }

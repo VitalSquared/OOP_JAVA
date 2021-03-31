@@ -47,5 +47,5 @@ public abstract class Entity {
         return notificationList;
     }
 
-    public abstract boolean detectCollision(Entity otherEntity);
+    public abstract boolean onCollideWith(Entity otherEntity);
 }

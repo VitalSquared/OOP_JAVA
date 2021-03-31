@@ -70,7 +70,7 @@ public class EnemyTank extends Tank {
     }
 
     @Override
-    public boolean detectCollision(Entity otherEntity) {
+    public boolean onCollideWith(Entity otherEntity) {
         if (otherEntity == null) {
             return false;
         }

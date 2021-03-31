@@ -1,7 +1,7 @@
-package ru.nsu.spirin.battlecity.view;
+package ru.nsu.spirin.battlecity.view.swing;
 
-import ru.nsu.spirin.battlecity.controller.Action;
 import ru.nsu.spirin.battlecity.controller.Controller;
+import ru.nsu.spirin.battlecity.exceptions.FactoryException;
 import ru.nsu.spirin.battlecity.math.Direction;
 import ru.nsu.spirin.battlecity.math.Point2D;
 import ru.nsu.spirin.battlecity.model.scene.Scene;
@@ -10,7 +10,9 @@ import ru.nsu.spirin.battlecity.model.scene.Entity;
 import ru.nsu.spirin.battlecity.model.scene.battle.EntityMovable;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.EnemyTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.PlayerTank;
-import ru.nsu.spirin.battlecity.model.scene.battle.tiles.TileBrick;
+import ru.nsu.spirin.battlecity.model.scene.battle.tile.Tile;
+import ru.nsu.spirin.battlecity.view.GameView;
+import ru.nsu.spirin.battlecity.view.swing.SwingInputHandler;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -19,11 +21,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -34,23 +33,13 @@ import java.util.Objects;
 public class SwingView extends Canvas implements GameView {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
-    private final int TEXTURE_SIZE = 50;
     private JFrame frame;
-
-    private final BufferedImage playerTankImage;
-    private final BufferedImage enemyTankImage;
-    private final BufferedImage bricksImage;
-    private final BufferedImage unknownImage;
-    private final BufferedImage bulletImage;
+    private final ImageFactory imageFactory;
 
     public SwingView(Controller controller) throws IOException {
         frame = new JFrame();
 
-        playerTankImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Tank.png")));
-        bricksImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bricks.png")));
-        unknownImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Unknown.png")));
-        bulletImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bullet.png")));
-        enemyTankImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_EnemyTank.png")));
+        imageFactory = new ImageFactory();
 
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
@@ -66,7 +55,7 @@ public class SwingView extends Canvas implements GameView {
                 repaint();
             }
         });
-        addKeyListener(new InputHandler(controller));
+        addKeyListener(new SwingInputHandler(controller));
 
         frame.add(this);
         frame.setTitle("Battle City");
@@ -78,7 +67,7 @@ public class SwingView extends Canvas implements GameView {
     }
 
     @Override
-    public void render(Scene scene) {
+    public void render(Scene scene) throws FactoryException {
         BufferStrategy bs = this.getBufferStrategy();
         if (bs == null)
         {
@@ -93,20 +82,20 @@ public class SwingView extends Canvas implements GameView {
 
         List<Entity> entityList = scene.getEntityList();
         for (var entity : entityList) {
-            BufferedImage imageBuf = unknownImage;
+            BufferedImage imageBuf = imageFactory.getImage("UNKNOWN");
             Point2D pos = entity.getPosition();
             Point2D size = entity.getSize();
             if (entity instanceof EntityMovable) {
                 if (entity instanceof Bullet) {
-                    imageBuf = bulletImage;
+                    imageBuf = imageFactory.getImage("BULLET");
                 }
 
                 if (entity instanceof PlayerTank) {
-                    imageBuf = playerTankImage;
+                    imageBuf = imageFactory.getImage("TANK_PLAYER");
                 }
 
                 if (entity instanceof EnemyTank) {
-                    imageBuf = enemyTankImage;
+                    imageBuf = imageFactory.getImage("TANK_ENEMY");
                 }
 
                 Graphics2D g2d = (Graphics2D) g;
@@ -121,8 +110,9 @@ public class SwingView extends Canvas implements GameView {
                 g2d.drawImage(imageBuf, tr, (img, infoflags, x, y, width, height) -> true);
             }
             else {
-                if (entity instanceof TileBrick) {
-                    imageBuf = bricksImage;
+                imageBuf = imageFactory.getImage("TILE_" + ((Tile) entity).getTileType().toString());
+                if (imageBuf == null) {
+                    imageBuf = imageFactory.getImage("UNKNOWN");
                 }
                 g.drawImage(imageBuf, pos.getX(), pos.getY(), size.getX(), size.getY(), (img, infoflags, x1, y1, width, height) -> true);
             }
@@ -131,55 +121,5 @@ public class SwingView extends Canvas implements GameView {
 
         g.dispose();
         bs.show();
-    }
-}
-
-class InputHandler implements KeyListener {
-    private final Controller controller;
-
-    public InputHandler(Controller controller) {
-        this.controller = controller;
-    }
-
-    /**
-     * Invoked when a key has been typed.
-     * See the class description for {@link KeyEvent} for a definition of
-     * a key typed event.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    /**
-     * Invoked when a key has been pressed.
-     * See the class description for {@link KeyEvent} for a definition of
-     * a key pressed event.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void keyPressed(KeyEvent e) {
-        switch(e.getKeyCode()) {
-            case KeyEvent.VK_W -> controller.action(Action.UP);
-            case KeyEvent.VK_S -> controller.action(Action.DOWN);
-            case KeyEvent.VK_A -> controller.action(Action.LEFT);
-            case KeyEvent.VK_D -> controller.action(Action.RIGHT);
-            case KeyEvent.VK_SPACE -> controller.action(Action.ACTION);
-        }
-    }
-
-    /**
-     * Invoked when a key has been released.
-     * See the class description for {@link KeyEvent} for a definition of
-     * a key released event.
-     *
-     * @param e the event to be processed
-     */
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }

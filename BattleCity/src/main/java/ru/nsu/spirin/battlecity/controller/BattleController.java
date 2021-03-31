@@ -8,7 +8,7 @@ import ru.nsu.spirin.battlecity.model.scene.battle.BattleScene;
 public class BattleController extends Controller {
 
     public BattleController(Scene scene) throws InvalidControllerSceneException {
-        if (! (scene instanceof BattleScene)) {
+        if (!(scene instanceof BattleScene)) {
             throw new InvalidControllerSceneException("Battle Controller needs Battle Scene");
         }
         setScene(scene);

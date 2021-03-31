@@ -41,7 +41,7 @@ public class PlayerTank extends Tank {
     }
 
     @Override
-    public boolean detectCollision(Entity otherEntity) {
+    public boolean onCollideWith(Entity otherEntity) {
         return false;
     }
 
