@@ -11,10 +11,10 @@ import ru.nsu.spirin.battlecity.model.scene.battle.EntityMovable;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.EnemyTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.PlayerTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tile.Tile;
+import ru.nsu.spirin.battlecity.model.scene.mainmenu.infocard.InfoCard;
+import ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable.MenuSelectable;
 import ru.nsu.spirin.battlecity.view.GameView;
-import ru.nsu.spirin.battlecity.view.swing.SwingInputHandler;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -23,12 +23,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.WindowEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 public class SwingView extends Canvas implements GameView {
     private static final int WIDTH = 1280;
@@ -110,16 +110,37 @@ public class SwingView extends Canvas implements GameView {
                 g2d.drawImage(imageBuf, tr, (img, infoflags, x, y, width, height) -> true);
             }
             else {
-                imageBuf = imageFactory.getImage("TILE_" + ((Tile) entity).getTileType().toString());
+                if (entity instanceof Tile) {
+                    imageBuf = imageFactory.getImage("TILE_" + ((Tile) entity).getTileType().toString());
+                }
+                else if (entity instanceof InfoCard) {
+                    imageBuf = imageFactory.getImage("MENU_" + ((InfoCard) entity).getInfoCardType().toString());
+                }
+                else if (entity instanceof MenuSelectable) {
+                    imageBuf = imageFactory.getImage("MENU_" + ((MenuSelectable) entity).getSelectableType().toString());
+                }
+
                 if (imageBuf == null) {
                     imageBuf = imageFactory.getImage("UNKNOWN");
                 }
                 g.drawImage(imageBuf, pos.getX(), pos.getY(), size.getX(), size.getY(), (img, infoflags, x1, y1, width, height) -> true);
-            }
 
+
+                if (entity instanceof MenuSelectable) {
+                    if (((MenuSelectable) entity).isSelected()) {
+                        imageBuf = imageFactory.getImage("TANK_PLAYER");
+                        g.drawImage(imageBuf, pos.getX() - (int) (size.getY() * 1.5), pos.getY(), size.getY(), size.getY(), (img, infoflags, x1, y1, width, height) -> true);
+                    }
+                }
+            }
         }
 
         g.dispose();
         bs.show();
+    }
+
+    @Override
+    public void close() {
+        frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
     }
 }

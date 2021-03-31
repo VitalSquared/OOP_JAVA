@@ -1,12 +1,13 @@
 package ru.nsu.spirin.battlecity;
 
-import ru.nsu.spirin.battlecity.controller.BattleController;
 import ru.nsu.spirin.battlecity.controller.Controller;
 import ru.nsu.spirin.battlecity.exceptions.FactoryException;
 import ru.nsu.spirin.battlecity.exceptions.InvalidBattleGridException;
 import ru.nsu.spirin.battlecity.exceptions.InvalidControllerSceneException;
+import ru.nsu.spirin.battlecity.model.notification.Context;
 import ru.nsu.spirin.battlecity.model.scene.Scene;
 import ru.nsu.spirin.battlecity.model.scene.battle.BattleScene;
+import ru.nsu.spirin.battlecity.model.scene.mainmenu.MainMenuScene;
 import ru.nsu.spirin.battlecity.view.GameView;
 import ru.nsu.spirin.battlecity.view.swing.SwingView;
 
@@ -21,13 +22,14 @@ public class BattleCityGame {
     Controller controller;
 
     public BattleCityGame() throws IOException, InvalidBattleGridException, InvalidControllerSceneException {
-        curScene = new BattleScene("maps/map1.txt");
-        controller = new BattleController(curScene);
+        curScene = new MainMenuScene();//new BattleScene("maps/map1.txt");
+        controller = new Controller(curScene);
         gameView = new SwingView(controller);
     }
 
-    public void run() throws FactoryException {
-        while(true) {
+    public void run() throws FactoryException, IOException, InvalidBattleGridException {
+        boolean shouldExit = false;
+        while(!shouldExit) {
             gameView.render(curScene);
             try {
                 Thread.sleep(1000 / MAX_FPS);
@@ -36,6 +38,26 @@ public class BattleCityGame {
                 throw new RuntimeException(e.getLocalizedMessage());
             }
             curScene.update();
+            for (var notification : curScene.getNotificationList()) {
+                switch (notification.getContext()) {
+                    case START_SINGLEPLAYER -> {
+                        curScene = new BattleScene("maps/map1.txt");
+                        controller.setScene(curScene);
+                    }
+                    case EXIT -> {
+                        shouldExit = true;
+                    }
+                    case TO_MAIN_MENU -> {
+                        curScene = new MainMenuScene();
+                        controller.setScene(curScene);
+                    }
+                }
+            }
+            curScene.getNotificationList().clear();
         }
+    }
+
+    public void close () {
+        gameView.close();
     }
 }

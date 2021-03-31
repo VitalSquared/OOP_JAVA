@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 
 public class SwingInputHandler implements KeyListener {
     private final Controller controller;
+    private int escapePresses = 0;
 
     public SwingInputHandler(Controller controller) {
         this.controller = controller;
@@ -52,7 +53,15 @@ public class SwingInputHandler implements KeyListener {
      */
     @Override
     public void keyReleased(KeyEvent e) {
-
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            escapePresses++;
+        }
+        else {
+            escapePresses = 0;
+        }
+        if (escapePresses >= 2) {
+            controller.action(Action.ESCAPE);
+        }
     }
 }
 

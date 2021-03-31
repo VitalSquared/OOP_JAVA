@@ -5,5 +5,6 @@ public enum Action {
     DOWN,
     LEFT,
     RIGHT,
-    ACTION
+    ACTION,
+    ESCAPE
 }

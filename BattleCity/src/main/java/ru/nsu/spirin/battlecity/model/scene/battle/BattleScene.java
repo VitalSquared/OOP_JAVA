@@ -1,8 +1,10 @@
 package ru.nsu.spirin.battlecity.model.scene.battle;
 
+import ru.nsu.spirin.battlecity.controller.Action;
 import ru.nsu.spirin.battlecity.exceptions.InvalidBattleGridException;
 import ru.nsu.spirin.battlecity.math.Direction;
 import ru.nsu.spirin.battlecity.math.Point2D;
+import ru.nsu.spirin.battlecity.model.notification.Context;
 import ru.nsu.spirin.battlecity.model.notification.Notification;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 import ru.nsu.spirin.battlecity.model.scene.Scene;
@@ -15,7 +17,6 @@ import ru.nsu.spirin.battlecity.model.scene.battle.tile.TileType;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
@@ -53,10 +54,6 @@ public class BattleScene extends Scene {
         getEntityList().add(playerTank);
         getEntityList().add(new EnemyTank(200, 100, 36, 36));
         getEntityList().add(new EnemyTank(300, 100, 36, 36));
-    }
-
-    public Tank getPlayerTank() {
-        return playerTank;
     }
 
     @Override
@@ -144,6 +141,32 @@ public class BattleScene extends Scene {
             }
         }
         entity.setPosition(newPos);
+        return true;
+    }
+
+    @Override
+    public boolean action(Action action) {
+        boolean result = false;
+        switch (action) {
+            case UP -> result = move(Direction.UP);
+            case DOWN -> result = move(Direction.DOWN);
+            case LEFT -> result = move(Direction.LEFT);
+            case RIGHT -> result = move(Direction.RIGHT);
+            case ACTION -> result = shoot();
+            case ESCAPE -> {
+                result = true;
+                getNotificationList().add(new Notification(Context.TO_MAIN_MENU, null));
+            }
+        }
+        return result;
+    }
+
+    private boolean move(Direction direction) {
+        return playerTank.move(direction);
+    }
+
+    private boolean shoot() {
+        playerTank.shoot();
         return true;
     }
 }

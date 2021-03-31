@@ -5,4 +5,5 @@ import ru.nsu.spirin.battlecity.model.scene.Scene;
 
 public interface GameView {
     void render(Scene scene) throws FactoryException;
+    void close();
 }
