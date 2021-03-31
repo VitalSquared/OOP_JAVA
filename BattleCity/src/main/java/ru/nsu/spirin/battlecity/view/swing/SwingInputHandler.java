@@ -6,7 +6,7 @@ import ru.nsu.spirin.battlecity.controller.Controller;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class SwingInputHandler implements KeyListener {
+public final class SwingInputHandler implements KeyListener {
     private final Controller controller;
     private int escapePresses = 0;
 

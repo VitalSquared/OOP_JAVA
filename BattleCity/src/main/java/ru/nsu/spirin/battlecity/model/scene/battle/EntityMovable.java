@@ -3,9 +3,6 @@ package ru.nsu.spirin.battlecity.model.scene.battle;
 import ru.nsu.spirin.battlecity.math.Direction;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class EntityMovable extends Entity {
 
     private Direction direction = Direction.UP;

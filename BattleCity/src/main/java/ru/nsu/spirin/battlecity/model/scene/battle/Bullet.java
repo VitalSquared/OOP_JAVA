@@ -7,7 +7,7 @@ import ru.nsu.spirin.battlecity.model.notification.Notification;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.Tank;
 
-public class Bullet extends EntityMovable {
+public final class Bullet extends EntityMovable {
     private final Tank parentTank;
 
     public Bullet(Tank parentTank) {
@@ -39,11 +39,6 @@ public class Bullet extends EntityMovable {
 
     @Override
     public boolean update() {
-        Point2D curPos = getPosition();
-        /*if (curPos.getX() < 0 || curPos.getX() > 1280 || curPos.getY() < 0 || curPos.getY() > 720) {
-            createNotification(new Notification(Context.DESTROY_SELF, getDirection()));
-            return false;
-        }*/
         move(getDirection());
         return false;
     }

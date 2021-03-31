@@ -7,7 +7,7 @@ import ru.nsu.spirin.battlecity.model.notification.Notification;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 import ru.nsu.spirin.battlecity.model.scene.battle.Bullet;
 
-public class PlayerTank extends Tank {
+public final class PlayerTank extends Tank {
 
     private int cooldown = 0;
 

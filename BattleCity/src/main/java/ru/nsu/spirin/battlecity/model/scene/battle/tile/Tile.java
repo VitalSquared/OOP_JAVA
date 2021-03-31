@@ -6,7 +6,7 @@ import ru.nsu.spirin.battlecity.model.notification.Notification;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 import ru.nsu.spirin.battlecity.model.scene.battle.Bullet;
 
-public class Tile extends Entity {
+public final class Tile extends Entity {
     private final boolean indestructible;
     private final boolean solid;
     private boolean destroyed;
@@ -27,6 +27,7 @@ public class Tile extends Entity {
         return this.type;
     }
 
+    @Override
     public boolean update() {
         if (destroyed) {
             return false;
@@ -38,6 +39,7 @@ public class Tile extends Entity {
         return true;
     }
 
+    @Override
     public boolean onCollideWith(Entity otherEntity) {
         if (indestructible || !solid) return false;
 

@@ -10,7 +10,7 @@ public enum SelectableType {
     ABOUT(new Notification(Context.SHOW_ABOUT, null)),
     EXIT(new Notification(Context.EXIT, null));
 
-    private Notification notification;
+    private final Notification notification;
 
     SelectableType(Notification notification) {
         this.notification = notification;

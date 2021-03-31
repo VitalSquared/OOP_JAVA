@@ -4,8 +4,8 @@ ru/nsu/spirin/battlecity/exceptions/InvalidControllerSceneException.java
  ru.nsu.spirin.battlecity.exceptions.InvalidControllerSceneException
 ru/nsu/spirin/battlecity/exceptions/InvalidBattleGridException.java
  ru.nsu.spirin.battlecity.exceptions.InvalidBattleGridException
-ru/nsu/spirin/battlecity/view/swing/ImageFactory.java
- ru.nsu.spirin.battlecity.view.swing.ImageFactory
+ru/nsu/spirin/battlecity/model/scene/Scene.java
+ ru.nsu.spirin.battlecity.model.scene.Scene
 ru/nsu/spirin/battlecity/math/Direction.java
  ru.nsu.spirin.battlecity.math.Direction
  ru.nsu.spirin.battlecity.math.Direction$1
@@ -15,25 +15,29 @@ ru/nsu/spirin/battlecity/exceptions/FactoryException.java
  ru.nsu.spirin.battlecity.exceptions.FactoryException
 ru/nsu/spirin/battlecity/model/scene/mainmenu/infocard/InfoCardType.java
  ru.nsu.spirin.battlecity.model.scene.mainmenu.infocard.InfoCardType
-ru/nsu/spirin/battlecity/BattleCityGame.java
- ru.nsu.spirin.battlecity.BattleCityGame
- ru.nsu.spirin.battlecity.BattleCityGame$1
+ru/nsu/spirin/battlecity/model/notification/Context.java
+ ru.nsu.spirin.battlecity.model.notification.Context
 ru/nsu/spirin/battlecity/view/GameView.java
  ru.nsu.spirin.battlecity.view.GameView
 ru/nsu/spirin/battlecity/controller/Action.java
  ru.nsu.spirin.battlecity.controller.Action
+ru/nsu/spirin/battlecity/model/notification/Notification.java
+ ru.nsu.spirin.battlecity.model.notification.Notification
+ru/nsu/spirin/battlecity/model/scene/Entity.java
+ ru.nsu.spirin.battlecity.model.scene.Entity
+ru/nsu/spirin/battlecity/controller/Controller.java
+ ru.nsu.spirin.battlecity.controller.Controller
+ru/nsu/spirin/battlecity/BattleCityGame.java
+ ru.nsu.spirin.battlecity.BattleCityGame
+ ru.nsu.spirin.battlecity.BattleCityGame$1
 ru/nsu/spirin/battlecity/Main.java
  ru.nsu.spirin.battlecity.Main
 ru/nsu/spirin/battlecity/model/scene/battle/EntityMovable.java
  ru.nsu.spirin.battlecity.model.scene.battle.EntityMovable
-ru/nsu/spirin/battlecity/controller/Controller.java
- ru.nsu.spirin.battlecity.controller.Controller
 ru/nsu/spirin/battlecity/model/scene/mainmenu/infocard/InfoCard.java
  ru.nsu.spirin.battlecity.model.scene.mainmenu.infocard.InfoCard
-ru/nsu/spirin/battlecity/model/notification/Notification.java
- ru.nsu.spirin.battlecity.model.notification.Notification
-ru/nsu/spirin/battlecity/model/notification/Context.java
- ru.nsu.spirin.battlecity.model.notification.Context
+ru/nsu/spirin/battlecity/view/swing/ImageFactory.java
+ ru.nsu.spirin.battlecity.view.swing.ImageFactory
 ru/nsu/spirin/battlecity/model/scene/mainmenu/selectable/SelectableType.java
  ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable.SelectableType
 ru/nsu/spirin/battlecity/model/scene/battle/tank/Tank.java
@@ -54,15 +58,10 @@ ru/nsu/spirin/battlecity/model/scene/battle/tank/PlayerTank.java
  ru.nsu.spirin.battlecity.model.scene.battle.tank.PlayerTank
 ru/nsu/spirin/battlecity/model/scene/battle/tile/Tile.java
  ru.nsu.spirin.battlecity.model.scene.battle.tile.Tile
-ru/nsu/spirin/battlecity/model/scene/Scene.java
- ru.nsu.spirin.battlecity.model.scene.Scene
 ru/nsu/spirin/battlecity/model/scene/battle/tank/EnemyTank.java
  ru.nsu.spirin.battlecity.model.scene.battle.tank.EnemyTank
 ru/nsu/spirin/battlecity/view/swing/SwingInputHandler.java
  ru.nsu.spirin.battlecity.view.swing.SwingInputHandler
-ru/nsu/spirin/battlecity/model/scene/Entity.java
- ru.nsu.spirin.battlecity.model.scene.Entity
 ru/nsu/spirin/battlecity/model/scene/battle/BattleScene.java
  ru.nsu.spirin.battlecity.model.scene.battle.BattleScene
  ru.nsu.spirin.battlecity.model.scene.battle.BattleScene$1
- ru.nsu.spirin.battlecity.model.scene.battle.BattleScene$2

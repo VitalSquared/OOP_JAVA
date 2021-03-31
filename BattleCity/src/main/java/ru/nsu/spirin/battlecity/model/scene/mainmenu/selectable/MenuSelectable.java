@@ -3,9 +3,9 @@ package ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable;
 import ru.nsu.spirin.battlecity.math.Point2D;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 
-public class MenuSelectable extends Entity {
+public final class MenuSelectable extends Entity {
     private boolean selected = false;
-    private SelectableType type;
+    private final SelectableType type;
     private MenuSelectable next = null;
     private MenuSelectable prev = null;
 

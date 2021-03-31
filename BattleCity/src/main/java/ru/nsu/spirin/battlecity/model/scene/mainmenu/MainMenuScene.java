@@ -12,20 +12,20 @@ import ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable.SelectableType;
 
 import java.util.List;
 
-public class MainMenuScene extends Scene {
+public final class MainMenuScene extends Scene {
 
-    private MenuSelectable activeButton = null;
-    private final int PADDING_LEFT = 200;
+    private MenuSelectable activeButton;
 
     public MainMenuScene() {
+        int PADDING_LEFT = 200;
         getEntityList().add(new InfoCard(InfoCardType.LOGO, new Point2D(PADDING_LEFT, 50), new Point2D(188, 68)));
-        getEntityList().add(new InfoCard(InfoCardType.COPYRIGHT, new Point2D(PADDING_LEFT, 500), new Point2D(256, 54)));
+        getEntityList().add(new InfoCard(InfoCardType.COPYRIGHT, new Point2D(PADDING_LEFT - 32, 500), new Point2D(256, 54)));
 
-        MenuSelectable singleplayerButton = new MenuSelectable(SelectableType.SINGLEPLAYER, new Point2D(PADDING_LEFT, 125), new Point2D(200, 50));
-        MenuSelectable multiplayerButton = new MenuSelectable(SelectableType.MULTIPLAYER, new Point2D(PADDING_LEFT, 200), new Point2D(200, 50));
-        MenuSelectable highscoreButton = new MenuSelectable(SelectableType.HIGHSCORE, new Point2D(PADDING_LEFT, 275), new Point2D(200, 50));
-        MenuSelectable aboutButton = new MenuSelectable(SelectableType.ABOUT, new Point2D(PADDING_LEFT, 350), new Point2D(200, 50));
-        MenuSelectable exitButton = new MenuSelectable(SelectableType.EXIT, new Point2D(PADDING_LEFT, 425), new Point2D(200, 50));
+        MenuSelectable singleplayerButton = new MenuSelectable(SelectableType.SINGLEPLAYER, new Point2D(PADDING_LEFT, 135), new Point2D(200, 50));
+        MenuSelectable multiplayerButton = new MenuSelectable(SelectableType.MULTIPLAYER, new Point2D(PADDING_LEFT, 210), new Point2D(200, 50));
+        MenuSelectable highscoreButton = new MenuSelectable(SelectableType.HIGHSCORE, new Point2D(PADDING_LEFT, 285), new Point2D(200, 50));
+        MenuSelectable aboutButton = new MenuSelectable(SelectableType.ABOUT, new Point2D(PADDING_LEFT, 360), new Point2D(200, 50));
+        MenuSelectable exitButton = new MenuSelectable(SelectableType.EXIT, new Point2D(PADDING_LEFT, 435), new Point2D(200, 50));
 
         singleplayerButton.setPrev(null);
         singleplayerButton.setNext(multiplayerButton);
@@ -63,7 +63,7 @@ public class MainMenuScene extends Scene {
                     case START_SINGLEPLAYER -> {
                         getNotificationList().add(new Notification(Context.START_SINGLEPLAYER, null));
                     }
-                    case START_MULTIPLAYER -> {
+                    /*case START_MULTIPLAYER -> {
 
                     }
                     case SHOW_HIGH_SCORES -> {
@@ -71,7 +71,7 @@ public class MainMenuScene extends Scene {
                     }
                     case SHOW_ABOUT -> {
 
-                    }
+                    }*/
                     case EXIT -> {
                         getNotificationList().add(new Notification(Context.EXIT, null));
                     }
@@ -98,12 +98,9 @@ public class MainMenuScene extends Scene {
                     activeButton.setSelected(true);
                 }
             }
-            case ACTION -> {
-                activeButton.onPressed();
-            }
+            case ACTION -> activeButton.onPressed();
         }
         return true;
     }
-
 
 }

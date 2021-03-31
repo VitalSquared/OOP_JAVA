@@ -17,13 +17,11 @@ import ru.nsu.spirin.battlecity.model.scene.battle.tile.TileType;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-public class BattleScene extends Scene {
+public final class BattleScene extends Scene {
     private final Tank playerTank;
-
 
     public BattleScene(String mapFileName) throws IOException, InvalidBattleGridException {
         this.playerTank = new PlayerTank(100, 100, 36, 36);
@@ -66,9 +64,7 @@ public class BattleScene extends Scene {
             for (int i = 0; i < notificationList.size(); i++) {
                 var notification = notificationList.get(i);
                 switch (notification.getContext()) {
-                    case DESTROY_SELF -> {
-                        toRemove.add(entity);
-                    }
+                    case DESTROY_SELF -> toRemove.add(entity);
                     case MOVE -> {
                         if (entity instanceof EntityMovable) {
                             moveEntity((EntityMovable) entity, notification.getDirection());
@@ -91,22 +87,17 @@ public class BattleScene extends Scene {
         }
         toRemove.clear();
         getEntityList().addAll(newEntities);
-        getEntityList().sort(new Comparator<Entity>() {
-            @Override
-            public int compare(Entity lhs, Entity rhs) {
-                // -1 - less than, 1 - greater than, 0 - equal
-                boolean lhsSolid = true;
-                boolean rhsSolid = true;
-                if (lhs instanceof Tile) {
-                    Tile tile = (Tile) lhs;
-                    lhsSolid = tile.getTileType().isSolid();
-                }
-                if (rhs instanceof Tile) {
-                    Tile tile = (Tile) rhs;
-                    rhsSolid = tile.getTileType().isSolid();
-                }
-                return lhsSolid ? (rhsSolid ? 0 : -1) : (rhsSolid ? 1 : 0);
+        getEntityList().sort((lhs, rhs) -> {
+            boolean lhsSolid = true, rhsSolid = true;
+            if (lhs instanceof Tile) {
+                Tile tile = (Tile) lhs;
+                lhsSolid = tile.getTileType().isSolid();
             }
+            if (rhs instanceof Tile) {
+                Tile tile = (Tile) rhs;
+                rhsSolid = tile.getTileType().isSolid();
+            }
+            return lhsSolid ? (rhsSolid ? 0 : -1) : (rhsSolid ? 1 : 0);
         });
     }
 

@@ -30,10 +30,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
-public class SwingView extends Canvas implements GameView {
+public final class SwingView extends Canvas implements GameView {
     private static final int WIDTH = 1280;
     private static final int HEIGHT = 720;
-    private JFrame frame;
+    private final JFrame frame;
     private final ImageFactory imageFactory;
 
     public SwingView(Controller controller) throws IOException {

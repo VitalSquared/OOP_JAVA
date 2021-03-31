@@ -9,7 +9,7 @@ import ru.nsu.spirin.battlecity.model.scene.battle.Bullet;
 
 import java.util.Random;
 
-public class EnemyTank extends Tank {
+public final class EnemyTank extends Tank {
     private int cooldown = 0;
     private int health = 100;
     private boolean isDead = false;

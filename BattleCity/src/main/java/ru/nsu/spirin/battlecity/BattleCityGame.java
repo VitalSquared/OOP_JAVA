@@ -4,7 +4,6 @@ import ru.nsu.spirin.battlecity.controller.Controller;
 import ru.nsu.spirin.battlecity.exceptions.FactoryException;
 import ru.nsu.spirin.battlecity.exceptions.InvalidBattleGridException;
 import ru.nsu.spirin.battlecity.exceptions.InvalidControllerSceneException;
-import ru.nsu.spirin.battlecity.model.notification.Context;
 import ru.nsu.spirin.battlecity.model.scene.Scene;
 import ru.nsu.spirin.battlecity.model.scene.battle.BattleScene;
 import ru.nsu.spirin.battlecity.model.scene.mainmenu.MainMenuScene;
@@ -13,7 +12,7 @@ import ru.nsu.spirin.battlecity.view.swing.SwingView;
 
 import java.io.IOException;
 
-public class BattleCityGame {
+public final class BattleCityGame {
 
     private static final int MAX_FPS = 30;
 
@@ -21,8 +20,8 @@ public class BattleCityGame {
     Scene curScene;
     Controller controller;
 
-    public BattleCityGame() throws IOException, InvalidBattleGridException, InvalidControllerSceneException {
-        curScene = new MainMenuScene();//new BattleScene("maps/map1.txt");
+    public BattleCityGame() throws IOException, InvalidControllerSceneException {
+        curScene = new MainMenuScene();
         controller = new Controller(curScene);
         gameView = new SwingView(controller);
     }
@@ -44,9 +43,7 @@ public class BattleCityGame {
                         curScene = new BattleScene("maps/map1.txt");
                         controller.setScene(curScene);
                     }
-                    case EXIT -> {
-                        shouldExit = true;
-                    }
+                    case EXIT -> shouldExit = true;
                     case TO_MAIN_MENU -> {
                         curScene = new MainMenuScene();
                         controller.setScene(curScene);
