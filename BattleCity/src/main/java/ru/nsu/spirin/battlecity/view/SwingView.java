@@ -8,6 +8,7 @@ import ru.nsu.spirin.battlecity.model.scene.Scene;
 import ru.nsu.spirin.battlecity.model.scene.battle.Bullet;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 import ru.nsu.spirin.battlecity.model.scene.battle.EntityMovable;
+import ru.nsu.spirin.battlecity.model.scene.battle.tank.EnemyTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.PlayerTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tiles.TileBrick;
 
@@ -25,6 +26,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -35,10 +37,11 @@ public class SwingView extends Canvas implements GameView {
     private final int TEXTURE_SIZE = 50;
     private JFrame frame;
 
-    private final Image playerTankImage;
-    private final Image bricksImage;
-    private final Image unknownImage;
-    private final Image bulletImage;
+    private final BufferedImage playerTankImage;
+    private final BufferedImage enemyTankImage;
+    private final BufferedImage bricksImage;
+    private final BufferedImage unknownImage;
+    private final BufferedImage bulletImage;
 
     public SwingView(Controller controller) throws IOException {
         frame = new JFrame();
@@ -47,6 +50,7 @@ public class SwingView extends Canvas implements GameView {
         bricksImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bricks.png")));
         unknownImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Unknown.png")));
         bulletImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_Bullet.png")));
+        enemyTankImage = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("textures/T_EnemyTank.png")));
 
         Dimension size = new Dimension(WIDTH, HEIGHT);
         this.setPreferredSize(size);
@@ -89,7 +93,7 @@ public class SwingView extends Canvas implements GameView {
 
         List<Entity> entityList = scene.getEntityList();
         for (var entity : entityList) {
-            Image imageBuf = unknownImage;
+            BufferedImage imageBuf = unknownImage;
             Point2D pos = entity.getPosition();
             Point2D size = entity.getSize();
             if (entity instanceof EntityMovable) {
@@ -101,14 +105,19 @@ public class SwingView extends Canvas implements GameView {
                     imageBuf = playerTankImage;
                 }
 
+                if (entity instanceof EnemyTank) {
+                    imageBuf = enemyTankImage;
+                }
+
                 Graphics2D g2d = (Graphics2D) g;
                 AffineTransform tr = new AffineTransform();
                 tr.translate(pos.getX(), pos.getY());
                 tr.rotate(
-                        Math.toRadians (Direction.convertDirectionToAngleDegrees(((EntityMovable) entity).getDirection())),
-                        TEXTURE_SIZE / 2.0,
-                        TEXTURE_SIZE / 2.0
+                        Math.toRadians(Direction.convertDirectionToAngleDegrees(((EntityMovable)entity).getDirection())),
+                        size.getX() / 2.0,
+                        size.getY() / 2.0
                 );
+                tr.scale(1.0 * size.getX() / imageBuf.getWidth(), 1.0 * size.getY() / imageBuf.getHeight());
                 g2d.drawImage(imageBuf, tr, (img, infoflags, x, y, width, height) -> true);
             }
             else {

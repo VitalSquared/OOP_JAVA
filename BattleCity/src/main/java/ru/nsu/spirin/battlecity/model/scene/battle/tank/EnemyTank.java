@@ -7,11 +7,14 @@ import ru.nsu.spirin.battlecity.model.notification.Notification;
 import ru.nsu.spirin.battlecity.model.scene.Entity;
 import ru.nsu.spirin.battlecity.model.scene.battle.Bullet;
 
-public class PlayerTank extends Tank {
+import java.util.Random;
 
+public class EnemyTank extends Tank {
     private int cooldown = 0;
+    private int health = 100;
+    private boolean isDead = false;
 
-    public PlayerTank(int posX, int posY, int sizeX, int sizeY) {
+    public EnemyTank(int posX, int posY, int sizeX, int sizeY) {
         setPosition(new Point2D(posX, posY));
         setSize(new Point2D(sizeX, sizeY));
         setSpeed(2);
@@ -34,14 +37,49 @@ public class PlayerTank extends Tank {
 
     @Override
     public boolean update() {
+        if (isDead) {
+            return false;
+        }
         if (cooldown > 0) {
             cooldown--;
+        }
+        if (health < 0) {
+            createNotification(new Notification(Context.DESTROY_SELF, getDirection()));
+            isDead = true;
+        }
+        Random rnd = new Random();
+        int rand = rnd.nextInt(50);
+        switch(rand) {
+            case 0 -> {
+                move(Direction.UP);
+            }
+            case 10 -> {
+                move(Direction.DOWN);
+            }
+            case 20 -> {
+                move(Direction.LEFT);
+            }
+            case 30 -> {
+                move(Direction.RIGHT);
+            }
+            case 40 -> {
+                shoot();
+            }
         }
         return false;
     }
 
     @Override
     public boolean detectCollision(Entity otherEntity) {
+        if (otherEntity == null) {
+            return false;
+        }
+        if (otherEntity instanceof Bullet) {
+            if (((Bullet) otherEntity).getParentTank() != this) {
+                health -= 10;
+                return true;
+            }
+        }
         return false;
     }
 

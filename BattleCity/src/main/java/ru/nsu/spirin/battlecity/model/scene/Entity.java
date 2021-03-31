@@ -1,7 +1,6 @@
 package ru.nsu.spirin.battlecity.model.scene;
 
 import ru.nsu.spirin.battlecity.math.Point2D;
-import ru.nsu.spirin.battlecity.model.notification.Context;
 import ru.nsu.spirin.battlecity.model.notification.Notification;
 
 import java.util.ArrayList;
@@ -47,4 +46,6 @@ public abstract class Entity {
     public List<Notification> getNotificationList() {
         return notificationList;
     }
+
+    public abstract boolean detectCollision(Entity otherEntity);
 }

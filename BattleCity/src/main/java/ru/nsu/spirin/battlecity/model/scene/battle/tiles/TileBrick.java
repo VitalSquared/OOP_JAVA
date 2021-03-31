@@ -14,4 +14,9 @@ public class TileBrick extends Entity {
     public boolean update() {
         return false;
     }
+
+    @Override
+    public boolean detectCollision(Entity otherEntity) {
+        return false;
+    }
 }
