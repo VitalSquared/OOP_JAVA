@@ -11,8 +11,8 @@ import ru.nsu.spirin.battlecity.model.scene.battle.EntityMovable;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.EnemyTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tank.PlayerTank;
 import ru.nsu.spirin.battlecity.model.scene.battle.tile.Tile;
-import ru.nsu.spirin.battlecity.model.scene.mainmenu.infocard.InfoCard;
-import ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable.MenuSelectable;
+import ru.nsu.spirin.battlecity.model.scene.menu.infocard.InfoCard;
+import ru.nsu.spirin.battlecity.model.scene.menu.selectable.MenuSelectable;
 import ru.nsu.spirin.battlecity.view.GameView;
 
 import javax.swing.JFrame;

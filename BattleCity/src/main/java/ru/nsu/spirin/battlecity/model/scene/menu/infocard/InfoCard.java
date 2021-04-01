@@ -1,4 +1,4 @@
-package ru.nsu.spirin.battlecity.model.scene.mainmenu.infocard;
+package ru.nsu.spirin.battlecity.model.scene.menu.infocard;
 
 import ru.nsu.spirin.battlecity.math.Point2D;
 import ru.nsu.spirin.battlecity.model.scene.Entity;

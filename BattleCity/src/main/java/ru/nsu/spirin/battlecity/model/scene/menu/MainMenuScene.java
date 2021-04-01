@@ -1,14 +1,14 @@
-package ru.nsu.spirin.battlecity.model.scene.mainmenu;
+package ru.nsu.spirin.battlecity.model.scene.menu;
 
 import ru.nsu.spirin.battlecity.controller.Action;
 import ru.nsu.spirin.battlecity.math.Point2D;
 import ru.nsu.spirin.battlecity.model.notification.Context;
 import ru.nsu.spirin.battlecity.model.notification.Notification;
 import ru.nsu.spirin.battlecity.model.scene.Scene;
-import ru.nsu.spirin.battlecity.model.scene.mainmenu.infocard.InfoCard;
-import ru.nsu.spirin.battlecity.model.scene.mainmenu.infocard.InfoCardType;
-import ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable.MenuSelectable;
-import ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable.SelectableType;
+import ru.nsu.spirin.battlecity.model.scene.menu.infocard.InfoCard;
+import ru.nsu.spirin.battlecity.model.scene.menu.infocard.InfoCardType;
+import ru.nsu.spirin.battlecity.model.scene.menu.selectable.MenuSelectable;
+import ru.nsu.spirin.battlecity.model.scene.menu.selectable.SelectableType;
 
 import java.util.List;
 

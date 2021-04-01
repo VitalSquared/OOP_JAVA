@@ -6,7 +6,8 @@ import ru.nsu.spirin.battlecity.exceptions.InvalidBattleGridException;
 import ru.nsu.spirin.battlecity.exceptions.InvalidControllerSceneException;
 import ru.nsu.spirin.battlecity.model.scene.Scene;
 import ru.nsu.spirin.battlecity.model.scene.battle.BattleScene;
-import ru.nsu.spirin.battlecity.model.scene.mainmenu.MainMenuScene;
+import ru.nsu.spirin.battlecity.model.scene.menu.MainMenuScene;
+import ru.nsu.spirin.battlecity.model.scene.menu.ResultsMenuScene;
 import ru.nsu.spirin.battlecity.view.GameView;
 import ru.nsu.spirin.battlecity.view.swing.SwingView;
 
@@ -46,6 +47,14 @@ public final class BattleCityGame {
                     case EXIT -> shouldExit = true;
                     case TO_MAIN_MENU -> {
                         curScene = new MainMenuScene();
+                        controller.setScene(curScene);
+                    }
+                    case GAME_LOST -> {
+                        curScene = new ResultsMenuScene(true, 0);
+                        controller.setScene(curScene);
+                    }
+                    case GAME_WON -> {
+                        curScene = new ResultsMenuScene(false, 10);
                         controller.setScene(curScene);
                     }
                 }

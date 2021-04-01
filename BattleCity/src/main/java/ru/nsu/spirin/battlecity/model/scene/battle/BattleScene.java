@@ -22,6 +22,8 @@ import java.util.Scanner;
 
 public final class BattleScene extends Scene {
     private final Tank playerTank;
+    private Tile eagle = null;
+    private int tanksKilled = 0;
 
     public BattleScene(String mapFileName) throws IOException, InvalidBattleGridException {
         this.playerTank = new PlayerTank(100, 100, 36, 36);
@@ -43,7 +45,11 @@ public final class BattleScene extends Scene {
                 getEntityList().add(new Tile(TileType.BORDER, new Point2D(posX, posY), new Point2D(sizeX, sizeY)));
             }
             if (line[0].equals("eagle")) {
-                getEntityList().add(new Tile(TileType.EAGLE, new Point2D(posX, posY), new Point2D(sizeX, sizeY)));
+                if (eagle != null) {
+                    throw new InvalidBattleGridException("Can't have more than one eagle!");
+                }
+                eagle = new Tile(TileType.EAGLE, new Point2D(posX, posY), new Point2D(sizeX, sizeY));
+                getEntityList().add(eagle);
             }
             if (line[0].equals("leaves")) {
                 getEntityList().add(new Tile(TileType.LEAVES, new Point2D(posX, posY), new Point2D(sizeX, sizeY)));
@@ -82,6 +88,12 @@ public final class BattleScene extends Scene {
         }
         for (var entity : toRemove) {
             if (entity != null) {
+                if (entity == eagle) {
+                    getNotificationList().add(new Notification(Context.GAME_LOST, null));
+                }
+                if (entity instanceof  EnemyTank) {
+                    tanksKilled++;
+                }
                 getEntityList().remove(entity);
             }
         }
@@ -99,6 +111,10 @@ public final class BattleScene extends Scene {
             }
             return lhsSolid ? (rhsSolid ? 0 : -1) : (rhsSolid ? 1 : 0);
         });
+
+        if (tanksKilled >= 2) {
+            getNotificationList().add(new Notification(Context.GAME_WON, null));
+        }
     }
 
     private boolean moveEntity(EntityMovable entity, Direction dir) {

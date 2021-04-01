@@ -6,6 +6,7 @@ import ru.nsu.spirin.battlecity.model.scene.Scene;
 public class Controller {
     private Scene scene;
 
+
     public Controller(Scene scene) throws InvalidControllerSceneException {
         if (scene == null) {
             throw new InvalidControllerSceneException("Scene was null!");

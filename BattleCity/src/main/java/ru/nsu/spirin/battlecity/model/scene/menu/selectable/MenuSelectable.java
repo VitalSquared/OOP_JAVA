@@ -1,4 +1,4 @@
-package ru.nsu.spirin.battlecity.model.scene.mainmenu.selectable;
+package ru.nsu.spirin.battlecity.model.scene.menu.selectable;
 
 import ru.nsu.spirin.battlecity.math.Point2D;
 import ru.nsu.spirin.battlecity.model.scene.Entity;

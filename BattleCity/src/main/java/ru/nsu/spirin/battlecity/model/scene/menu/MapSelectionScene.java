@@ -1,4 +1,4 @@
-package ru.nsu.spirin.battlecity.model.scene.mapselection;
+package ru.nsu.spirin.battlecity.model.scene.menu;
 
 import ru.nsu.spirin.battlecity.controller.Action;
 import ru.nsu.spirin.battlecity.model.scene.Scene;

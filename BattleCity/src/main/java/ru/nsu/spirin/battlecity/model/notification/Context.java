@@ -5,6 +5,10 @@ public enum Context {
     SHOOT,
     MOVE,
     TO_MAIN_MENU,
+    TO_MAP_SELECTION,
+
+    GAME_LOST,
+    GAME_WON,
 
     START_SINGLEPLAYER,
     START_MULTIPLAYER,
