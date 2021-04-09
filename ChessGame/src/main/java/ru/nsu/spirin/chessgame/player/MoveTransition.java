@@ -3,8 +3,6 @@ package ru.nsu.spirin.chessgame.player;
 import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.Move;
 
-import java.util.concurrent.Future;
-
 public class MoveTransition {
 
     private final Board transitionBoard;
@@ -21,5 +19,9 @@ public class MoveTransition {
 
     public MoveStatus getMoveStatus() {
         return this.moveStatus;
+    }
+
+    public Board getTransitionBoard() {
+        return this.transitionBoard;
     }
 }
