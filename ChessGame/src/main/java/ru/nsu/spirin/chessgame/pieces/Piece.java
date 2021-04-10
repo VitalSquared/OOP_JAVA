@@ -1,8 +1,8 @@
 package ru.nsu.spirin.chessgame.pieces;
 
-import ru.nsu.spirin.chessgame.Alliance;
+import ru.nsu.spirin.chessgame.player.Alliance;
 import ru.nsu.spirin.chessgame.board.Board;
-import ru.nsu.spirin.chessgame.board.Move;
+import ru.nsu.spirin.chessgame.move.Move;
 
 import java.util.Collection;
 
@@ -31,8 +31,6 @@ public abstract class Piece {
         result = 31 * result + (isFirstMove ? 1 : 0);
         return result;
     }
-
-
 
     @Override
     public boolean equals(final Object other) {
@@ -74,73 +72,8 @@ public abstract class Piece {
 
     public abstract Piece movePiece(Move move);
 
-    public enum PieceType {
-        PAWN("P") {
-            @Override
-            public boolean isKing() {
-                return false;
-            }
-            public boolean isRook() {
-                return false;
-            }
-        },
-        KNIGHT("N") {
-            @Override
-            public boolean isKing() {
-                return false;
-            }
-            public boolean isRook() {
-                return false;
-            }
-        },
-        BISHOP("B") {
-            @Override
-            public boolean isKing() {
-                return false;
-            }
-            public boolean isRook() {
-                return false;
-            }
-        },
-        ROOK("R") {
-            @Override
-            public boolean isKing() {
-                return false;
-            }
-            public boolean isRook() {
-                return true;
-            }
-        },
-        QUEEN("Q") {
-            @Override
-            public boolean isKing() {
-                return false;
-            }
-            public boolean isRook() {
-                return false;
-            }
-        },
-        KING("K") {
-            @Override
-            public boolean isKing() {
-                return true;
-            }
-            public boolean isRook() {
-                return false;
-            }
-        };
-
-        private final String pieceName;
-        PieceType(final String pieceName) {
-            this.pieceName = pieceName;
-        }
-
-        @Override
-        public String toString() {
-            return this.pieceName;
-        }
-
-        public abstract boolean isKing();
-        public abstract boolean isRook();
+    public int getPieceValue() {
+        return this.pieceType.getPieceValue();
     }
+
 }

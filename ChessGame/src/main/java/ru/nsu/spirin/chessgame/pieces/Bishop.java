@@ -1,13 +1,13 @@
 package ru.nsu.spirin.chessgame.pieces;
 
 import com.google.common.collect.ImmutableList;
-import ru.nsu.spirin.chessgame.Alliance;
+import ru.nsu.spirin.chessgame.player.Alliance;
 import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.BoardUtils;
-import ru.nsu.spirin.chessgame.board.Move;
-import ru.nsu.spirin.chessgame.board.Move.AttackMove;
-import ru.nsu.spirin.chessgame.board.Move.MajorMove;
-import ru.nsu.spirin.chessgame.board.Tile;
+import ru.nsu.spirin.chessgame.move.attack.MajorAttackMove;
+import ru.nsu.spirin.chessgame.move.Move;
+import ru.nsu.spirin.chessgame.move.MajorMove;
+import ru.nsu.spirin.chessgame.board.tile.Tile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,9 +30,7 @@ public class Bishop extends Piece {
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
-
         final List<Move> legalMoves = new ArrayList<>();
-
         for (final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR_COORDINATES) {
             int candidateDestinationCoordinate = this.piecePosition;
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
@@ -40,7 +38,6 @@ public class Bishop extends Piece {
                     isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset)) {
                     break;
                 }
-
                 candidateDestinationCoordinate += candidateCoordinateOffset;
                 if (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
                     final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
@@ -51,14 +48,13 @@ public class Bishop extends Piece {
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                            legalMoves.add(new MajorAttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
                         break;
                     }
                 }
             }
         }
-
         return ImmutableList.copyOf(legalMoves);
     }
 
@@ -72,10 +68,12 @@ public class Bishop extends Piece {
         return PieceType.BISHOP.toString();
     }
 
+    //first column and we want to go up-left or down-left (out of bounds)
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
         return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
     }
 
+    //last column and we want to go up-right and down-right (out of bounds)
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
         return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 9);
     }

@@ -2,7 +2,6 @@ package ru.nsu.spirin.chessgame.board;
 
 import com.google.common.collect.ImmutableMap;
 
-import javax.annotation.concurrent.Immutable;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -5,10 +5,11 @@ import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.BoardUtils;
-import ru.nsu.spirin.chessgame.board.Move;
-import ru.nsu.spirin.chessgame.board.Tile;
+import ru.nsu.spirin.chessgame.move.Move;
+import ru.nsu.spirin.chessgame.board.tile.Tile;
+import ru.nsu.spirin.chessgame.move.MoveFactory;
 import ru.nsu.spirin.chessgame.pieces.Piece;
-import ru.nsu.spirin.chessgame.player.MoveTransition;
+import ru.nsu.spirin.chessgame.move.MoveTransition;
 import ru.nsu.spirin.chessgame.view.GameView;
 
 import javax.imageio.ImageIO;
@@ -21,14 +22,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -42,7 +40,11 @@ import java.util.List;
 public class Table implements GameView {
 
     private final JFrame gameFrame;
+    private final GameHistoryPanel gameHistoryPanel;
+    private final TakenPiecesPanel takenPiecesPanel;
     private final BoardPanel boardPanel;
+    private final MoveLog moveLog;
+
     private Board chessBoard;
 
     private Tile sourceTile;
@@ -65,9 +67,14 @@ public class Table implements GameView {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.chessBoard = Board.createStandardBoard();
+        this.gameHistoryPanel = new GameHistoryPanel();
+        this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel();
+        this.moveLog = new MoveLog();
         this.boardDirection = BoardDirection.NORMAL;
+        this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
+        this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
         this.gameFrame.setVisible(true);
     }
 
@@ -82,21 +89,11 @@ public class Table implements GameView {
         final JMenu fileMenu = new JMenu("File");
 
         final JMenuItem openPGN = new JMenuItem("Load PGN File");
-        openPGN.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("open up pgn file!");
-            }
-        });
+        openPGN.addActionListener(e -> System.out.println("open up pgn file!"));
         fileMenu.add(openPGN);
 
         final JMenuItem exitButtonItem = new JMenuItem("Exit");
-        exitButtonItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        exitButtonItem.addActionListener(e -> System.exit(0));
         fileMenu.add(exitButtonItem);
 
         return fileMenu;
@@ -105,12 +102,9 @@ public class Table implements GameView {
     private JMenu createPreferencesMenu() {
         final JMenu preferencesMenu = new JMenu("Preferences");
         final JMenuItem flipBoardMenuItem = new JMenuItem("Flip Board");
-        flipBoardMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boardDirection = boardDirection.opposite();
-                boardPanel.drawBoard(chessBoard);
-            }
+        flipBoardMenuItem.addActionListener(e -> {
+            boardDirection = boardDirection.opposite();
+            boardPanel.drawBoard(chessBoard);
         });
         preferencesMenu.add(flipBoardMenuItem);
         return preferencesMenu;
@@ -180,6 +174,38 @@ public class Table implements GameView {
         }
     }
 
+    public static class MoveLog {
+        private final List<Move> moves;
+
+        MoveLog() {
+            this.moves = new ArrayList<>();
+        }
+
+        public List<Move> getMoves() {
+            return this.moves;
+        }
+
+        public void addMove(final Move move) {
+            this.moves.add(move);
+        }
+
+        public int size() {
+            return this.moves.size();
+        }
+
+        public void clear() {
+            this.moves.clear();
+        }
+
+        public Move removeMove(int index) {
+            return this.moves.remove(index);
+        }
+
+        public boolean removeMove(final Move move) {
+            return this.moves.remove(move);
+        }
+    }
+
     private class TilePanel extends JPanel {
         private final int tileID;
 
@@ -209,23 +235,21 @@ public class Table implements GameView {
                         }
                         else {
                             destinationTile = chessBoard.getTile(tileID);
-                            if (destinationTile != sourceTile) {
-                                final Move move = Move.MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(), destinationTile.getTileCoordinate());
-                                final MoveTransition transition = chessBoard.getCurrentPlayer().makeMove(move);
-                                if (transition.getMoveStatus().isDone()) {
-                                    chessBoard = transition.getTransitionBoard();
-                                    //TODO add move to the move log
-                                }
+                            final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(), destinationTile.getTileCoordinate());
+                            final MoveTransition transition = chessBoard.getCurrentPlayer().makeMove(move);
+                            if (transition.getMoveStatus().isDone()) {
+                                chessBoard = transition.getTransitionBoard();
+                                moveLog.addMove(move);
                             }
+
                             sourceTile = null;
                             destinationTile = null;
                             humanMovedPiece = null;
                         }
-                        SwingUtilities.invokeLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                boardPanel.drawBoard(chessBoard);
-                            }
+                        SwingUtilities.invokeLater(() -> {
+                            gameHistoryPanel.redo(chessBoard, moveLog);
+                            takenPiecesPanel.redo(moveLog);
+                            boardPanel.drawBoard(chessBoard);
                         });
                     }
 
@@ -291,7 +315,7 @@ public class Table implements GameView {
                 String pieceIconPath = "textures/";
                 try {
                     final BufferedImage image = ImageIO.read(new File(pieceIconPath +
-                            board.getTile(this.tileID).getPiece().getPieceAlliance().toString().substring(0, 1) +
+                            board.getTile(this.tileID).getPiece().getPieceAlliance().toString().charAt(0) +
                             board.getTile(this.tileID).toString() + ".gif"));
                     add(new JLabel(new ImageIcon(image)));
                 }

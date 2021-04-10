@@ -2,7 +2,9 @@ package ru.nsu.spirin.chessgame.board;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import ru.nsu.spirin.chessgame.Alliance;
+import ru.nsu.spirin.chessgame.player.Alliance;
+import ru.nsu.spirin.chessgame.board.tile.Tile;
+import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.pieces.Bishop;
 import ru.nsu.spirin.chessgame.pieces.King;
 import ru.nsu.spirin.chessgame.pieces.Knight;
@@ -16,9 +18,7 @@ import ru.nsu.spirin.chessgame.player.WhitePlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Board {
 
@@ -30,17 +30,20 @@ public class Board {
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
 
-    private Board(Builder builder) {
-        this.gameBoard = createGameBoard(builder);
+    private final Pawn enPassantPawn;
+
+    Board(BoardBuilder boardBuilder) {
+        this.gameBoard = createGameBoard(boardBuilder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+        this.enPassantPawn = boardBuilder.enPassantPawn;
 
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
-        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
+        this.currentPlayer = boardBuilder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
     @Override
@@ -72,7 +75,11 @@ public class Board {
         return blackPlayer;
     }
 
-    private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
+    public Pawn getEnPassantPawn() {
+        return this.enPassantPawn;
+    }
+
+    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new ArrayList<>();
         for (final Piece piece : pieces) {
             legalMoves.addAll(piece.calculateLegalMoves(this));
@@ -83,7 +90,6 @@ public class Board {
     private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard,
                                                     final Alliance alliance) {
         List<Piece> activePieces = new ArrayList<>();
-
         for (final Tile tile : gameBoard) {
             if (tile.isTileOccupied()) {
                 final Piece piece = tile.getPiece();
@@ -92,7 +98,6 @@ public class Board {
                 }
             }
         }
-
         return ImmutableList.copyOf(activePieces);
     }
 
@@ -100,54 +105,53 @@ public class Board {
         return gameBoard.get(tileCoordinate);
     }
 
-    public static List<Tile> createGameBoard(final Builder builder) {
+    public static List<Tile> createGameBoard(final BoardBuilder boardBuilder) {
         final Tile[] tiles = new Tile[BoardUtils.NUM_TILES];
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
-            tiles[i] = Tile.createTile(i, builder.boardConfig.get(i));
+            tiles[i] = Tile.createTile(i, boardBuilder.boardConfig.get(i));
         }
         return ImmutableList.copyOf(tiles);
     }
 
     public static Board createStandardBoard() {
-        final Builder builder = new Builder();
+        final BoardBuilder boardBuilder = new BoardBuilder();
         //black layout
-        builder.setPiece(new Rook(Alliance.BLACK, 0));
-        builder.setPiece(new Knight(Alliance.BLACK, 1));
-        builder.setPiece(new Bishop(Alliance.BLACK, 2));
-        builder.setPiece(new Queen(Alliance.BLACK, 3));
-        builder.setPiece(new King(Alliance.BLACK, 4));
-        builder.setPiece(new Bishop(Alliance.BLACK, 5));
-        builder.setPiece(new Knight(Alliance.BLACK, 6));
-        builder.setPiece(new Rook(Alliance.BLACK, 7));
-        builder.setPiece(new Pawn(Alliance.BLACK, 8));
-        builder.setPiece(new Pawn(Alliance.BLACK, 9));
-        builder.setPiece(new Pawn(Alliance.BLACK, 10));
-        builder.setPiece(new Pawn(Alliance.BLACK, 11));
-        builder.setPiece(new Pawn(Alliance.BLACK, 12));
-        builder.setPiece(new Pawn(Alliance.BLACK, 13));
-        builder.setPiece(new Pawn(Alliance.BLACK, 14));
-        builder.setPiece(new Pawn(Alliance.BLACK, 15));
+        boardBuilder.setPiece(new Rook(Alliance.BLACK, 0));
+        boardBuilder.setPiece(new Knight(Alliance.BLACK, 1));
+        boardBuilder.setPiece(new Bishop(Alliance.BLACK, 2));
+        boardBuilder.setPiece(new Queen(Alliance.BLACK, 3));
+        boardBuilder.setPiece(new King(Alliance.BLACK, 4));
+        boardBuilder.setPiece(new Bishop(Alliance.BLACK, 5));
+        boardBuilder.setPiece(new Knight(Alliance.BLACK, 6));
+        boardBuilder.setPiece(new Rook(Alliance.BLACK, 7));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 8));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 9));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 10));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 11));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 12));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 13));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 14));
+        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 15));
         //white layout
-        builder.setPiece(new Pawn(Alliance.WHITE, 48));
-        builder.setPiece(new Pawn(Alliance.WHITE, 49));
-        builder.setPiece(new Pawn(Alliance.WHITE, 50));
-        builder.setPiece(new Pawn(Alliance.WHITE, 51));
-        builder.setPiece(new Pawn(Alliance.WHITE, 52));
-        builder.setPiece(new Pawn(Alliance.WHITE, 53));
-        builder.setPiece(new Pawn(Alliance.WHITE, 54));
-        builder.setPiece(new Pawn(Alliance.WHITE, 55));
-        builder.setPiece(new Rook(Alliance.WHITE, 56));
-        builder.setPiece(new Knight(Alliance.WHITE, 57));
-        builder.setPiece(new Bishop(Alliance.WHITE, 58));
-        builder.setPiece(new Queen(Alliance.WHITE, 59));
-        builder.setPiece(new King(Alliance.WHITE, 60));
-        builder.setPiece(new Bishop(Alliance.WHITE, 61));
-        builder.setPiece(new Knight(Alliance.WHITE, 62));
-        builder.setPiece(new Rook(Alliance.WHITE, 63));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 48));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 49));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 50));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 51));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 52));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 53));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 54));
+        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 55));
+        boardBuilder.setPiece(new Rook(Alliance.WHITE, 56));
+        boardBuilder.setPiece(new Knight(Alliance.WHITE, 57));
+        boardBuilder.setPiece(new Bishop(Alliance.WHITE, 58));
+        boardBuilder.setPiece(new Queen(Alliance.WHITE, 59));
+        boardBuilder.setPiece(new King(Alliance.WHITE, 60));
+        boardBuilder.setPiece(new Bishop(Alliance.WHITE, 61));
+        boardBuilder.setPiece(new Knight(Alliance.WHITE, 62));
+        boardBuilder.setPiece(new Rook(Alliance.WHITE, 63));
 
-        builder.setMoveMaker(Alliance.WHITE);
-
-        return builder.build();
+        boardBuilder.setMoveMaker(Alliance.WHITE);
+        return boardBuilder.build();
     }
 
     public Player getCurrentPlayer() {
@@ -158,31 +162,4 @@ public class Board {
         return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
     }
 
-    public static class Builder {
-        Map<Integer, Piece> boardConfig;
-        Alliance nextMoveMaker;
-        Pawn enPassantPawn;
-
-        public Builder() {
-            this.boardConfig = new HashMap<>();
-        }
-
-        public Builder setPiece(final Piece piece) {
-            this.boardConfig.put(piece.getPiecePosition(), piece);
-            return this;
-        }
-
-        public Builder setMoveMaker(final Alliance nextMoveMaker) {
-            this.nextMoveMaker = nextMoveMaker;
-            return this;
-        }
-
-        public Board build() {
-            return new Board(this);
-        }
-
-        public void setEnPassantPawn(Pawn enPassantPawn) {
-            this.enPassantPawn = enPassantPawn;
-        }
-    }
 }

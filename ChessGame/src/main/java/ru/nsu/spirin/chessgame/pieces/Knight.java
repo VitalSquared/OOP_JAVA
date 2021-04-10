@@ -1,13 +1,13 @@
 package ru.nsu.spirin.chessgame.pieces;
 
 import com.google.common.collect.ImmutableList;
-import ru.nsu.spirin.chessgame.Alliance;
+import ru.nsu.spirin.chessgame.player.Alliance;
 import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.BoardUtils;
-import ru.nsu.spirin.chessgame.board.Move;
-import ru.nsu.spirin.chessgame.board.Move.AttackMove;
-import ru.nsu.spirin.chessgame.board.Move.MajorMove;
-import ru.nsu.spirin.chessgame.board.Tile;
+import ru.nsu.spirin.chessgame.move.attack.MajorAttackMove;
+import ru.nsu.spirin.chessgame.move.Move;
+import ru.nsu.spirin.chessgame.move.MajorMove;
+import ru.nsu.spirin.chessgame.board.tile.Tile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,9 +30,7 @@ public class Knight extends Piece {
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
-
         final List<Move> legalMoves = new ArrayList<>();
-
         for (final int currentCandidateOffset : CANDIDATE_MOVE_COORDINATES) {
             final int candidateDestinationCoordinate = this.piecePosition + currentCandidateOffset;
             if (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
@@ -51,17 +49,16 @@ public class Knight extends Piece {
                     final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                     final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                     if (this.pieceAlliance != pieceAlliance) {
-                        legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                        legalMoves.add(new MajorAttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                     }
                 }
             }
         }
-
         return ImmutableList.copyOf(legalMoves);
     }
 
     @Override
-    public Knight movePiece(Move move) {
+    public Knight movePiece(final Move move) {
         return new Knight(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
     }
 
