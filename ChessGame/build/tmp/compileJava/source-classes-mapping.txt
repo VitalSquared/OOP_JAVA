@@ -1,12 +1,3 @@
-ru/nsu/spirin/chessgame/Main.java
- ru.nsu.spirin.chessgame.Main
-ru/nsu/spirin/chessgame/board/BoardUtils.java
- ru.nsu.spirin.chessgame.board.BoardUtils
-ru/nsu/spirin/chessgame/move/MoveStatus.java
- ru.nsu.spirin.chessgame.move.MoveStatus
- ru.nsu.spirin.chessgame.move.MoveStatus$1
- ru.nsu.spirin.chessgame.move.MoveStatus$2
- ru.nsu.spirin.chessgame.move.MoveStatus$3
 ru/nsu/spirin/chessgame/move/Move.java
  ru.nsu.spirin.chessgame.move.Move
 ru/nsu/spirin/chessgame/player/Alliance.java
@@ -21,10 +12,8 @@ ru/nsu/spirin/chessgame/move/pawn/PawnPromotion.java
  ru.nsu.spirin.chessgame.move.pawn.PawnPromotion
 ru/nsu/spirin/chessgame/pieces/Knight.java
  ru.nsu.spirin.chessgame.pieces.Knight
-ru/nsu/spirin/chessgame/view/swing/GameHistoryPanel.java
- ru.nsu.spirin.chessgame.view.swing.GameHistoryPanel
- ru.nsu.spirin.chessgame.view.swing.GameHistoryPanel$DataModel
- ru.nsu.spirin.chessgame.view.swing.GameHistoryPanel$Row
+ru/nsu/spirin/chessgame/move/pawn/PawnJump.java
+ ru.nsu.spirin.chessgame.move.pawn.PawnJump
 ru/nsu/spirin/chessgame/pieces/Bishop.java
  ru.nsu.spirin.chessgame.pieces.Bishop
 ru/nsu/spirin/chessgame/player/WhitePlayer.java
@@ -53,6 +42,8 @@ ru/nsu/spirin/chessgame/board/tile/Tile.java
  ru.nsu.spirin.chessgame.board.tile.Tile
 ru/nsu/spirin/chessgame/player/BlackPlayer.java
  ru.nsu.spirin.chessgame.player.BlackPlayer
+ru/nsu/spirin/chessgame/player/ai/BoardEvaluator.java
+ ru.nsu.spirin.chessgame.player.ai.BoardEvaluator
 ru/nsu/spirin/chessgame/board/tile/OccupiedTile.java
  ru.nsu.spirin.chessgame.board.tile.OccupiedTile
 ru/nsu/spirin/chessgame/pieces/Piece.java
@@ -65,38 +56,63 @@ ru/nsu/spirin/chessgame/view/GameView.java
  ru.nsu.spirin.chessgame.view.GameView
 ru/nsu/spirin/chessgame/pieces/King.java
  ru.nsu.spirin.chessgame.pieces.King
-ru/nsu/spirin/chessgame/view/swing/TakenPiecesPanel.java
- ru.nsu.spirin.chessgame.view.swing.TakenPiecesPanel
+ru/nsu/spirin/chessgame/player/ai/MoveStrategy.java
+ ru.nsu.spirin.chessgame.player.ai.MoveStrategy
+ru/nsu/spirin/chessgame/player/ai/StandardBoardEvaluator.java
+ ru.nsu.spirin.chessgame.player.ai.StandardBoardEvaluator
+ru/nsu/spirin/chessgame/board/BoardUtils.java
+ ru.nsu.spirin.chessgame.board.BoardUtils
 ru/nsu/spirin/chessgame/move/castle/QueenSideCastleMove.java
  ru.nsu.spirin.chessgame.move.castle.QueenSideCastleMove
 ru/nsu/spirin/chessgame/board/Board.java
  ru.nsu.spirin.chessgame.board.Board
 ru/nsu/spirin/chessgame/move/pawn/PawnMove.java
  ru.nsu.spirin.chessgame.move.pawn.PawnMove
-ru/nsu/spirin/chessgame/ChessGame.java
- ru.nsu.spirin.chessgame.ChessGame
+ru/nsu/spirin/chessgame/Main.java
+ ru.nsu.spirin.chessgame.Main
+ru/nsu/spirin/chessgame/pieces/Rook.java
+ ru.nsu.spirin.chessgame.pieces.Rook
 ru/nsu/spirin/chessgame/move/pawn/PawnAttackMove.java
  ru.nsu.spirin.chessgame.move.pawn.PawnAttackMove
 ru/nsu/spirin/chessgame/pieces/Queen.java
  ru.nsu.spirin.chessgame.pieces.Queen
+ru/nsu/spirin/chessgame/view/swing/GameHistoryPanel.java
+ ru.nsu.spirin.chessgame.view.swing.GameHistoryPanel
+ ru.nsu.spirin.chessgame.view.swing.GameHistoryPanel$DataModel
+ ru.nsu.spirin.chessgame.view.swing.GameHistoryPanel$Row
 ru/nsu/spirin/chessgame/move/pawn/PawnEnPassantAttackMove.java
  ru.nsu.spirin.chessgame.move.pawn.PawnEnPassantAttackMove
 ru/nsu/spirin/chessgame/move/MoveFactory.java
  ru.nsu.spirin.chessgame.move.MoveFactory
+ru/nsu/spirin/chessgame/move/MoveStatus.java
+ ru.nsu.spirin.chessgame.move.MoveStatus
+ ru.nsu.spirin.chessgame.move.MoveStatus$1
+ ru.nsu.spirin.chessgame.move.MoveStatus$2
+ ru.nsu.spirin.chessgame.move.MoveStatus$3
+ru/nsu/spirin/chessgame/move/castle/CastleMove.java
+ ru.nsu.spirin.chessgame.move.castle.CastleMove
+ru/nsu/spirin/chessgame/view/swing/TakenPiecesPanel.java
+ ru.nsu.spirin.chessgame.view.swing.TakenPiecesPanel
+ru/nsu/spirin/chessgame/view/ConsoleView.java
+ ru.nsu.spirin.chessgame.view.ConsoleView
+ru/nsu/spirin/chessgame/view/swing/GameSetup.java
+ ru.nsu.spirin.chessgame.view.swing.GameSetup
+ ru.nsu.spirin.chessgame.view.swing.GameSetup$1
+ ru.nsu.spirin.chessgame.view.swing.GameSetup$2
+ru/nsu/spirin/chessgame/ChessGame.java
+ ru.nsu.spirin.chessgame.ChessGame
 ru/nsu/spirin/chessgame/view/swing/Table.java
  ru.nsu.spirin.chessgame.view.swing.Table
+ ru.nsu.spirin.chessgame.view.swing.Table$1
+ ru.nsu.spirin.chessgame.view.swing.Table$AIThinkTank
  ru.nsu.spirin.chessgame.view.swing.Table$BoardDirection
  ru.nsu.spirin.chessgame.view.swing.Table$BoardDirection$1
  ru.nsu.spirin.chessgame.view.swing.Table$BoardDirection$2
  ru.nsu.spirin.chessgame.view.swing.Table$BoardPanel
  ru.nsu.spirin.chessgame.view.swing.Table$MoveLog
+ ru.nsu.spirin.chessgame.view.swing.Table$PlayerType
+ ru.nsu.spirin.chessgame.view.swing.Table$TableGameAIWatcher
  ru.nsu.spirin.chessgame.view.swing.Table$TilePanel
  ru.nsu.spirin.chessgame.view.swing.Table$TilePanel$1
-ru/nsu/spirin/chessgame/move/pawn/PawnJump.java
- ru.nsu.spirin.chessgame.move.pawn.PawnJump
-ru/nsu/spirin/chessgame/pieces/Rook.java
- ru.nsu.spirin.chessgame.pieces.Rook
-ru/nsu/spirin/chessgame/view/ConsoleView.java
- ru.nsu.spirin.chessgame.view.ConsoleView
-ru/nsu/spirin/chessgame/move/castle/CastleMove.java
- ru.nsu.spirin.chessgame.move.castle.CastleMove
+ru/nsu/spirin/chessgame/player/ai/MiniMax.java
+ ru.nsu.spirin.chessgame.player.ai.MiniMax

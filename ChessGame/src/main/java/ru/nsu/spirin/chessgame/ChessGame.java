@@ -10,12 +10,12 @@ public final class ChessGame {
     private Board board;
 
     public ChessGame() {
-        gameView = new Table();
+        gameView = Table.get();
     }
 
     public void run() {
         board = Board.createStandardBoard();
-        gameView.render(board);
+        gameView.show();
     }
 
     public void close() {

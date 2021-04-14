@@ -15,4 +15,9 @@ public class ConsoleView implements GameView {
 
     @Override
     public void close() {}
+
+    @Override
+    public void show() {
+
+    }
 }
