@@ -19,7 +19,7 @@ public final class Controller {
         this.scene = scene;
     }
 
-    public boolean execute(final String command) {
+    public boolean execute(final String command, boolean privileged) {
         if (command == null || command.equals("")) {
             return true;
         }
@@ -29,7 +29,15 @@ public final class Controller {
             case MAIN_MENU -> {
                 switch (split.getFirst()) {
                     case "new_game" -> {
-                        scene.setBoard(Board.createStandardBoard());
+                        if (split.getSecond().length == 0) {
+                            return false;
+                        }
+                        if (split.getSecond()[0].equals("-singleplayer") && split.getSecond().length == 5) {
+                            scene.setBoard(Board.createStandardBoard(Boolean.parseBoolean(split.getSecond()[3]), Boolean.parseBoolean(split.getSecond()[4])));
+                        }
+                        else {
+                            return false;
+                        }
                     }
                     case "exit" -> {
                         scene.destroyScene();
@@ -56,9 +64,25 @@ public final class Controller {
                                 scene.setBoard(transition.getTransitionBoard());
                                 scene.getMoveLog().addMove(move);
                             }
+                            else {
+                                return false;
+                            }
                         }
                         else {
                             return false;
+                        }
+                    }
+                    case "ai_move" -> {
+                        Move aiMove = scene.getBoard().checkAI();
+                        if (aiMove != null) {
+                            final MoveTransition transition = scene.getBoard().getCurrentPlayer().makeMove(aiMove);
+                            if (transition.getMoveStatus().isDone()) {
+                                scene.setBoard(transition.getTransitionBoard());
+                                scene.getMoveLog().addMove(aiMove);
+                            }
+                            else {
+                                return false;
+                            }
                         }
                     }
                     case "surrender" -> {

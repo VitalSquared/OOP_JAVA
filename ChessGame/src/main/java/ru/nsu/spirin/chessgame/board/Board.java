@@ -15,6 +15,8 @@ import ru.nsu.spirin.chessgame.pieces.Rook;
 import ru.nsu.spirin.chessgame.player.BlackPlayer;
 import ru.nsu.spirin.chessgame.player.Player;
 import ru.nsu.spirin.chessgame.player.WhitePlayer;
+import ru.nsu.spirin.chessgame.player.ai.MiniMax;
+import ru.nsu.spirin.chessgame.player.ai.MoveStrategy;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,18 +51,23 @@ public class Board {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("8 ");
+        builder.append("8| ");
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
             final String tileText = this.gameBoard.get(i).toString();
             builder.append(tileText).append(" ");
             if ((i + 1) % BoardUtils.NUM_TILES_PER_ROW == 0) {
                 builder.append(System.lineSeparator());
                 if (i != BoardUtils.NUM_TILES - 1) {
-                    builder.append(8 - (i + 1) / 8).append(" ");
+                    builder.append(8 - (i + 1) / 8).append("| ");
                 }
             }
         }
-        builder.append("  ");
+        builder.append(" +");
+        for (char i = 0; i < 8; i++) {
+            builder.append("--");
+        }
+        builder.append(System.lineSeparator());
+        builder.append("   ");
         for (char i = 'a'; i <= 'h'; i++) {
             builder.append(i).append(" ");
         }
@@ -122,7 +129,7 @@ public class Board {
         return ImmutableList.copyOf(tiles);
     }
 
-    public static Board createStandardBoard() {
+    public static Board createStandardBoard(boolean isWhiteAI, boolean isBlackAI) {
         final BoardBuilder boardBuilder = new BoardBuilder();
         //black layout
         boardBuilder.setPiece(new Rook(Alliance.BLACK, 0));
@@ -159,6 +166,9 @@ public class Board {
         boardBuilder.setPiece(new Knight(Alliance.WHITE, 62));
         boardBuilder.setPiece(new Rook(Alliance.WHITE, 63));
 
+        boardBuilder.setWhiteAI(isWhiteAI);
+        boardBuilder.setBlackAI(isBlackAI);
+
         boardBuilder.setMoveMaker(Alliance.WHITE);
         return boardBuilder.build();
     }
@@ -171,4 +181,13 @@ public class Board {
         return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
     }
 
+    public Move checkAI() {
+        if (currentPlayer.isAI()) {
+            final MoveStrategy miniMax = new MiniMax(4);
+            return miniMax.execute(this);
+        }
+        else {
+            return null;
+        }
+    }
 }

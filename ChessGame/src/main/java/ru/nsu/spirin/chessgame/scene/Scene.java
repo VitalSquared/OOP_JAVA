@@ -1,7 +1,9 @@
 package ru.nsu.spirin.chessgame.scene;
 
 import ru.nsu.spirin.chessgame.board.Board;
+import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.move.MoveLog;
+import ru.nsu.spirin.chessgame.move.MoveTransition;
 
 public final class Scene {
     private Board board;

@@ -1,12 +1,13 @@
 package ru.nsu.spirin.chessgame.view.swing;
 
 import ru.nsu.spirin.chessgame.controller.Controller;
-import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.board.tile.Tile;
 import ru.nsu.spirin.chessgame.pieces.Piece;
-import ru.nsu.spirin.chessgame.player.PlayerType;
 import ru.nsu.spirin.chessgame.scene.Scene;
 import ru.nsu.spirin.chessgame.view.GameView;
+import ru.nsu.spirin.chessgame.view.swing.dialog.AboutDialog;
+import ru.nsu.spirin.chessgame.view.swing.dialog.HighScoresDialog;
+import ru.nsu.spirin.chessgame.view.swing.dialog.NewGameDialog;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -16,9 +17,8 @@ import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
-import java.util.Observable;
 
-public class SwingView extends Observable implements GameView {
+public class SwingView implements GameView {
 
     private final JFrame gameFrame;
     private final Controller controller;
@@ -35,8 +35,7 @@ public class SwingView extends Observable implements GameView {
     private final AboutDialog aboutDialog;
 
     private boolean pressedExit = false;
-
-    private Move computerMove;
+    private boolean isAIMove = false;
 
     public static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     public static final Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
@@ -53,8 +52,6 @@ public class SwingView extends Observable implements GameView {
         this.gameHistoryPanel = new GameHistoryPanel();
         this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel(this, controller);
-
-        this.addObserver(new TableGameAIWatcher());
 
         this.newGameDialog = new NewGameDialog(this.gameFrame, true, controller);
         this.aboutDialog = new AboutDialog(this.gameFrame, true);
@@ -93,10 +90,6 @@ public class SwingView extends Observable implements GameView {
 
     public Piece getHumanMovedPiece() {
         return this.humanMovedPiece;
-    }
-
-    private NewGameDialog getGameSetup() {
-        return this.newGameDialog;
     }
 
     private JMenuBar populateMenuBar() {
@@ -143,7 +136,14 @@ public class SwingView extends Observable implements GameView {
         flipBoardMenuItem.addActionListener(e -> {
             boardDirection = boardDirection.opposite();
         });
+
+        final JMenuItem surrenderButton = new JMenuItem("Surrender");
+        surrenderButton.addActionListener(e -> {
+            controller.execute("surrender", false);
+        });
+
         preferencesMenu.add(flipBoardMenuItem);
+        preferencesMenu.add(surrenderButton);
         return preferencesMenu;
     }
 
@@ -158,20 +158,6 @@ public class SwingView extends Observable implements GameView {
         });
         optionsMenu.add(setupGameMenuItem);
         return optionsMenu;
-    }
-
-    private void setupUpdate(final NewGameDialog newGameDialog) {
-        setChanged();
-        notifyObservers(newGameDialog);
-    }
-
-    public void updateComputerMove(final Move move) {
-        this.computerMove = move;
-    }
-
-    private void moveMadeUpdate(final PlayerType playerType) {
-        setChanged();
-        notifyObservers(playerType);
     }
 
     @Override
@@ -189,6 +175,14 @@ public class SwingView extends Observable implements GameView {
                 gameHistoryPanel.redo(scene.getBoard(), scene.getMoveLog());
                 takenPiecesPanel.redo(scene.getMoveLog());
                 boardPanel.drawBoard(scene.getBoard());
+
+                if (scene.getBoard().getCurrentPlayer().isAI()) {
+                    boolean execResult = controller.execute("ai_move", true);
+                    isAIMove = true;
+                }
+                else {
+                    isAIMove = false;
+                }
             }
         }
     }
@@ -196,5 +190,9 @@ public class SwingView extends Observable implements GameView {
     @Override
     public void close() {
         gameFrame.dispatchEvent(new WindowEvent(gameFrame, WindowEvent.WINDOW_CLOSING));
+    }
+
+    public boolean isAIMove() {
+        return this.isAIMove;
     }
 }

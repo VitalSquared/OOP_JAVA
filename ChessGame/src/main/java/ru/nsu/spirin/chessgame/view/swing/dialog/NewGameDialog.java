@@ -1,4 +1,4 @@
-package ru.nsu.spirin.chessgame.view.swing;
+package ru.nsu.spirin.chessgame.view.swing.dialog;
 
 import ru.nsu.spirin.chessgame.controller.Controller;
 import ru.nsu.spirin.chessgame.player.Alliance;
@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class NewGameDialog extends JDialog {
+public class NewGameDialog extends Dialog {
 
     private PlayerType whitePlayerType;
     private PlayerType blackPlayerType;
@@ -19,7 +19,7 @@ class NewGameDialog extends JDialog {
     private static final String HUMAN_TEXT = "Human";
     private static final String COMPUTER_TEXT = "Computer";
 
-    NewGameDialog(final JFrame frame, final boolean modal, final Controller controller) {
+    public NewGameDialog(final JFrame frame, final boolean modal, final Controller controller) {
         super(frame, modal);
         final JPanel myPanel = new JPanel(new GridLayout(0, 1));
         final JRadioButton whiteHumanButton = new JRadioButton(HUMAN_TEXT);
@@ -53,9 +53,9 @@ class NewGameDialog extends JDialog {
 
         okButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //whitePlayerType = whiteComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
-                //blackPlayerType = blackComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
-                controller.execute("new_game");
+                String isWhiteAI = whiteComputerButton.isSelected() ? "true" : "false";
+                String isBlackAI = blackComputerButton.isSelected() ? "true" : "false";
+                controller.execute("new_game -singleplayer default_white default_black " + isWhiteAI + " " + isBlackAI, false);
                 NewGameDialog.this.setVisible(false);
             }
         });
@@ -75,7 +75,8 @@ class NewGameDialog extends JDialog {
         setVisible(false);
     }
 
-    void promptUser() {
+    @Override
+    public void promptUser() {
         setVisible(true);
         repaint();
     }

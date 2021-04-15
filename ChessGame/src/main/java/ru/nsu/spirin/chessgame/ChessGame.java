@@ -30,7 +30,7 @@ public final class ChessGame {
                 shouldExit = true;
             }
             try {
-                Thread.sleep(10);
+                Thread.sleep(100);
             }
             catch (Exception e) {
                 throw new RuntimeException(e.getLocalizedMessage());

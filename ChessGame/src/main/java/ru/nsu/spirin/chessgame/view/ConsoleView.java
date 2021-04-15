@@ -18,18 +18,31 @@ public class ConsoleView implements GameView {
     public void render(Scene scene) {
         switch(scene.getSceneState()) {
             case MAIN_MENU -> {
-                System.out.println("List of commands:\nnew_game\nhigh_scores\nabout\nexit");
+                printCommands();
                 System.out.print("Enter command: ");
-                boolean execResult = controller.execute(scanner.nextLine());
+                boolean execResult = controller.execute(scanner.nextLine(), false);
             }
             case GAME -> {
                 System.out.println(scene.getBoard().toString());
                 System.out.print("[" + scene.getBoard().getCurrentPlayer().getAlliance().toString() + "]" + " Enter command: ");
-                boolean execResult = controller.execute(scanner.nextLine());
+                if (!scene.getBoard().getCurrentPlayer().isAI()) {
+                    boolean execResult = controller.execute(scanner.nextLine(), false);
+                }
+                else {
+                    boolean execResult = controller.execute("ai_move", true);
+                }
             }
         }
     }
 
     @Override
     public void close() {}
+
+    private void printCommands() {
+        System.out.println("List of commands:");
+        System.out.println("new_game -singleplayer <white_player_name> <black_player_name> <white_ai [true|false]> <black_ai [true|false]>");
+        System.out.println("high_scores");
+        System.out.println("about");
+        System.out.println("exit");
+    }
 }

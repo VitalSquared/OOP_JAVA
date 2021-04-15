@@ -28,6 +28,10 @@ public final class PawnJump extends Move {
         boardBuilder.setPiece(movedPawn);
         boardBuilder.setEnPassantPawn(movedPawn);
         boardBuilder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
+
+        boardBuilder.setWhiteAI(this.board.getWhitePlayer().isAI());
+        boardBuilder.setBlackAI(this.board.getBlackPlayer().isAI());
+
         return boardBuilder.build();
     }
 

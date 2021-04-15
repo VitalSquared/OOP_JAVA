@@ -42,33 +42,29 @@ public class TilePanel extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                if (isRightMouseButton(e)) {
-                    swingView.setSourceTile(null);
-                    swingView.setDestinationTile(null);
-                    swingView.setHumanMovedPiece(null);
-                }
-                else if (isLeftMouseButton(e)) {
-                    if (swingView.getSourceTile() == null) {
-                        swingView.setSourceTile(board.getTile(tileID));
-                        swingView.setHumanMovedPiece(swingView.getSourceTile().getPiece());
-                        if (swingView.getHumanMovedPiece() == null) {
-                            swingView.setSourceTile(null);
-                        }
-                    }
-                    else {
-                        swingView.setDestinationTile(board.getTile(tileID));
-                        boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(swingView.getSourceTile().getTileCoordinate()) + " " + BoardUtils.getPositionAtCoordinate(swingView.getDestinationTile().getTileCoordinate()));
+                if (!swingView.isAIMove()) {
+                    if (isRightMouseButton(e)) {
                         swingView.setSourceTile(null);
                         swingView.setDestinationTile(null);
                         swingView.setHumanMovedPiece(null);
                     }
-                    SwingUtilities.invokeLater(() -> {
-                        /*if (swingView.gameSetup.isAIPlayer(swingView.chessBoard.getCurrentPlayer())) {
-                            SwingView.get().moveMadeUpdate(PlayerType.HUMAN);
-                        }*/
-                    });
+                    else if (isLeftMouseButton(e)) {
+                        if (swingView.getSourceTile() == null) {
+                            swingView.setSourceTile(board.getTile(tileID));
+                            swingView.setHumanMovedPiece(swingView.getSourceTile().getPiece());
+                            if (swingView.getHumanMovedPiece() == null) {
+                                swingView.setSourceTile(null);
+                            }
+                        }
+                        else {
+                            swingView.setDestinationTile(board.getTile(tileID));
+                            boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(swingView.getSourceTile().getTileCoordinate()) + " " + BoardUtils.getPositionAtCoordinate(swingView.getDestinationTile().getTileCoordinate()), false);
+                            swingView.setSourceTile(null);
+                            swingView.setDestinationTile(null);
+                            swingView.setHumanMovedPiece(null);
+                        }
+                    }
                 }
-
             }
 
             @Override

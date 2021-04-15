@@ -32,6 +32,10 @@ public class PawnPromotion extends Move {
         }
         boardBuilder.setPiece(this.promotedPawn.getPromotionPiece().movePiece(this));
         boardBuilder.setMoveMaker(pawnMovedBoard.getCurrentPlayer().getAlliance());
+
+        boardBuilder.setWhiteAI(this.board.getWhitePlayer().isAI());
+        boardBuilder.setBlackAI(this.board.getBlackPlayer().isAI());
+
         return boardBuilder.build();
     }
 

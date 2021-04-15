@@ -1,24 +1,23 @@
-package ru.nsu.spirin.chessgame.view.swing;
+package ru.nsu.spirin.chessgame.view.swing.dialog;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.GridLayout;
 
-public class AboutDialog extends JDialog {
+public class HighScoresDialog extends Dialog {
 
-    public AboutDialog(final JFrame frame, final boolean modal) {
+    public HighScoresDialog(final JFrame frame, final boolean modal) {
         super(frame, modal);
         final JPanel myPanel = new JPanel(new GridLayout(0, 1));
 
         getContentPane().add(myPanel);
-        myPanel.add(new JLabel("This is a Chess Game.\n Created by Vitaly Spirin"));
+        myPanel.add(new JLabel("List of high scores:"));
 
         final JButton okButton = new JButton("OK");
 
-        okButton.addActionListener(e -> AboutDialog.this.setVisible(false));
+        okButton.addActionListener(e -> HighScoresDialog.this.setVisible(false));
 
         myPanel.add(okButton);
 
@@ -27,6 +26,7 @@ public class AboutDialog extends JDialog {
         setVisible(false);
     }
 
+    @Override
     public void promptUser() {
         this.setVisible(true);
         repaint();
