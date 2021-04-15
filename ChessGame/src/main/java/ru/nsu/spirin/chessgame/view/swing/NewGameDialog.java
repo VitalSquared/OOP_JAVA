@@ -1,15 +1,16 @@
 package ru.nsu.spirin.chessgame.view.swing;
 
+import ru.nsu.spirin.chessgame.controller.Controller;
 import ru.nsu.spirin.chessgame.player.Alliance;
 import ru.nsu.spirin.chessgame.player.Player;
-import ru.nsu.spirin.chessgame.view.swing.Table.PlayerType;
+import ru.nsu.spirin.chessgame.player.PlayerType;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class GameSetup extends JDialog {
+class NewGameDialog extends JDialog {
 
     private PlayerType whitePlayerType;
     private PlayerType blackPlayerType;
@@ -18,7 +19,7 @@ class GameSetup extends JDialog {
     private static final String HUMAN_TEXT = "Human";
     private static final String COMPUTER_TEXT = "Computer";
 
-    GameSetup(final JFrame frame, final boolean modal) {
+    NewGameDialog(final JFrame frame, final boolean modal, final Controller controller) {
         super(frame, modal);
         final JPanel myPanel = new JPanel(new GridLayout(0, 1));
         final JRadioButton whiteHumanButton = new JRadioButton(HUMAN_TEXT);
@@ -52,16 +53,17 @@ class GameSetup extends JDialog {
 
         okButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                whitePlayerType = whiteComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
-                blackPlayerType = blackComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
-                GameSetup.this.setVisible(false);
+                //whitePlayerType = whiteComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
+                //blackPlayerType = blackComputerButton.isSelected() ? PlayerType.COMPUTER : PlayerType.HUMAN;
+                controller.execute("new_game");
+                NewGameDialog.this.setVisible(false);
             }
         });
 
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Cancel");
-                GameSetup.this.setVisible(false);
+                NewGameDialog.this.setVisible(false);
             }
         });
 

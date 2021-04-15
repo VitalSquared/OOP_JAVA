@@ -2,6 +2,7 @@ package ru.nsu.spirin.chessgame.view.swing;
 
 import com.google.common.primitives.Ints;
 import ru.nsu.spirin.chessgame.move.Move;
+import ru.nsu.spirin.chessgame.move.MoveLog;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
 import javax.imageio.ImageIO;
@@ -41,7 +42,7 @@ public class TakenPiecesPanel extends JPanel {
         setPreferredSize(TAKEN_PIECES_DIMENSION);
     }
 
-    public void redo(final Table.MoveLog moveLog) {
+    public void redo(final MoveLog moveLog) {
         this.southPanel.removeAll();
         this.northPanel.removeAll();
 

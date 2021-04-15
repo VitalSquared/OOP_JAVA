@@ -1,10 +1,8 @@
 package ru.nsu.spirin.chessgame.view;
 
-import ru.nsu.spirin.chessgame.board.Board;
+import ru.nsu.spirin.chessgame.scene.Scene;
 
 public interface GameView {
-    void render(Board board);
+    void render(Scene scene);
     void close();
-
-    void show();
 }

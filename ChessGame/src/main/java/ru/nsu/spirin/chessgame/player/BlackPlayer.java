@@ -13,8 +13,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class BlackPlayer extends Player {
-    public BlackPlayer(final Board board, final Collection<Move> whiteStandardLegalMoves, final Collection<Move> blackStandardLegalMoves) {
-        super(board, blackStandardLegalMoves, whiteStandardLegalMoves);
+    public BlackPlayer(final Board board, final Collection<Move> whiteStandardLegalMoves, final Collection<Move> blackStandardLegalMoves, final boolean isAI) {
+        super(board, blackStandardLegalMoves, whiteStandardLegalMoves, isAI);
     }
 
     @Override

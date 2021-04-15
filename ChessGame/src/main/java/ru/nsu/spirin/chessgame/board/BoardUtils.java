@@ -71,10 +71,10 @@ public class BoardUtils {
     }
 
     public static int getCoordinateAtPosition(final String position) {
-        return POSITION_TO_COORDINATE.get(position);
+        return POSITION_TO_COORDINATE.getOrDefault(position, -1);
     }
 
     public static String getPositionAtCoordinate(final int coordinate) {
-        return ALGEBRAIC_NOTATION[coordinate];
+        return coordinate >= 0 && coordinate < NUM_TILES ? ALGEBRAIC_NOTATION[coordinate] : null;
     }
 }

@@ -17,13 +17,15 @@ public abstract class Player {
     protected final Board board;
     protected final King playerKing;
     protected final Collection<Move> legalMoves;
+    protected final boolean isAI;
     private final boolean isInCheck;
 
-    Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves) {
+    Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves, final boolean isAI) {
         this.board = board;
         this.playerKing = establishKing();
         this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
+        this.isAI = isAI;
     }
 
     public Piece getPlayerKing() {
@@ -32,6 +34,10 @@ public abstract class Player {
 
     public Collection<Move> getLegalMoves() {
         return this.legalMoves;
+    }
+
+    public boolean isAI() {
+        return this.isAI;
     }
 
     protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {

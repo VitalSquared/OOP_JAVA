@@ -2,6 +2,7 @@ package ru.nsu.spirin.chessgame.view.swing;
 
 import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.move.Move;
+import ru.nsu.spirin.chessgame.move.MoveLog;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -32,7 +33,7 @@ public class GameHistoryPanel extends JPanel {
     }
 
     void redo(final Board board,
-              final Table.MoveLog moveHistory) {
+              final MoveLog moveHistory) {
         int currentRow = 0;
         this.model.clear();
         for (final Move move : moveHistory.getMoves()) {

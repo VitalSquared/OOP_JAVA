@@ -41,21 +41,30 @@ public class Board {
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
-        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
-        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isWhiteAI());
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isBlackAI());
         this.currentPlayer = boardBuilder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
+        builder.append("8 ");
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
             final String tileText = this.gameBoard.get(i).toString();
             builder.append(tileText).append(" ");
             if ((i + 1) % BoardUtils.NUM_TILES_PER_ROW == 0) {
                 builder.append(System.lineSeparator());
+                if (i != BoardUtils.NUM_TILES - 1) {
+                    builder.append(8 - (i + 1) / 8).append(" ");
+                }
             }
         }
+        builder.append("  ");
+        for (char i = 'a'; i <= 'h'; i++) {
+            builder.append(i).append(" ");
+        }
+        builder.append(System.lineSeparator());
         return builder.toString();
     }
 
