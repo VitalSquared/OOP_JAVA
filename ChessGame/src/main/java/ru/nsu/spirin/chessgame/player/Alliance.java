@@ -29,12 +29,11 @@ public enum Alliance {
 
         @Override
         public boolean isPawnPromotionTile(int tilePosition) {
-            return BoardUtils.EIGHTH_ROW[tilePosition];
+            return BoardUtils.isPositionInRow(tilePosition, 8);
         }
 
         @Override
-        public Player choosePlayer(final WhitePlayer whitePlayer,
-                                   final BlackPlayer blackPlayer) {
+        public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
             return whitePlayer;
         }
     },
@@ -61,20 +60,24 @@ public enum Alliance {
 
         @Override
         public boolean isPawnPromotionTile(int tilePosition) {
-            return BoardUtils.FIRST_ROW[tilePosition];
+            return BoardUtils.isPositionInRow(tilePosition, 1);
         }
 
         @Override
-        public Player choosePlayer(final WhitePlayer whitePlayer,
-                                   final BlackPlayer blackPlayer) {
+        public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
             return blackPlayer;
         }
     };
 
     public abstract int getDirection();
+
     public abstract int getOppositeDirection();
+
     public abstract boolean isWhite();
+
     public abstract boolean isBlack();
+
     public abstract boolean isPawnPromotionTile(int tilePosition);
+
     public abstract Player choosePlayer(WhitePlayer whitePlayer, BlackPlayer blackPlayer);
 }

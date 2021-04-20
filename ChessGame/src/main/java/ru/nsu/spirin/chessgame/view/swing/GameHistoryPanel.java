@@ -32,8 +32,7 @@ public class GameHistoryPanel extends JPanel {
         this.setVisible(true);
     }
 
-    void redo(final Board board,
-              final MoveLog moveHistory) {
+    void redo(final Board board, final MoveLog moveHistory) {
         int currentRow = 0;
         this.model.clear();
         for (final Move move : moveHistory.getMoves()) {
@@ -75,7 +74,7 @@ public class GameHistoryPanel extends JPanel {
 
     private static final class DataModel extends DefaultTableModel {
         private final List<Row> values;
-        private static final String[] NAMES = { "White", "Black" };
+        private static final String[] NAMES = {"White", "Black"};
 
         DataModel() {
             this.values = new ArrayList<>();
@@ -100,8 +99,7 @@ public class GameHistoryPanel extends JPanel {
         }
 
         @Override
-        public Object getValueAt(final int row,
-                                 final int column) {
+        public Object getValueAt(final int row, final int column) {
             final Row currentRow = this.values.get(row);
             if (column == 0) {
                 return currentRow.getWhiteMove();
@@ -113,9 +111,7 @@ public class GameHistoryPanel extends JPanel {
         }
 
         @Override
-        public void setValueAt(final Object aValue,
-                               final int row,
-                               final int column) {
+        public void setValueAt(final Object aValue, final int row, final int column) {
             final Row currentRow;
             if (this.values.size() <= row) {
                 currentRow = new Row();
@@ -152,9 +148,7 @@ public class GameHistoryPanel extends JPanel {
         private String whiteMove;
         private String blackMove;
 
-        Row() {
-
-        }
+        Row() {}
 
         public String getWhiteMove() {
             return this.whiteMove;

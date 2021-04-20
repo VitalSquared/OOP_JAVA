@@ -5,51 +5,42 @@ import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.move.Move;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public abstract class Piece {
-    protected final PieceType pieceType;
-    protected final int piecePosition;
-    protected final Alliance pieceAlliance;
-    protected final boolean isFirstMove;
-    private final int cachedHashCode;
+    private final PieceType pieceType;
+    private final int       piecePosition;
+    private final Alliance  pieceAlliance;
+    private final boolean   isFirstMove;
+    private final int       hashCode;
 
-    Piece(final PieceType pieceType,
-          final Alliance pieceAlliance,
-          final int piecePosition,
-          final boolean isFirstMove) {
+    protected Piece(final PieceType pieceType, final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
         this.pieceType = pieceType;
         this.piecePosition = piecePosition;
         this.pieceAlliance = pieceAlliance;
         this.isFirstMove = isFirstMove;
-        this.cachedHashCode = computeHashCode();
+        this.hashCode = Objects.hash(pieceType, pieceAlliance, piecePosition, isFirstMove);
     }
 
-    private int computeHashCode() {
-        int result = pieceType.hashCode();
-        result = 31 * result + pieceAlliance.hashCode();
-        result = 31 * result + piecePosition;
-        result = 31 * result + (isFirstMove ? 1 : 0);
-        return result;
-    }
+    public abstract Collection<Move> calculateLegalMoves(final Board board);
+
+    public abstract Piece movePiece(final Move move);
 
     @Override
     public boolean equals(final Object other) {
         if (this == other) {
             return true;
         }
-
         if (!(other instanceof Piece)) {
             return false;
         }
-
         final Piece otherPiece = (Piece) other;
-        return piecePosition == otherPiece.getPiecePosition() && pieceType == otherPiece.getPieceType() &&
-                pieceAlliance == ((Piece) other).getPieceAlliance() && isFirstMove == otherPiece.isFirstMove;
+        return piecePosition == otherPiece.getPiecePosition() && pieceType == otherPiece.getPieceType() && pieceAlliance == ((Piece) other).getPieceAlliance() && isFirstMove == otherPiece.isFirstMove;
     }
 
     @Override
     public int hashCode() {
-        return this.cachedHashCode;
+        return this.hashCode;
     }
 
     public PieceType getPieceType() {
@@ -67,13 +58,4 @@ public abstract class Piece {
     public boolean isFirstMove() {
         return this.isFirstMove;
     }
-
-    public abstract Collection<Move> calculateLegalMoves(final Board board);
-
-    public abstract Piece movePiece(Move move);
-
-    public int getPieceValue() {
-        return this.pieceType.getPieceValue();
-    }
-
 }

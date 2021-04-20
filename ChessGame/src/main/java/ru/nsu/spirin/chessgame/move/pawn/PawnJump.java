@@ -8,7 +8,6 @@ import ru.nsu.spirin.chessgame.pieces.Pawn;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
 public final class PawnJump extends Move {
-
     public PawnJump(final Board board, final Piece movePiece, final int destinationCoordinate) {
         super(board, movePiece, destinationCoordinate);
     }
@@ -16,27 +15,27 @@ public final class PawnJump extends Move {
     @Override
     public Board execute() {
         final BoardBuilder boardBuilder = new BoardBuilder();
-        for (final Piece piece : this.board.getCurrentPlayer().getActivePieces()) {
-            if (!this.movedPiece.equals(piece)) {
+        for (final Piece piece : this.getBoard().getCurrentPlayer().getActivePieces()) {
+            if (!this.getMovedPiece().equals(piece)) {
                 boardBuilder.setPiece(piece);
             }
         }
-        for (final Piece piece : this.board.getCurrentPlayer().getOpponent().getActivePieces()) {
+        for (final Piece piece : this.getBoard().getCurrentPlayer().getOpponent().getActivePieces()) {
             boardBuilder.setPiece(piece);
         }
-        final Pawn movedPawn = (Pawn) this.movedPiece.movePiece(this);
+        final Pawn movedPawn = (Pawn) this.getMovedPiece().movePiece(this);
         boardBuilder.setPiece(movedPawn);
         boardBuilder.setEnPassantPawn(movedPawn);
-        boardBuilder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
+        boardBuilder.setMoveMaker(this.getBoard().getCurrentPlayer().getOpponent().getAlliance());
 
-        boardBuilder.setWhiteAI(this.board.getWhitePlayer().isAI());
-        boardBuilder.setBlackAI(this.board.getBlackPlayer().isAI());
+        boardBuilder.setWhiteAI(this.getBoard().getWhitePlayer().isAI());
+        boardBuilder.setBlackAI(this.getBoard().getBlackPlayer().isAI());
 
         return boardBuilder.build();
     }
 
     @Override
     public String toString() {
-        return BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
+        return BoardUtils.getPositionAtCoordinate(this.getDestinationCoordinate());
     }
 }

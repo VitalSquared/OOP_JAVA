@@ -69,12 +69,16 @@ public enum PieceType {
     };
 
     private final String pieceName;
-    private final int pieceValue;
+    private final int    pieceValue;
 
     PieceType(final String pieceName, final int pieceValue) {
         this.pieceName = pieceName;
         this.pieceValue = pieceValue;
     }
+
+    public abstract boolean isKing();
+
+    public abstract boolean isRook();
 
     @Override
     public String toString() {
@@ -84,8 +88,4 @@ public enum PieceType {
     public int getPieceValue() {
         return this.pieceValue;
     }
-
-    public abstract boolean isKing();
-
-    public abstract boolean isRook();
 }

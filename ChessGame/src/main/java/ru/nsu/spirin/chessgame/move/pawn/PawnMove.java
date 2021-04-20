@@ -5,7 +5,6 @@ import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
 public final class PawnMove extends Move {
-
     public PawnMove(final Board board, final Piece movePiece, final int destinationCoordinate) {
         super(board, movePiece, destinationCoordinate);
     }

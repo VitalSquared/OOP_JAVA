@@ -5,7 +5,6 @@ import ru.nsu.spirin.chessgame.pieces.Piece;
 import ru.nsu.spirin.chessgame.pieces.Rook;
 
 public final class KingSideCastleMove extends CastleMove {
-
     public KingSideCastleMove(final Board board, final Piece movePiece, final int destinationCoordinate, final Rook castleRook, final int castleRookStart, final int castleRookDestination) {
         super(board, movePiece, destinationCoordinate, castleRook, castleRookStart, castleRookDestination);
     }

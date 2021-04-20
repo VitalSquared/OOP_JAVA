@@ -1,7 +1,5 @@
 package ru.nsu.spirin.chessgame.move;
 
-import ru.nsu.spirin.chessgame.move.Move;
-
 import java.util.ArrayList;
 import java.util.List;
 

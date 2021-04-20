@@ -6,7 +6,6 @@ import ru.nsu.spirin.chessgame.move.attack.AttackMove;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
 public class PawnAttackMove extends AttackMove {
-
     public PawnAttackMove(final Board board, final Piece movePiece, final int destinationCoordinate, final Piece attackedPiece) {
         super(board, movePiece, destinationCoordinate, attackedPiece);
     }
@@ -18,6 +17,6 @@ public class PawnAttackMove extends AttackMove {
 
     @Override
     public String toString() {
-        return BoardUtils.getPositionAtCoordinate(this.movedPiece.getPiecePosition()).charAt(0) + "x" + BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
+        return BoardUtils.getPositionAtCoordinate(this.getMovedPiece().getPiecePosition()).charAt(0) + "x" + BoardUtils.getPositionAtCoordinate(this.getDestinationCoordinate());
     }
 }

@@ -9,7 +9,7 @@ import ru.nsu.spirin.chessgame.view.swing.SwingView;
 
 public final class ChessGame {
     private final GameView gameView;
-    private final Scene scene;
+    private final Scene    scene;
 
     public ChessGame(final boolean useSwing) {
         scene = new Scene();

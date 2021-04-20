@@ -5,8 +5,7 @@ import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
 public class AttackMove extends Move {
-
-    final Piece attackedPiece;
+    private final Piece attackedPiece;
 
     public AttackMove(final Board board, final Piece movePiece, final int destinationCoordinate, final Piece attackedPiece) {
         super(board, movePiece, destinationCoordinate);

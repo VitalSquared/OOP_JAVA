@@ -5,7 +5,6 @@ import ru.nsu.spirin.chessgame.board.BoardBuilder;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
 public final class PawnEnPassantAttackMove extends PawnAttackMove {
-
     public PawnEnPassantAttackMove(final Board board, final Piece movePiece, final int destinationCoordinate, final Piece attackedPiece) {
         super(board, movePiece, destinationCoordinate, attackedPiece);
     }
@@ -18,21 +17,21 @@ public final class PawnEnPassantAttackMove extends PawnAttackMove {
     @Override
     public Board execute() {
         final BoardBuilder boardBuilder = new BoardBuilder();
-        for (final Piece piece : this.board.getCurrentPlayer().getActivePieces()) {
-            if (!this.movedPiece.equals(piece)) {
+        for (final Piece piece : this.getBoard().getCurrentPlayer().getActivePieces()) {
+            if (!this.getMovedPiece().equals(piece)) {
                 boardBuilder.setPiece(piece);
             }
         }
-        for (final Piece piece : this.board.getCurrentPlayer().getOpponent().getActivePieces()) {
+        for (final Piece piece : this.getBoard().getCurrentPlayer().getOpponent().getActivePieces()) {
             if (!piece.equals(this.getAttackedPiece())) {
                 boardBuilder.setPiece(piece);
             }
         }
-        boardBuilder.setPiece(this.movedPiece.movePiece(this));
-        boardBuilder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
+        boardBuilder.setPiece(this.getMovedPiece().movePiece(this));
+        boardBuilder.setMoveMaker(this.getBoard().getCurrentPlayer().getOpponent().getAlliance());
 
-        boardBuilder.setWhiteAI(this.board.getWhitePlayer().isAI());
-        boardBuilder.setBlackAI(this.board.getBlackPlayer().isAI());
+        boardBuilder.setWhiteAI(this.getBoard().getWhitePlayer().isAI());
+        boardBuilder.setBlackAI(this.getBoard().getBlackPlayer().isAI());
 
         return boardBuilder.build();
     }

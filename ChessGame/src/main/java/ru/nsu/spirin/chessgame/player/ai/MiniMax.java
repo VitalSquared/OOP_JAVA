@@ -4,10 +4,12 @@ import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.move.MoveTransition;
 
-public class MiniMax implements MoveStrategy {
+import java.util.Collection;
+import java.util.Optional;
 
+public class MiniMax implements MoveStrategy {
     private final BoardEvaluator boardEvaluator;
-    private final int searchDepth;
+    private final int            searchDepth;
 
     public MiniMax(final int searchDepth) {
         this.boardEvaluator = new StandardBoardEvaluator();
@@ -22,7 +24,7 @@ public class MiniMax implements MoveStrategy {
     @Override
     public Move execute(Board board) {
 
-        final long startTime = System.currentTimeMillis();
+        //final long startTime = System.currentTimeMillis();
 
         Move bestMove = null;
 
@@ -30,15 +32,17 @@ public class MiniMax implements MoveStrategy {
         int lowestSeenValue = Integer.MAX_VALUE;
         int currentValue;
 
-        System.out.println(board.getCurrentPlayer() + " THINKING with depth = " + this.searchDepth);
+        System.out.println(board.getCurrentPlayer().getAlliance() + " THINKING with depth = " + this.searchDepth);
 
-        int numMoves = board.getCurrentPlayer().getLegalMoves().size();
+        //int numMoves = board.getCurrentPlayer().getLegalMoves().size();
 
         for (final Move move : board.getCurrentPlayer().getLegalMoves()) {
 
             final MoveTransition moveTransition = board.getCurrentPlayer().makeMove(move);
             if (moveTransition.getMoveStatus().isDone()) {
-                currentValue = board.getCurrentPlayer().getAlliance().isWhite() ? min(moveTransition.getTransitionBoard(), this.searchDepth - 1) : max(moveTransition.getTransitionBoard(), this.searchDepth - 1);
+                currentValue = board.getCurrentPlayer().getAlliance().isWhite() ?
+                        min(moveTransition.getTransitionBoard(), this.searchDepth - 1) :
+                        max(moveTransition.getTransitionBoard(), this.searchDepth - 1);
 
                 if (board.getCurrentPlayer().getAlliance().isWhite() && currentValue >= highestSeenValue) {
                     highestSeenValue = currentValue;
@@ -51,7 +55,13 @@ public class MiniMax implements MoveStrategy {
             }
         }
 
-        final long executionTime = System.currentTimeMillis() - startTime;
+        //final long executionTime = System.currentTimeMillis() - startTime;
+
+        if (bestMove == null) {
+            Collection<Move> legalMoves = board.getCurrentPlayer().getLegalMoves();
+            Optional<Move> randomMove = legalMoves.stream().skip((int) (legalMoves.size() * Math.random())).findFirst();
+            bestMove = randomMove.orElse(null);
+        }
 
         return bestMove;
     }
@@ -60,7 +70,7 @@ public class MiniMax implements MoveStrategy {
         return board.getCurrentPlayer().isInCheckMate() || board.getCurrentPlayer().isInStaleMate();
     }
 
-    public int min(final Board board, final int depth) {
+    private int min(final Board board, final int depth) {
         if (depth == 0 || isEndGameScenario(board)) {
             return this.boardEvaluator.evaluate(board, depth);
         }
@@ -79,7 +89,7 @@ public class MiniMax implements MoveStrategy {
         return lowestSeenValue;
     }
 
-    public int max(final Board board, final int depth) {
+    private int max(final Board board, final int depth) {
         if (depth == 0 || isEndGameScenario(board)) {
             return this.boardEvaluator.evaluate(board, depth);
         }

@@ -1,14 +1,12 @@
 package ru.nsu.spirin.chessgame.scene;
 
 import ru.nsu.spirin.chessgame.board.Board;
-import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.move.MoveLog;
-import ru.nsu.spirin.chessgame.move.MoveTransition;
 
 public final class Scene {
-    private Board board;
-    private final MoveLog moveLog;
-    private SceneState sceneState;
+    private       Board      board;
+    private final MoveLog    moveLog;
+    private       SceneState sceneState;
 
     public Scene() {
         this.board = null;
@@ -33,11 +31,11 @@ public final class Scene {
         this.board = board;
         if (board == null) {
             this.sceneState = SceneState.MAIN_MENU;
+            this.moveLog.clear();
         }
         else {
             this.sceneState = SceneState.GAME;
         }
-        this.moveLog.clear();
     }
 
     public SceneState getSceneState() {

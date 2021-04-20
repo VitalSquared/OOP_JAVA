@@ -6,13 +6,11 @@ import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.BoardUtils;
 import ru.nsu.spirin.chessgame.controller.Controller;
 import ru.nsu.spirin.chessgame.move.Move;
-import ru.nsu.spirin.chessgame.player.PlayerType;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
@@ -24,7 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class TilePanel extends JPanel {
-    private final SwingView swingView;
+    private final BoardPanel boardPanel;
     private final Controller controller;
     private final int tileID;
     private Board board;
@@ -32,9 +30,9 @@ public class TilePanel extends JPanel {
     private static final Color lightTileColor = Color.decode("#FFFACD");
     private static final Color darkTileColor = Color.decode("#593E1A");
 
-    public TilePanel(final SwingView swingView, final Controller controller, final BoardPanel boardPanel, final int tileID) {
+    public TilePanel(final Controller controller, final BoardPanel boardPanel, final int tileID) {
         super(new GridBagLayout());
-        this.swingView = swingView;
+        this.boardPanel = boardPanel;
         this.controller = controller;
         this.tileID = tileID;
         setPreferredSize(SwingView.TILE_PANEL_DIMENSION);
@@ -42,26 +40,26 @@ public class TilePanel extends JPanel {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(final MouseEvent e) {
-                if (!swingView.isAIMove()) {
+                if (!board.getCurrentPlayer().isAI()) {
                     if (isRightMouseButton(e)) {
-                        swingView.setSourceTile(null);
-                        swingView.setDestinationTile(null);
-                        swingView.setHumanMovedPiece(null);
+                        boardPanel.setSourceTile(null);
+                        boardPanel.setDestinationTile(null);
+                        boardPanel.setHumanMovedPiece(null);
                     }
                     else if (isLeftMouseButton(e)) {
-                        if (swingView.getSourceTile() == null) {
-                            swingView.setSourceTile(board.getTile(tileID));
-                            swingView.setHumanMovedPiece(swingView.getSourceTile().getPiece());
-                            if (swingView.getHumanMovedPiece() == null) {
-                                swingView.setSourceTile(null);
+                        if (boardPanel.getSourceTile() == null) {
+                            boardPanel.setSourceTile(board.getTile(tileID));
+                            boardPanel.setHumanMovedPiece(boardPanel.getSourceTile().getPiece());
+                            if (boardPanel.getHumanMovedPiece() == null) {
+                                boardPanel.setSourceTile(null);
                             }
                         }
                         else {
-                            swingView.setDestinationTile(board.getTile(tileID));
-                            boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(swingView.getSourceTile().getTileCoordinate()) + " " + BoardUtils.getPositionAtCoordinate(swingView.getDestinationTile().getTileCoordinate()), false);
-                            swingView.setSourceTile(null);
-                            swingView.setDestinationTile(null);
-                            swingView.setHumanMovedPiece(null);
+                            boardPanel.setDestinationTile(board.getTile(tileID));
+                            boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(boardPanel.getSourceTile().getTileCoordinate()) + " " + BoardUtils.getPositionAtCoordinate(boardPanel.getDestinationTile().getTileCoordinate()), false);
+                            boardPanel.setSourceTile(null);
+                            boardPanel.setDestinationTile(null);
+                            boardPanel.setHumanMovedPiece(null);
                         }
                     }
                 }
@@ -116,8 +114,8 @@ public class TilePanel extends JPanel {
     }
 
     private Collection<Move> pieceLegalMoves(final Board board) {
-        if (swingView.getHumanMovedPiece() != null && swingView.getHumanMovedPiece().getPieceAlliance() == board.getCurrentPlayer().getAlliance()) {
-            return swingView.getHumanMovedPiece().calculateLegalMoves(board);
+        if (boardPanel.getHumanMovedPiece() != null && boardPanel.getHumanMovedPiece().getPieceAlliance() == board.getCurrentPlayer().getAlliance()) {
+            return boardPanel.getHumanMovedPiece().calculateLegalMoves(board);
         }
         return Collections.emptyList();
     }
@@ -137,10 +135,10 @@ public class TilePanel extends JPanel {
     }
 
     private void assignTileColor() {
-        if (BoardUtils.FIRST_ROW[this.tileID] || BoardUtils.THIRD_ROW[this.tileID] || BoardUtils.FIFTH_ROW[this.tileID] || BoardUtils.SEVENTH_ROW[this.tileID]) {
+        if (BoardUtils.isPositionInRow(this.tileID, 1) || BoardUtils.isPositionInRow(this.tileID, 3) || BoardUtils.isPositionInRow(this.tileID, 5) || BoardUtils.isPositionInRow(this.tileID, 7)) {
             setBackground(this.tileID % 2 == 0 ? lightTileColor : darkTileColor);
         }
-        else if (BoardUtils.SECOND_ROW[this.tileID] || BoardUtils.FOURTH_ROW[this.tileID] || BoardUtils.SIXTH_ROW[this.tileID] || BoardUtils.EIGHTH_ROW[this.tileID]) {
+        else if (BoardUtils.isPositionInRow(this.tileID, 2)|| BoardUtils.isPositionInRow(this.tileID, 4) || BoardUtils.isPositionInRow(this.tileID, 6) || BoardUtils.isPositionInRow(this.tileID, 8)) {
             setBackground(this.tileID % 2 == 0 ? darkTileColor : lightTileColor);
         }
     }

@@ -22,30 +22,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Board {
+public final class Board {
 
-    private final List<Tile> gameBoard;
+    private final List<Tile>        gameBoard;
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
-
-    private final WhitePlayer whitePlayer;
-    private final BlackPlayer blackPlayer;
-    private final Player currentPlayer;
-
-    private final Pawn enPassantPawn;
+    private final WhitePlayer       whitePlayer;
+    private final BlackPlayer       blackPlayer;
+    private final Player            currentPlayer;
+    private final Pawn              enPassantPawn;
 
     Board(BoardBuilder boardBuilder) {
         this.gameBoard = createGameBoard(boardBuilder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
-        this.enPassantPawn = boardBuilder.enPassantPawn;
+        this.enPassantPawn = boardBuilder.getEnPassantPawn();
 
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isWhiteAI());
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isBlackAI());
-        this.currentPlayer = boardBuilder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
+        this.currentPlayer = boardBuilder.getNextMoveMaker().choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
     @Override
@@ -95,41 +93,19 @@ public class Board {
         return this.enPassantPawn;
     }
 
-    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
-        final List<Move> legalMoves = new ArrayList<>();
-        for (final Piece piece : pieces) {
-            legalMoves.addAll(piece.calculateLegalMoves(this));
-        }
-        return ImmutableList.copyOf(legalMoves);
-    }
-
-    private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard,
-                                                    final Alliance alliance) {
-        List<Piece> activePieces = new ArrayList<>();
-        for (final Tile tile : gameBoard) {
-            if (tile.isTileOccupied()) {
-                final Piece piece = tile.getPiece();
-                if (piece.getPieceAlliance() == alliance) {
-                    activePieces.add(piece);
-                }
-            }
-        }
-        return ImmutableList.copyOf(activePieces);
-    }
-
     public Tile getTile(final int tileCoordinate) {
-        return gameBoard.get(tileCoordinate);
+        return this.gameBoard.get(tileCoordinate);
     }
 
     public static List<Tile> createGameBoard(final BoardBuilder boardBuilder) {
         final Tile[] tiles = new Tile[BoardUtils.NUM_TILES];
         for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
-            tiles[i] = Tile.createTile(i, boardBuilder.boardConfig.get(i));
+            tiles[i] = Tile.createTile(i, boardBuilder.getBoardConfig().get(i));
         }
         return ImmutableList.copyOf(tiles);
     }
 
-    public static Board createStandardBoard(boolean isWhiteAI, boolean isBlackAI) {
+    public static Board createStandardBoard(final boolean isWhiteAI, final boolean isBlackAI) {
         final BoardBuilder boardBuilder = new BoardBuilder();
         //black layout
         boardBuilder.setPiece(new Rook(Alliance.BLACK, 0));
@@ -182,12 +158,31 @@ public class Board {
     }
 
     public Move checkAI() {
-        if (currentPlayer.isAI()) {
+        if (this.currentPlayer.isAI()) {
             final MoveStrategy miniMax = new MiniMax(4);
             return miniMax.execute(this);
         }
-        else {
-            return null;
+        return null;
+    }
+
+    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
+        final List<Move> legalMoves = new ArrayList<>();
+        for (final Piece piece : pieces) {
+            legalMoves.addAll(piece.calculateLegalMoves(this));
         }
+        return ImmutableList.copyOf(legalMoves);
+    }
+
+    private Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
+        List<Piece> activePieces = new ArrayList<>();
+        for (final Tile tile : gameBoard) {
+            if (tile.isTileOccupied()) {
+                final Piece piece = tile.getPiece();
+                if (piece.getPieceAlliance() == alliance) {
+                    activePieces.add(piece);
+                }
+            }
+        }
+        return ImmutableList.copyOf(activePieces);
     }
 }

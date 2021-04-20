@@ -73,6 +73,10 @@ public final class Controller {
                         }
                     }
                     case "ai_move" -> {
+                        if (!privileged) {
+                            return false;
+                        }
+
                         Move aiMove = scene.getBoard().checkAI();
                         if (aiMove != null) {
                             final MoveTransition transition = scene.getBoard().getCurrentPlayer().makeMove(aiMove);

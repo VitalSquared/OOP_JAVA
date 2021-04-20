@@ -3,7 +3,6 @@ package ru.nsu.spirin.chessgame.move;
 import ru.nsu.spirin.chessgame.board.Board;
 
 public final class NullMove extends Move {
-
     public NullMove() {
         super(null, 65);
     }

@@ -2,14 +2,14 @@ package ru.nsu.spirin.chessgame.move.pawn;
 
 import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.BoardBuilder;
+import ru.nsu.spirin.chessgame.board.BoardUtils;
 import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.pieces.Pawn;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
-public class PawnPromotion extends Move {
-
-    final Move decoratedMove;
-    final Pawn promotedPawn;
+public final class PawnPromotion extends Move {
+    private final Move decoratedMove;
+    private final Pawn promotedPawn;
 
     public PawnPromotion(final Move decoratedMove) {
         super(decoratedMove.getBoard(), decoratedMove.getMovedPiece(), decoratedMove.getDestinationCoordinate());
@@ -19,7 +19,6 @@ public class PawnPromotion extends Move {
 
     @Override
     public Board execute() {
-
         final Board pawnMovedBoard = this.decoratedMove.execute();
         final BoardBuilder boardBuilder = new BoardBuilder();
         for (final Piece piece : pawnMovedBoard.getCurrentPlayer().getActivePieces()) {
@@ -33,8 +32,8 @@ public class PawnPromotion extends Move {
         boardBuilder.setPiece(this.promotedPawn.getPromotionPiece().movePiece(this));
         boardBuilder.setMoveMaker(pawnMovedBoard.getCurrentPlayer().getAlliance());
 
-        boardBuilder.setWhiteAI(this.board.getWhitePlayer().isAI());
-        boardBuilder.setBlackAI(this.board.getBlackPlayer().isAI());
+        boardBuilder.setWhiteAI(this.getBoard().getWhitePlayer().isAI());
+        boardBuilder.setBlackAI(this.getBoard().getBlackPlayer().isAI());
 
         return boardBuilder.build();
     }
@@ -51,7 +50,7 @@ public class PawnPromotion extends Move {
 
     @Override
     public String toString() {
-        return "";
+        return BoardUtils.getPositionAtCoordinate(getDestinationCoordinate()) + this.promotedPawn.getPromotionPiece().getPieceType().toString().charAt(0);
     }
 
     @Override

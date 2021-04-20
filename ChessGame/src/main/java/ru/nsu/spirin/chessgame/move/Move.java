@@ -4,26 +4,22 @@ import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.BoardBuilder;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
+import java.util.Objects;
+
 public abstract class Move {
+    private final Board   board;
+    private final Piece   movedPiece;
+    private final int     destinationCoordinate;
+    private final boolean isFirstMove;
 
-    protected final Board board;
-    protected final Piece movedPiece;
-    protected final int destinationCoordinate;
-    protected final boolean isFirstMove;
-
-    public static final Move NULL_MOVE = new NullMove();
-
-    protected Move(final Board board,
-                 final Piece movedPiece,
-                 final int destinationCoordinate) {
+    protected Move(final Board board, final Piece movedPiece, final int destinationCoordinate) {
         this.board = board;
         this.movedPiece = movedPiece;
         this.destinationCoordinate = destinationCoordinate;
         this.isFirstMove = movedPiece.isFirstMove();
     }
 
-    protected Move(final Board board,
-                 final int destinationCoordinate) {
+    protected Move(final Board board, final int destinationCoordinate) {
         this.board = board;
         this.destinationCoordinate = destinationCoordinate;
         this.movedPiece = null;
@@ -32,12 +28,7 @@ public abstract class Move {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + this.destinationCoordinate;
-        result = prime * result + this.movedPiece.hashCode();
-        result = prime * result + this.movedPiece.getPiecePosition();
-        return result;
+        return Objects.hash(1, this.destinationCoordinate, this.movedPiece, this.movedPiece.getPiecePosition());
     }
 
     @Override
@@ -49,9 +40,7 @@ public abstract class Move {
             return false;
         }
         final Move otherMove = (Move) other;
-        return getCurrentCoordinate() == otherMove.getCurrentCoordinate() &&
-                getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
-                getMovedPiece() == otherMove.getMovedPiece();
+        return getCurrentCoordinate() == otherMove.getCurrentCoordinate() && getDestinationCoordinate() == otherMove.getDestinationCoordinate() && getMovedPiece() == otherMove.getMovedPiece();
     }
 
     public Board getBoard() {
@@ -100,5 +89,4 @@ public abstract class Move {
 
         return boardBuilder.build();
     }
-
 }

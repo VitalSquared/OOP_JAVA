@@ -4,8 +4,7 @@ import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.board.BoardUtils;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
-public class MajorAttackMove extends AttackMove {
-
+public final class MajorAttackMove extends AttackMove {
     public MajorAttackMove(final Board board, final Piece pieceMoved, final int destinationCoordinate, final Piece pieceAttacked) {
         super(board, pieceMoved, destinationCoordinate, pieceAttacked);
     }
@@ -17,6 +16,6 @@ public class MajorAttackMove extends AttackMove {
 
     @Override
     public String toString() {
-        return movedPiece.getPieceType().toString() + BoardUtils.getPositionAtCoordinate(this.destinationCoordinate);
+        return getMovedPiece().getPieceType().toString() + BoardUtils.getPositionAtCoordinate(this.getDestinationCoordinate());
     }
 }

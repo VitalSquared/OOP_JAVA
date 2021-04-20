@@ -4,6 +4,8 @@ import ru.nsu.spirin.chessgame.board.Board;
 
 public class MoveFactory {
 
+    private static final Move NULL_MOVE = new NullMove();
+
     private MoveFactory() {
         throw new RuntimeException("Not instantiable");
     }
@@ -14,6 +16,6 @@ public class MoveFactory {
                 return move;
             }
         }
-        return Move.NULL_MOVE;
+        return NULL_MOVE;
     }
 }

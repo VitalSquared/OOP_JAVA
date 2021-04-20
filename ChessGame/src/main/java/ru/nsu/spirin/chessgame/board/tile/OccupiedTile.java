@@ -12,7 +12,9 @@ public final class OccupiedTile extends Tile {
 
     @Override
     public String toString() {
-        return getPiece().getPieceAlliance().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
+        return getPiece().getPieceAlliance().isBlack() ?
+                getPiece().toString().toLowerCase() :
+                getPiece().toString().toUpperCase();
     }
 
     @Override
@@ -22,6 +24,6 @@ public final class OccupiedTile extends Tile {
 
     @Override
     public Piece getPiece() {
-        return pieceOnTile;
+        return this.pieceOnTile;
     }
 }

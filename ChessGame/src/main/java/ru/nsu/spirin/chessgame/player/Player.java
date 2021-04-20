@@ -6,6 +6,7 @@ import ru.nsu.spirin.chessgame.board.Board;
 import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.move.MoveStatus;
 import ru.nsu.spirin.chessgame.move.MoveTransition;
+import ru.nsu.spirin.chessgame.move.pawn.PawnPromotion;
 import ru.nsu.spirin.chessgame.pieces.King;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
@@ -14,18 +15,32 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class Player {
-    protected final Board board;
-    protected final King playerKing;
-    protected final Collection<Move> legalMoves;
-    protected final boolean isAI;
-    private final boolean isInCheck;
+    private final Board            board;
+    private final King             playerKing;
+    private final Collection<Move> legalMoves;
+    private final boolean          isAI;
+    private final boolean          isInCheck;
+    private       int              promotedPawns;
 
-    Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves, final boolean isAI) {
+    protected Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves, final boolean isAI) {
         this.board = board;
         this.playerKing = establishKing();
         this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
         this.isAI = isAI;
+        this.promotedPawns = 0;
+    }
+
+    public abstract Collection<Piece> getActivePieces();
+
+    public abstract Alliance getAlliance();
+
+    public abstract Player getOpponent();
+
+    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentLegals);
+
+    public Board getBoard() {
+        return this.board;
     }
 
     public Piece getPlayerKing() {
@@ -38,16 +53,6 @@ public abstract class Player {
 
     public boolean isAI() {
         return this.isAI;
-    }
-
-    protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
-        final List<Move> attackMoves = new ArrayList<>();
-        for (final Move move : moves) {
-            if (piecePosition == move.getDestinationCoordinate()) {
-                attackMoves.add(move);
-            }
-        }
-        return ImmutableList.copyOf(attackMoves);
     }
 
     private King establishKing() {
@@ -89,8 +94,11 @@ public abstract class Player {
         return false;
     }
 
-    public MoveTransition makeMove(final Move move) {
+    public int getPromotedPawns() {
+        return this.promotedPawns;
+    }
 
+    public MoveTransition makeMove(final Move move) {
         if (!isMoveLegal(move)) {
             return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
         }
@@ -102,14 +110,20 @@ public abstract class Player {
             return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
         }
 
+        if (move instanceof PawnPromotion) {
+            this.promotedPawns++;
+        }
+
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
-    public abstract Collection<Piece> getActivePieces();
-
-    public abstract Alliance getAlliance();
-
-    public abstract Player getOpponent();
-
-    protected abstract Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentLegals);
+    protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
+        final List<Move> attackMoves = new ArrayList<>();
+        for (final Move move : moves) {
+            if (piecePosition == move.getDestinationCoordinate()) {
+                attackMoves.add(move);
+            }
+        }
+        return ImmutableList.copyOf(attackMoves);
+    }
 }

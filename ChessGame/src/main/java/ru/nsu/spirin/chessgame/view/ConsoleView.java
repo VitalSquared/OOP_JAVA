@@ -5,9 +5,9 @@ import ru.nsu.spirin.chessgame.scene.Scene;
 
 import java.util.Scanner;
 
-public class ConsoleView implements GameView {
+public final class ConsoleView implements GameView {
     private final Controller controller;
-    private final Scanner scanner;
+    private final Scanner    scanner;
 
     public ConsoleView(Controller controller) {
         this.controller = controller;
@@ -16,7 +16,7 @@ public class ConsoleView implements GameView {
 
     @Override
     public void render(Scene scene) {
-        switch(scene.getSceneState()) {
+        switch (scene.getSceneState()) {
             case MAIN_MENU -> {
                 printCommands();
                 System.out.print("Enter command: ");
@@ -24,6 +24,11 @@ public class ConsoleView implements GameView {
             }
             case GAME -> {
                 System.out.println(scene.getBoard().toString());
+                if (scene.getBoard().getCurrentPlayer().isInCheckMate() || scene.getBoard().getCurrentPlayer().isInStaleMate()) {
+                    System.out.println(scene.getBoard().getCurrentPlayer().getOpponent().getAlliance() + "won!");
+                    scene.setBoard(null);
+                    return;
+                }
                 System.out.print("[" + scene.getBoard().getCurrentPlayer().getAlliance().toString() + "]" + " Enter command: ");
                 if (!scene.getBoard().getCurrentPlayer().isAI()) {
                     boolean execResult = controller.execute(scanner.nextLine(), false);
@@ -36,7 +41,8 @@ public class ConsoleView implements GameView {
     }
 
     @Override
-    public void close() {}
+    public void close() {
+    }
 
     private void printCommands() {
         System.out.println("List of commands:");

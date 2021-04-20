@@ -13,18 +13,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class Bishop extends Piece {
+public final class Bishop extends Piece {
+    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = {-9, -7, 7, 9};
 
-    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -9, -7, 7, 9 };
-
-    public Bishop(final Alliance pieceAlliance,
-                  final int piecePosition) {
+    public Bishop(final Alliance pieceAlliance, final int piecePosition) {
         super(PieceType.BISHOP, pieceAlliance, piecePosition, true);
     }
 
-    public Bishop(final Alliance pieceAlliance,
-                  final int piecePosition,
-                  final boolean isFirstMove) {
+    public Bishop(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
         super(PieceType.BISHOP, pieceAlliance, piecePosition, isFirstMove);
     }
 
@@ -32,10 +28,9 @@ public class Bishop extends Piece {
     public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
         for (final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR_COORDINATES) {
-            int candidateDestinationCoordinate = this.piecePosition;
+            int candidateDestinationCoordinate = this.getPiecePosition();
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
-                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) ||
-                    isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset)) {
+                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) || isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset)) {
                     break;
                 }
                 candidateDestinationCoordinate += candidateCoordinateOffset;
@@ -47,7 +42,7 @@ public class Bishop extends Piece {
                     else {
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
-                        if (this.pieceAlliance != pieceAlliance) {
+                        if (this.getPieceAlliance() != pieceAlliance) {
                             legalMoves.add(new MajorAttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
                         break;
@@ -59,7 +54,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public Bishop movePiece(Move move) {
+    public Bishop movePiece(final Move move) {
         return new Bishop(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
     }
 
@@ -68,13 +63,11 @@ public class Bishop extends Piece {
         return PieceType.BISHOP.toString();
     }
 
-    //first column and we want to go up-left or down-left (out of bounds)
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
+        return BoardUtils.isPositionInColumn(currentPosition, 1) && (candidateOffset == -9 || candidateOffset == 7);
     }
 
-    //last column and we want to go up-right and down-right (out of bounds)
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 9);
+        return BoardUtils.isPositionInColumn(currentPosition, 8) && (candidateOffset == -7 || candidateOffset == 9);
     }
 }

@@ -1,19 +1,12 @@
 package ru.nsu.spirin.chessgame.view.swing.dialog;
 
 import ru.nsu.spirin.chessgame.controller.Controller;
-import ru.nsu.spirin.chessgame.player.Alliance;
-import ru.nsu.spirin.chessgame.player.Player;
-import ru.nsu.spirin.chessgame.player.PlayerType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class NewGameDialog extends Dialog {
 
-    private PlayerType whitePlayerType;
-    private PlayerType blackPlayerType;
     private JSpinner searchDepthSpinner;
 
     private static final String HUMAN_TEXT = "Human";
@@ -51,20 +44,16 @@ public class NewGameDialog extends Dialog {
         final JButton cancelButton = new JButton("Cancel");
         final JButton okButton = new JButton("OK");
 
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String isWhiteAI = whiteComputerButton.isSelected() ? "true" : "false";
-                String isBlackAI = blackComputerButton.isSelected() ? "true" : "false";
-                controller.execute("new_game -singleplayer default_white default_black " + isWhiteAI + " " + isBlackAI, false);
-                NewGameDialog.this.setVisible(false);
-            }
+        okButton.addActionListener(e -> {
+            String isWhiteAI = whiteComputerButton.isSelected() ? "true" : "false";
+            String isBlackAI = blackComputerButton.isSelected() ? "true" : "false";
+            controller.execute("new_game -singleplayer default_white default_black " + isWhiteAI + " " + isBlackAI, false);
+            NewGameDialog.this.setVisible(false);
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Cancel");
-                NewGameDialog.this.setVisible(false);
-            }
+        cancelButton.addActionListener(e -> {
+            System.out.println("Cancel");
+            NewGameDialog.this.setVisible(false);
         });
 
         myPanel.add(cancelButton);
@@ -79,21 +68,6 @@ public class NewGameDialog extends Dialog {
     public void promptUser() {
         setVisible(true);
         repaint();
-    }
-
-    boolean isAIPlayer(final Player player) {
-        if (player.getAlliance() == Alliance.WHITE) {
-            return getWhitePlayerType() == PlayerType.COMPUTER;
-        }
-        return getBlackPlayerType() == PlayerType.COMPUTER;
-    }
-
-    PlayerType getWhitePlayerType() {
-        return this.whitePlayerType;
-    }
-
-    PlayerType getBlackPlayerType() {
-        return this.blackPlayerType;
     }
 
     private static JSpinner addLabeledSpinner(final Container c, final String label, final SpinnerModel model) {
