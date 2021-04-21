@@ -33,7 +33,7 @@ public final class Controller {
                             return false;
                         }
                         if (split.getSecond()[0].equals("-singleplayer") && split.getSecond().length == 5) {
-                            scene.setBoard(Board.createStandardBoard(Boolean.parseBoolean(split.getSecond()[3]), Boolean.parseBoolean(split.getSecond()[4])));
+                            scene.setBoard(Board.createStandardBoard(Boolean.parseBoolean(split.getSecond()[3]), Boolean.parseBoolean(split.getSecond()[4]), split.getSecond()[1], split.getSecond()[2]));
                         }
                         else {
                             return false;
@@ -90,7 +90,7 @@ public final class Controller {
                         }
                     }
                     case "surrender" -> {
-                        scene.setBoard(null);
+                        scene.getBoard().getCurrentPlayer().surrender();
                     }
                     default -> {
                         return false;

@@ -41,36 +41,9 @@ public final class Board {
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
-        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isWhiteAI());
-        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isBlackAI());
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isWhiteAI(), boardBuilder.getWhitePlayerName());
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isBlackAI(), boardBuilder.getBlackPlayerName());
         this.currentPlayer = boardBuilder.getNextMoveMaker().choosePlayer(this.whitePlayer, this.blackPlayer);
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("8| ");
-        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
-            final String tileText = this.gameBoard.get(i).toString();
-            builder.append(tileText).append(" ");
-            if ((i + 1) % BoardUtils.NUM_TILES_PER_ROW == 0) {
-                builder.append(System.lineSeparator());
-                if (i != BoardUtils.NUM_TILES - 1) {
-                    builder.append(8 - (i + 1) / 8).append("| ");
-                }
-            }
-        }
-        builder.append(" +");
-        for (char i = 0; i < 8; i++) {
-            builder.append("--");
-        }
-        builder.append(System.lineSeparator());
-        builder.append("   ");
-        for (char i = 'a'; i <= 'h'; i++) {
-            builder.append(i).append(" ");
-        }
-        builder.append(System.lineSeparator());
-        return builder.toString();
     }
 
     public Collection<Piece> getWhitePieces() {
@@ -105,7 +78,7 @@ public final class Board {
         return ImmutableList.copyOf(tiles);
     }
 
-    public static Board createStandardBoard(final boolean isWhiteAI, final boolean isBlackAI) {
+    public static Board createStandardBoard(final boolean isWhiteAI, final boolean isBlackAI, final String whitePlayerName, final String blackPlayerName) {
         final BoardBuilder boardBuilder = new BoardBuilder();
         //black layout
         boardBuilder.setPiece(new Rook(Alliance.BLACK, 0));
@@ -144,6 +117,9 @@ public final class Board {
 
         boardBuilder.setWhiteAI(isWhiteAI);
         boardBuilder.setBlackAI(isBlackAI);
+
+        boardBuilder.setWhitePlayerName(whitePlayerName);
+        boardBuilder.setBlackPlayerName(blackPlayerName);
 
         boardBuilder.setMoveMaker(Alliance.WHITE);
         return boardBuilder.build();

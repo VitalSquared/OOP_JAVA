@@ -4,6 +4,7 @@ import ru.nsu.spirin.chessgame.controller.Controller;
 import ru.nsu.spirin.chessgame.scene.Scene;
 import ru.nsu.spirin.chessgame.view.GameView;
 import ru.nsu.spirin.chessgame.view.swing.dialog.AboutDialog;
+import ru.nsu.spirin.chessgame.view.swing.dialog.GameResultDialog;
 import ru.nsu.spirin.chessgame.view.swing.dialog.HighScoresDialog;
 import ru.nsu.spirin.chessgame.view.swing.dialog.NewGameDialog;
 
@@ -27,6 +28,7 @@ public final class SwingView implements GameView {
     private final NewGameDialog    newGameDialog;
     private final HighScoresDialog highScoresDialog;
     private final AboutDialog      aboutDialog;
+    private final GameResultDialog gameResultDialog;
 
     private boolean pressedExit = false;
 
@@ -52,6 +54,7 @@ public final class SwingView implements GameView {
         this.newGameDialog = new NewGameDialog(this.gameFrame, true, controller);
         this.aboutDialog = new AboutDialog(this.gameFrame, true);
         this.highScoresDialog = new HighScoresDialog(this.gameFrame, true);
+        this.gameResultDialog = new GameResultDialog(this.gameFrame, true);
 
         this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
@@ -122,8 +125,18 @@ public final class SwingView implements GameView {
                 takenPiecesPanel.redo(scene.getMoveLog());
                 boardPanel.drawBoard(scene.getBoard());
 
-                if (scene.getBoard().getCurrentPlayer().isAI()) {
-                    boolean execResult = controller.execute("ai_move", true);
+                try {
+                    if (scene.getBoard().getCurrentPlayer().isInCheckMate() || scene.getBoard().getCurrentPlayer().isInStaleMate() || scene.getBoard().getCurrentPlayer().hasSurrendered()) {
+                        gameResultDialog.setScene(scene);
+                        gameResultDialog.promptUser();
+                    }
+
+                    if (scene.getBoard().getCurrentPlayer().isAI()) {
+                        boolean execResult = controller.execute("ai_move", true);
+                    }
+                }
+                catch (Exception ignored) {
+
                 }
             }
         }

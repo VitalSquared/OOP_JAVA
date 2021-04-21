@@ -41,7 +41,7 @@ public final class Pawn extends Piece {
                     legalMoves.add(new PawnPromotion(new PawnMove(board, this, candidateDestinationCoordinate)));
                 }
                 else {
-                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+                    legalMoves.add(new PawnMove(board, this, candidateDestinationCoordinate));
                 }
             }
             //two steps up/down

@@ -25,9 +25,9 @@ public class TakenPiecesPanel extends JPanel {
     private final JPanel northPanel;
     private final JPanel southPanel;
 
-    private static final EtchedBorder PANEL_BORDER = new EtchedBorder(EtchedBorder.RAISED);
-    private static final Color PANEL_COLOR = Color.decode("0xFDFE6");
-    private static final Dimension TAKEN_PIECES_DIMENSION = new Dimension(40, 80);
+    private static final EtchedBorder PANEL_BORDER           = new EtchedBorder(EtchedBorder.RAISED);
+    private static final Color        PANEL_COLOR            = Color.decode("0xFDFE6");
+    private static final Dimension    TAKEN_PIECES_DIMENSION = new Dimension(40, 80);
 
     public TakenPiecesPanel() {
         super(new BorderLayout());
@@ -49,13 +49,13 @@ public class TakenPiecesPanel extends JPanel {
         final List<Piece> whiteTakenPieces = new ArrayList<>();
         final List<Piece> blackTakenPieces = new ArrayList<>();
 
-        for(final Move move : moveLog.getMoves()) {
+        for (final Move move : moveLog.getMoves()) {
             if (move.isAttack()) {
                 final Piece takenPiece = move.getAttackedPiece();
                 if (takenPiece.getPieceAlliance().isWhite()) {
                     whiteTakenPieces.add(takenPiece);
                 }
-                else if (takenPiece.getPieceAlliance().isBlack()){
+                else if (takenPiece.getPieceAlliance().isBlack()) {
                     blackTakenPieces.add(takenPiece);
                 }
                 else {
@@ -69,8 +69,7 @@ public class TakenPiecesPanel extends JPanel {
 
         for (final Piece takenPiece : whiteTakenPieces) {
             try {
-                final BufferedImage image = ImageIO.read(new File("textures/" + takenPiece.getPieceAlliance().toString().charAt(0) +
-                                                                    takenPiece.toString() + ".gif"));
+                final BufferedImage image = ImageIO.read(new File("textures/" + takenPiece.getPieceAlliance().toString().charAt(0) + takenPiece.toString() + ".gif"));
                 final ImageIcon icon = new ImageIcon(image);
                 final JLabel imageLabel = new JLabel(icon);
                 this.southPanel.add(imageLabel);
@@ -82,8 +81,7 @@ public class TakenPiecesPanel extends JPanel {
 
         for (final Piece takenPiece : blackTakenPieces) {
             try {
-                final BufferedImage image = ImageIO.read(new File("textures/" + takenPiece.getPieceAlliance().toString().charAt(0) +
-                        takenPiece.toString() + ".gif"));
+                final BufferedImage image = ImageIO.read(new File("textures/" + takenPiece.getPieceAlliance().toString().charAt(0) + takenPiece.toString() + ".gif"));
                 final ImageIcon icon = new ImageIcon(image);
                 final JLabel imageLabel = new JLabel(icon);
                 this.southPanel.add(imageLabel);

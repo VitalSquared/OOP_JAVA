@@ -3,6 +3,7 @@ package ru.nsu.spirin.chessgame.board;
 import ru.nsu.spirin.chessgame.player.Alliance;
 import ru.nsu.spirin.chessgame.pieces.Pawn;
 import ru.nsu.spirin.chessgame.pieces.Piece;
+import ru.nsu.spirin.chessgame.player.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,8 @@ public final class BoardBuilder {
     private       Pawn                enPassantPawn;
     private       boolean             isWhiteAI;
     private       boolean             isBlackAI;
+    private       String              whitePlayerName;
+    private       String              blackPlayerName;
 
     public BoardBuilder() {
         this.boardConfig = new HashMap<>();
@@ -42,6 +45,14 @@ public final class BoardBuilder {
         return this.isBlackAI;
     }
 
+    public String getWhitePlayerName() {
+        return this.whitePlayerName;
+    }
+
+    public String getBlackPlayerName() {
+        return this.blackPlayerName;
+    }
+
     public void setPiece(final Piece piece) {
         this.boardConfig.put(piece.getPiecePosition(), piece);
     }
@@ -50,16 +61,31 @@ public final class BoardBuilder {
         this.nextMoveMaker = nextMoveMaker;
     }
 
-    public void setEnPassantPawn(Pawn enPassantPawn) {
+    public void setEnPassantPawn(final Pawn enPassantPawn) {
         this.enPassantPawn = enPassantPawn;
     }
 
-    public void setWhiteAI(boolean isWhiteAI) {
+    public void setWhiteAI(final boolean isWhiteAI) {
         this.isWhiteAI = isWhiteAI;
     }
 
-    public void setBlackAI(boolean isBlackAI) {
+    public void setBlackAI(final boolean isBlackAI) {
         this.isBlackAI = isBlackAI;
+    }
+
+    public void setWhitePlayerName(final String whitePlayerName) {
+        this.whitePlayerName = whitePlayerName;
+    }
+
+    public void setBlackPlayerName(final String blackPlayerName) {
+        this.blackPlayerName = blackPlayerName;
+    }
+
+    public void copyPlayerInfo(final Player whitePlayer, final Player blackPlayer) {
+        setWhiteAI(whitePlayer.isAI());
+        setWhitePlayerName(whitePlayer.getPlayerName());
+        setBlackAI(blackPlayer.isAI());
+        setBlackPlayerName(blackPlayer.getPlayerName());
     }
 
     public Board build() {

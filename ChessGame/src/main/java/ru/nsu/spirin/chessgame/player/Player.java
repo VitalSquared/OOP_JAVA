@@ -20,15 +20,18 @@ public abstract class Player {
     private final Collection<Move> legalMoves;
     private final boolean          isAI;
     private final boolean          isInCheck;
+    private       boolean          hasSurrendered;
     private       int              promotedPawns;
+    private final String           playerName;
 
-    protected Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves, final boolean isAI) {
+    protected Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves, final boolean isAI, final String playerName) {
         this.board = board;
         this.playerKing = establishKing();
         this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
         this.isAI = isAI;
         this.promotedPawns = 0;
+        this.playerName = playerName;
     }
 
     public abstract Collection<Piece> getActivePieces();
@@ -94,8 +97,16 @@ public abstract class Player {
         return false;
     }
 
+    public boolean hasSurrendered() {
+        return this.hasSurrendered;
+    }
+
     public int getPromotedPawns() {
         return this.promotedPawns;
+    }
+
+    public String getPlayerName() {
+        return this.playerName;
     }
 
     public MoveTransition makeMove(final Move move) {
@@ -125,5 +136,9 @@ public abstract class Player {
             }
         }
         return ImmutableList.copyOf(attackMoves);
+    }
+
+    public void surrender() {
+        this.hasSurrendered = true;
     }
 }

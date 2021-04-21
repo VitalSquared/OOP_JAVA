@@ -1,6 +1,7 @@
 package ru.nsu.spirin.chessgame.move.pawn;
 
 import ru.nsu.spirin.chessgame.board.Board;
+import ru.nsu.spirin.chessgame.board.BoardUtils;
 import ru.nsu.spirin.chessgame.move.Move;
 import ru.nsu.spirin.chessgame.pieces.Piece;
 
@@ -12,5 +13,10 @@ public final class PawnMove extends Move {
     @Override
     public boolean equals(final Object other) {
         return this == other || other instanceof PawnMove && super.equals(other);
+    }
+
+    @Override
+    public String toString() {
+        return BoardUtils.getPositionAtCoordinate(this.getDestinationCoordinate());
     }
 }

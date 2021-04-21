@@ -30,8 +30,7 @@ public final class PawnEnPassantAttackMove extends PawnAttackMove {
         boardBuilder.setPiece(this.getMovedPiece().movePiece(this));
         boardBuilder.setMoveMaker(this.getBoard().getCurrentPlayer().getOpponent().getAlliance());
 
-        boardBuilder.setWhiteAI(this.getBoard().getWhitePlayer().isAI());
-        boardBuilder.setBlackAI(this.getBoard().getBlackPlayer().isAI());
+        boardBuilder.copyPlayerInfo(this.getBoard().getWhitePlayer(), this.getBoard().getBlackPlayer());
 
         return boardBuilder.build();
     }

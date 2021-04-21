@@ -5,7 +5,7 @@ import ru.nsu.spirin.chessgame.pieces.Piece;
 public final class OccupiedTile extends Tile {
     private final Piece pieceOnTile;
 
-    public OccupiedTile(int coordinate, Piece pieceOnTile) {
+    public OccupiedTile(final int coordinate, final Piece pieceOnTile) {
         super(coordinate);
         this.pieceOnTile = pieceOnTile;
     }

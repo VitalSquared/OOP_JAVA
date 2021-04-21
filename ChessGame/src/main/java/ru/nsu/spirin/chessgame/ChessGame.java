@@ -12,21 +12,21 @@ public final class ChessGame {
     private final Scene    scene;
 
     public ChessGame(final boolean useSwing) {
-        scene = new Scene();
-        Controller controller = new Controller(scene);
+        this.scene = new Scene();
+        Controller controller = new Controller(this.scene);
         if (useSwing) {
-            gameView = new SwingView(controller);
+            this.gameView = new SwingView(controller);
         }
         else {
-            gameView = new ConsoleView(controller);
+            this.gameView = new ConsoleView(controller);
         }
     }
 
     public void run() {
         boolean shouldExit = false;
         while (!shouldExit) {
-            gameView.render(scene);
-            if (scene.getSceneState() == SceneState.DESTROY_SELF) {
+            this.gameView.render(this.scene);
+            if (this.scene.getSceneState() == SceneState.DESTROY_SELF) {
                 shouldExit = true;
             }
             try {
@@ -39,6 +39,6 @@ public final class ChessGame {
     }
 
     public void close() {
-        gameView.close();
+        this.gameView.close();
     }
 }

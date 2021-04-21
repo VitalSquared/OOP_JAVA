@@ -44,8 +44,7 @@ public abstract class CastleMove extends Move {
         boardBuilder.setPiece(new Rook(this.castleRook.getPieceAlliance(), this.castleRookDestination));
         boardBuilder.setMoveMaker(this.getBoard().getCurrentPlayer().getOpponent().getAlliance());
 
-        boardBuilder.setWhiteAI(this.getBoard().getWhitePlayer().isAI());
-        boardBuilder.setBlackAI(this.getBoard().getBlackPlayer().isAI());
+        boardBuilder.copyPlayerInfo(this.getBoard().getWhitePlayer(), this.getBoard().getBlackPlayer());
 
         return boardBuilder.build();
     }
