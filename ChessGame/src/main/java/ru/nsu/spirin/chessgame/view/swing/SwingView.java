@@ -22,8 +22,10 @@ public final class SwingView implements GameView {
     private final JFrame           gameFrame;
     private final Controller       controller;
     private final GameHistoryPanel gameHistoryPanel;
-    private final TakenPiecesPanel takenPiecesPanel;
     private final BoardPanel       boardPanel;
+
+    private final PlayerInfoPanel whitePlayerInfoPanel;
+    private final PlayerInfoPanel blackPlayerInfoPanel;
 
     private final NewGameDialog    newGameDialog;
     private final HighScoresDialog highScoresDialog;
@@ -37,7 +39,7 @@ public final class SwingView implements GameView {
 
     public static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     public static final Dimension TILE_PANEL_DIMENSION  = new Dimension(10, 10);
-    public static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
+    public static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 400);
 
     public SwingView(Controller controller) {
         this.gameFrame = new JFrame("Chess");
@@ -48,15 +50,18 @@ public final class SwingView implements GameView {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.gameHistoryPanel = new GameHistoryPanel();
-        this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel(controller);
+
+        this.whitePlayerInfoPanel = new PlayerInfoPanel(true);
+        this.blackPlayerInfoPanel = new PlayerInfoPanel(false);
 
         this.newGameDialog = new NewGameDialog(this.gameFrame, true, controller);
         this.aboutDialog = new AboutDialog(this.gameFrame, true);
         this.highScoresDialog = new HighScoresDialog(this.gameFrame, true);
         this.gameResultDialog = new GameResultDialog(this.gameFrame, true);
 
-        this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
+        this.gameFrame.add(this.blackPlayerInfoPanel, BorderLayout.NORTH);
+        this.gameFrame.add(this.whitePlayerInfoPanel, BorderLayout.SOUTH);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
         this.gameFrame.setVisible(true);
@@ -113,16 +118,19 @@ public final class SwingView implements GameView {
                 gameMenu.setVisible(false);
                 gameHistoryPanel.setVisible(false);
                 boardPanel.setVisible(false);
-                takenPiecesPanel.setVisible(false);
+                whitePlayerInfoPanel.setVisible(false);
+                blackPlayerInfoPanel.setVisible(false);
             }
             case GAME -> {
                 mainMenu.setVisible(false);
                 gameMenu.setVisible(true);
                 gameHistoryPanel.setVisible(true);
                 boardPanel.setVisible(true);
-                takenPiecesPanel.setVisible(true);
+                whitePlayerInfoPanel.setVisible(true);
+                blackPlayerInfoPanel.setVisible(true);
                 gameHistoryPanel.redo(scene.getBoard(), scene.getMoveLog());
-                takenPiecesPanel.redo(scene.getMoveLog());
+                whitePlayerInfoPanel.redo(scene.getBoard().getWhitePlayer().getPlayerName(), scene.getMoveLog());
+                blackPlayerInfoPanel.redo(scene.getBoard().getBlackPlayer().getPlayerName(), scene.getMoveLog());
                 boardPanel.drawBoard(scene.getBoard());
 
                 try {

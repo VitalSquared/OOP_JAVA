@@ -46,6 +46,18 @@ public final class Board {
         this.currentPlayer = boardBuilder.getNextMoveMaker().choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        for (Tile tile : gameBoard) {
+            int cur = 31;
+            Piece piece = tile.getPiece();
+            if (piece != null) cur = piece.hashCode();
+            hash += cur * tile.getTileCoordinate();
+        }
+        return hash;
+    }
+
     public Collection<Piece> getWhitePieces() {
         return this.whitePieces;
     }
@@ -133,9 +145,9 @@ public final class Board {
         return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
     }
 
-    public Move checkAI() {
+    public Move checkAI(final int miniMaxDepth) {
         if (this.currentPlayer.isAI()) {
-            final MoveStrategy miniMax = new MiniMax(4);
+            final MoveStrategy miniMax = new MiniMax(miniMaxDepth);
             return miniMax.execute(this);
         }
         return null;

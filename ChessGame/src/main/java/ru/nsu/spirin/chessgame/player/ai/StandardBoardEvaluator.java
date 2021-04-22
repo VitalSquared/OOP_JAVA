@@ -9,6 +9,7 @@ public class StandardBoardEvaluator implements BoardEvaluator {
     private static final int CHECK_MATE_BONUS = 1000;
     private static final int DEPTH_BONUS      = 100;
     private static final int CASTLE_BONUS     = 60;
+    private static final int PROMOTION_BONUS  = 60;
 
     @Override
     public int evaluate(final Board board, final int depth) {
@@ -48,7 +49,7 @@ public class StandardBoardEvaluator implements BoardEvaluator {
     }
 
     private static int promotions(final Player player) {
-        return player.getPromotedPawns();
+        return PROMOTION_BONUS * player.getPromotedPawns();
     }
 
     private int pieceValue(Player player) {

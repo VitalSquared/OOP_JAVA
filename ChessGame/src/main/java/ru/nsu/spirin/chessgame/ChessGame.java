@@ -7,11 +7,13 @@ import ru.nsu.spirin.chessgame.view.ConsoleView;
 import ru.nsu.spirin.chessgame.view.GameView;
 import ru.nsu.spirin.chessgame.view.swing.SwingView;
 
+import java.io.IOException;
+
 public final class ChessGame {
     private final GameView gameView;
     private final Scene    scene;
 
-    public ChessGame(final boolean useSwing) {
+    public ChessGame(final boolean useSwing) throws IOException {
         this.scene = new Scene();
         Controller controller = new Controller(this.scene);
         if (useSwing) {
