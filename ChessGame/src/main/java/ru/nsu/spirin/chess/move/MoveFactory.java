@@ -3,16 +3,16 @@ package ru.nsu.spirin.chess.move;
 import ru.nsu.spirin.chess.board.Board;
 
 public class MoveFactory {
-
     private static final Move NULL_MOVE = new NullMove();
 
     private MoveFactory() {
         throw new RuntimeException("Not instantiable");
     }
 
-    public static Move createMove(final Board board, final int currentCoordinate, final int destinationCoordinate) {
-        for (final Move move : board.getAllLegalMoves()) {
-            if (move.getCurrentCoordinate() == currentCoordinate && move.getDestinationCoordinate() == destinationCoordinate) {
+    public static Move createMove(Board board, int currentCoordinate, int destinationCoordinate) {
+        for (Move move : board.getAllLegalMoves()) {
+            if (move.getCurrentCoordinate() == currentCoordinate &&
+                move.getDestinationCoordinate() == destinationCoordinate) {
                 return move;
             }
         }

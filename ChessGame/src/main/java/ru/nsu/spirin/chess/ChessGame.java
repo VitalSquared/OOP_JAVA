@@ -13,7 +13,7 @@ public final class ChessGame {
     private final GameView gameView;
     private final Scene    scene;
 
-    public ChessGame(final boolean useSwing) throws IOException {
+    public ChessGame(boolean useSwing) throws IOException {
         this.scene = new Scene();
         Controller controller = new Controller(this.scene);
         this.gameView = useSwing ? new SwingView(controller) : new ConsoleView(controller);

@@ -72,12 +72,12 @@ public final class ConsoleView extends GameView {
     private void printBoard(final Scene scene) {
         final StringBuilder builder = new StringBuilder();
         builder.append("8| ");
-        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
+        for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
             final String tileText = scene.getBoard().getTile(i).toString();
             builder.append(tileText).append(" ");
-            if ((i + 1) % BoardUtils.NUM_TILES_PER_ROW == 0) {
+            if ((i + 1) % BoardUtils.NUMBER_OF_TILES_IN_ROW == 0) {
                 builder.append(System.lineSeparator());
-                if (i != BoardUtils.NUM_TILES - 1) {
+                if (i != BoardUtils.TOTAL_NUMBER_OF_TILES - 1) {
                     builder.append(8 - (i + 1) / 8).append("| ");
                 }
             }
@@ -100,15 +100,15 @@ public final class ConsoleView extends GameView {
         for (final Move move : scene.getMoveLog().getMoves()) {
             if (move.isAttack()) {
                 final Piece takenPiece = move.getAttackedPiece();
-                if (takenPiece.getPieceAlliance().isWhite() && !isWhite) {
+                if (takenPiece.getAlliance().isWhite() && !isWhite) {
                     takenPieces.add(takenPiece);
                 }
-                else if (takenPiece.getPieceAlliance().isBlack() && isWhite) {
+                else if (takenPiece.getAlliance().isBlack() && isWhite) {
                     takenPieces.add(takenPiece);
                 }
             }
         }
-        takenPieces.sort((o1, o2) -> Ints.compare(o1.getPieceType().getPieceValue(), o2.getPieceType().getPieceValue()));
+        takenPieces.sort((o1, o2) -> Ints.compare(o1.getType().getPieceValue(), o2.getType().getPieceValue()));
         for (final Piece piece : takenPieces) {
             System.out.print(piece.toString() + " ");
         }
@@ -119,10 +119,10 @@ public final class ConsoleView extends GameView {
         System.out.println(" WHITE | BLACK ");
         for (final Move move : scene.getMoveLog().getMoves()) {
             final String moveText = move.toString();
-            if (move.getMovedPiece().getPieceAlliance().isWhite()) {
+            if (move.getMovedPiece().getAlliance().isWhite()) {
                 System.out.printf("%7s", moveText);
             }
-            if (move.getMovedPiece().getPieceAlliance().isBlack()) {
+            if (move.getMovedPiece().getAlliance().isBlack()) {
                 System.out.printf("|%7s\n", moveText);
             }
         }

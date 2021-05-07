@@ -22,6 +22,7 @@ public class GameHistoryPanel extends JPanel {
 
     GameHistoryPanel() {
         this.setLayout(new BorderLayout());
+        setDoubleBuffered(false);
         this.model = new DataModel();
         final JTable table = new JTable(model);
         table.setRowHeight(15);
@@ -37,10 +38,10 @@ public class GameHistoryPanel extends JPanel {
         this.model.clear();
         for (final Move move : moveHistory.getMoves()) {
             final String moveText = move.toString();
-            if (move.getMovedPiece().getPieceAlliance().isWhite()) {
+            if (move.getMovedPiece().getAlliance().isWhite()) {
                 this.model.setValueAt(moveText, currentRow, 0);
             }
-            if (move.getMovedPiece().getPieceAlliance().isBlack()) {
+            if (move.getMovedPiece().getAlliance().isBlack()) {
                 this.model.setValueAt(moveText, currentRow, 1);
                 currentRow++;
             }
@@ -50,10 +51,10 @@ public class GameHistoryPanel extends JPanel {
             final Move lastMove = moveHistory.getMoves().get(moveHistory.size() - 1);
             final String moveText = lastMove.toString();
 
-            if (lastMove.getMovedPiece().getPieceAlliance().isWhite()) {
+            if (lastMove.getMovedPiece().getAlliance().isWhite()) {
                 this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow, 0);
             }
-            else if (lastMove.getMovedPiece().getPieceAlliance().isBlack()) {
+            else if (lastMove.getMovedPiece().getAlliance().isBlack()) {
                 this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow - 1, 1);
             }
         }

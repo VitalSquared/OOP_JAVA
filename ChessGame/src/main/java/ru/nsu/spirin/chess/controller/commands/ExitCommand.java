@@ -5,12 +5,12 @@ import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
 public class ExitCommand extends Command {
-    public ExitCommand(final Scene scene) {
+    public ExitCommand(Scene scene) {
         super(scene);
     }
 
     @Override
-    public boolean execute(final String[] args, final boolean privileged) {
+    public boolean execute(String[] args, boolean privileged) {
         if (getScene().getSceneState() != SceneState.MAIN_MENU || args.length != 0) {
             return false;
         }

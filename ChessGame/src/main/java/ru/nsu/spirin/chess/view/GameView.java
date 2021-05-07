@@ -15,5 +15,6 @@ public abstract class GameView {
     }
 
     public abstract void render(Scene scene);
+
     public abstract void close();
 }

@@ -5,7 +5,7 @@ import ru.nsu.spirin.chess.scene.Scene;
 public abstract class Command {
     private final Scene scene;
 
-    protected Command(final Scene scene) {
+    protected Command(Scene scene) {
         this.scene = scene;
     }
 
@@ -13,5 +13,5 @@ public abstract class Command {
         return this.scene;
     }
 
-    public abstract boolean execute(final String[] args, final boolean privileged);
+    public abstract boolean execute(String[] args, boolean privileged);
 }

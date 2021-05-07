@@ -3,16 +3,16 @@ package ru.nsu.spirin.chess.board.tile;
 import ru.nsu.spirin.chess.pieces.Piece;
 
 public final class OccupiedTile extends Tile {
-    private final Piece pieceOnTile;
+    private final Piece piece;
 
-    public OccupiedTile(final int coordinate, final Piece pieceOnTile) {
+    public OccupiedTile(int coordinate, Piece piece) {
         super(coordinate);
-        this.pieceOnTile = pieceOnTile;
+        this.piece = piece;
     }
 
     @Override
     public String toString() {
-        return getPiece().getPieceAlliance().isBlack() ?
+        return getPiece().getAlliance().isBlack() ?
                 getPiece().toString().toLowerCase() :
                 getPiece().toString().toUpperCase();
     }
@@ -24,6 +24,6 @@ public final class OccupiedTile extends Tile {
 
     @Override
     public Piece getPiece() {
-        return this.pieceOnTile;
+        return this.piece;
     }
 }

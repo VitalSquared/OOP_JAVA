@@ -6,13 +6,9 @@ import ru.nsu.spirin.chess.scene.SceneState;
 import ru.nsu.spirin.chess.view.GameView;
 
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.WindowConstants;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.event.WindowEvent;
@@ -21,7 +17,6 @@ public final class SwingView extends GameView {
 
     private final JFrame           gameFrame;
 
-
     private final MainMenuPanel   mainMenuPanel;
     private final NewGamePanel    newGamePanel;
     private final HighScoresPanel highScoresPanel;
@@ -29,11 +24,6 @@ public final class SwingView extends GameView {
     private final ConnectionPanel connectionPanel;
     private final BoardPanel      boardPanel;
     private final ResultsPanel    resultsPanel;
-
-    private boolean pressedExit = false;
-
-    private JMenu mainMenu;
-    private JMenu gameMenu;
 
     public static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     public static final Dimension TILE_PANEL_DIMENSION  = new Dimension(10, 10);
@@ -87,7 +77,7 @@ public final class SwingView extends GameView {
         if (scene.getSceneState() == SceneState.BOARD_MENU) {
             try {
                 if (scene.getBoard().getCurrentPlayer().isAI()) {
-                    boolean execResult = getController().execute("ai_move", true);
+                    getController().execute("ai_move", true);
                 }
             }
             catch (Exception ignored) {}

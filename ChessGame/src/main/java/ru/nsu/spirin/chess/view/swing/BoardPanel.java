@@ -19,7 +19,6 @@ class BoardPanel extends JPanel {
     private       Piece           humanMovedPiece;
     private final List<TilePanel> boardTiles;
     private       Scene           scene;
-    private       JPanel          tilesPanel;
 
     private final GameHistoryPanel gameHistoryPanel;
     private final PlayerInfoPanel  whitePlayerInfoPanel;
@@ -29,7 +28,7 @@ class BoardPanel extends JPanel {
         super(new BorderLayout());
         setDoubleBuffered(false);
 
-        tilesPanel = new JPanel(new GridLayout(8,8));
+        JPanel tilesPanel = new JPanel(new GridLayout(8, 8));
 
         this.gameHistoryPanel = new GameHistoryPanel();
         this.whitePlayerInfoPanel = new PlayerInfoPanel(true);
@@ -41,7 +40,7 @@ class BoardPanel extends JPanel {
         add(tilesPanel, BorderLayout.CENTER);
 
         this.boardTiles = new ArrayList<>();
-        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
+        for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
             final TilePanel tilePanel = new TilePanel(controller, this, i);
             this.boardTiles.add(tilePanel);
             tilesPanel.add(tilePanel);

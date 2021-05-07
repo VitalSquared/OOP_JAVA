@@ -8,31 +8,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Tile {
-    private final int tileCoordinate;
+    private final int coordinate;
 
     private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();
 
-    protected Tile(final int tileCoordinate) {
-        this.tileCoordinate = tileCoordinate;
+    protected Tile(int coordinate) {
+        this.coordinate = coordinate;
     }
 
     public abstract boolean isTileOccupied();
 
     public abstract Piece getPiece();
 
-    public static Tile createTile(final int tileCoordinate, final Piece piece) {
+    public int getCoordinate() {
+        return this.coordinate;
+    }
+
+    public static Tile createTile(int tileCoordinate, Piece piece) {
         return piece != null ?
                 new OccupiedTile(tileCoordinate, piece) :
                 EMPTY_TILES_CACHE.get(tileCoordinate);
     }
 
-    public int getTileCoordinate() {
-        return this.tileCoordinate;
-    }
-
     private static Map<Integer, EmptyTile> createAllPossibleEmptyTiles() {
-        final Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
-        for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
+        Map<Integer, EmptyTile> emptyTileMap = new HashMap<>();
+        for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
             emptyTileMap.put(i, new EmptyTile(i));
         }
         return ImmutableMap.copyOf(emptyTileMap);

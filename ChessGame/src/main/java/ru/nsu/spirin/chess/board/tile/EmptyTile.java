@@ -3,7 +3,7 @@ package ru.nsu.spirin.chess.board.tile;
 import ru.nsu.spirin.chess.pieces.Piece;
 
 public final class EmptyTile extends Tile {
-    public EmptyTile(final int coordinate) {
+    public EmptyTile(int coordinate) {
         super(coordinate);
     }
 

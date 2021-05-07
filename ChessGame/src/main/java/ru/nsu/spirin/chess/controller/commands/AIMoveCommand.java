@@ -7,26 +7,25 @@ import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
 public class AIMoveCommand extends Command {
-    public AIMoveCommand(final Scene scene) {
+    public AIMoveCommand(Scene scene) {
         super(scene);
     }
 
     @Override
-    public boolean execute(final String[] args, final boolean privileged) {
+    public boolean execute(String[] args, boolean privileged) {
         if (!privileged || getScene().getSceneState() != SceneState.BOARD_MENU) {
             return false;
         }
 
-        Move aiMove = getScene().getBoard().checkAI(getScene().getMiniMaxDepth());
+        Move aiMove = getScene().getBoard().checkAI(4);
         if (aiMove != null) {
             final MoveTransition transition = getScene().getBoard().getCurrentPlayer().makeMove(aiMove);
             if (transition.getMoveStatus().isDone()) {
                 getScene().setBoard(transition.getTransitionBoard());
                 getScene().getMoveLog().addMove(aiMove);
+                return true;
             }
-            else {
-                return false;
-            }
+            return false;
         }
         return true;
     }

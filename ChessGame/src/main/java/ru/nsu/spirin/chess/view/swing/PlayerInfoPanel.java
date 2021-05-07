@@ -31,10 +31,12 @@ public final class PlayerInfoPanel extends JPanel {
 
     public PlayerInfoPanel(final boolean isWhite) {
         super(new BorderLayout());
+        setDoubleBuffered(false);
         setBackground(PANEL_COLOR);
         setBorder(PANEL_BORDER);
         this.playerNamePanel = new JPanel(new GridLayout(1, 1));
         this.playerTakenPieces = new JPanel(new GridLayout(1, 16));
+        this.playerTakenPieces.setDoubleBuffered(false);
         this.playerNameLabel = new JLabel("");
         this.playerNamePanel.setBackground(PANEL_COLOR);
         this.playerTakenPieces.setBackground(PANEL_COLOR);
@@ -54,20 +56,20 @@ public final class PlayerInfoPanel extends JPanel {
         for (final Move move : moveLog.getMoves()) {
             if (move.isAttack()) {
                 final Piece takenPiece = move.getAttackedPiece();
-                if (takenPiece.getPieceAlliance().isWhite() && !isWhite) {
+                if (takenPiece.getAlliance().isWhite() && !isWhite) {
                     takenPieces.add(takenPiece);
                 }
-                else if (takenPiece.getPieceAlliance().isBlack() && isWhite) {
+                else if (takenPiece.getAlliance().isBlack() && isWhite) {
                     takenPieces.add(takenPiece);
                 }
             }
         }
 
-        takenPieces.sort((o1, o2) -> Ints.compare(o1.getPieceType().getPieceValue(), o2.getPieceType().getPieceValue()));
+        takenPieces.sort((o1, o2) -> Ints.compare(o1.getType().getPieceValue(), o2.getType().getPieceValue()));
 
         for (final Piece takenPiece : takenPieces) {
             try {
-                final BufferedImage image = ImageIO.read(new File("textures/" + takenPiece.getPieceAlliance().toString().charAt(0) + takenPiece.toString() + ".gif"));
+                final BufferedImage image = ImageIO.read(new File("textures/" + takenPiece.getAlliance().toString().charAt(0) + takenPiece.toString() + ".gif"));
                 final ImageIcon icon = new ImageIcon(image);
                 final JLabel imageLabel = new JLabel(icon);
                 this.playerTakenPieces.add(imageLabel);

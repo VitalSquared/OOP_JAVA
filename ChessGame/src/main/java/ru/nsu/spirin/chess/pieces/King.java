@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.board.BoardUtils;
-import ru.nsu.spirin.chess.move.attack.MajorAttackMove;
+import ru.nsu.spirin.chess.move.MajorAttackMove;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MajorMove;
 import ru.nsu.spirin.chess.board.tile.Tile;
@@ -14,35 +14,53 @@ import java.util.Collection;
 import java.util.List;
 
 public final class King extends Piece {
-    private final static int[] CANDIDATE_MOVE_COORDINATE = {-9, -8, -7, -1, 1, 7, 8, 9};
+    private final static int[] MOVE_DIRECTIONS = {-9, -8, -7, -1, 1, 7, 8, 9};
 
-    public King(final Alliance pieceAlliance, final int piecePosition) {
-        super(PieceType.KING, pieceAlliance, piecePosition, true);
+    private final boolean isCastled;
+    private final boolean kingSideCastleCapable;
+    private final boolean queenSideCastleCapable;
+
+    public King(Alliance alliance, int coordinate, boolean kingSideCastleCapable, boolean queenSideCastleCapable) {
+        this(alliance, coordinate, true, false, kingSideCastleCapable, queenSideCastleCapable);
     }
 
-    public King(final Alliance pieceAlliance, final int piecePosition, final boolean isFirstMove) {
-        super(PieceType.KING, pieceAlliance, piecePosition, isFirstMove);
+    public King(Alliance alliance, int coordinate, boolean isFirstMove, boolean isCastled, boolean kingSideCastleCapable, boolean queenSideCastleCapable) {
+        super(PieceType.KING, alliance, coordinate, isFirstMove);
+        this.isCastled = isCastled;
+        this.kingSideCastleCapable = kingSideCastleCapable;
+        this.queenSideCastleCapable = queenSideCastleCapable;
+    }
+
+    public boolean isCastled() {
+        return this.isCastled;
+    }
+
+    public boolean isKingSideCastleCapable() {
+        return this.kingSideCastleCapable;
+    }
+
+    public boolean isQueenSideCastleCapable() {
+        return this.queenSideCastleCapable;
     }
 
     @Override
-    public Collection<Move> calculateLegalMoves(final Board board) {
-        final List<Move> legalMoves = new ArrayList<>();
-        for (final int currentCandidateOffset : CANDIDATE_MOVE_COORDINATE) {
-            final int candidateDestinationCoordinate = this.getPiecePosition() + currentCandidateOffset;
-            if (isFirstColumnExclusion(this.getPiecePosition(), currentCandidateOffset) || isEighthColumnExclusion(this.getPiecePosition(), currentCandidateOffset)) {
+    public Collection<Move> calculateLegalMoves(Board board) {
+        List<Move> legalMoves = new ArrayList<>();
+        for (int offset : MOVE_DIRECTIONS) {
+            int destinationCoordinate = this.getCoordinate() + offset;
+            if (isFirstColumnExclusion(this.getCoordinate(), offset) || isEighthColumnExclusion(this.getCoordinate(), offset)) {
                 continue;
             }
-            if (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
-                final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
-                if (!candidateDestinationTile.isTileOccupied()) {
-                    legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+            if (BoardUtils.isValidTileCoordinate(destinationCoordinate)) {
+                Tile destinationTile = board.getTile(destinationCoordinate);
+                if (destinationTile.isTileOccupied()) {
+                    Piece destinationPiece = destinationTile.getPiece();
+                    if (this.getAlliance() != destinationPiece.getAlliance()) {
+                        legalMoves.add(new MajorAttackMove(board, this, destinationCoordinate, destinationPiece));
+                    }
                 }
                 else {
-                    final Piece pieceAtDestination = candidateDestinationTile.getPiece();
-                    final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
-                    if (this.getPieceAlliance() != pieceAlliance) {
-                        legalMoves.add(new MajorAttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
-                    }
+                    legalMoves.add(new MajorMove(board, this, destinationCoordinate));
                 }
             }
         }
@@ -50,20 +68,15 @@ public final class King extends Piece {
     }
 
     @Override
-    public King movePiece(final Move move) {
-        return new King(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+    public King movePiece(Move move) {
+        return new King(move.getMovedPiece().getAlliance(), move.getDestinationCoordinate(), false, move.isCastlingMove(), false, false);
     }
 
-    @Override
-    public String toString() {
-        return PieceType.KING.toString();
+    private static boolean isFirstColumnExclusion(int coordinate, int offset) {
+        return BoardUtils.isPositionInColumn(coordinate, 1) && (offset == -9 || offset == -1 || offset == 7);
     }
 
-    private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.isPositionInColumn(currentPosition, 1) && (candidateOffset == -9 || candidateOffset == -1 || candidateOffset == 7);
-    }
-
-    private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.isPositionInColumn(currentPosition, 8) && ((candidateOffset == -7) || (candidateOffset == 1 || candidateOffset == 9));
+    private static boolean isEighthColumnExclusion(int coordinate, int offset) {
+        return BoardUtils.isPositionInColumn(coordinate, 8) && ((offset == -7) || (offset == 1 || offset == 9));
     }
 }

@@ -1,14 +1,13 @@
-package ru.nsu.spirin.chess.move.attack;
+package ru.nsu.spirin.chess.move;
 
 import ru.nsu.spirin.chess.board.Board;
-import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.pieces.Piece;
 
 public class AttackMove extends Move {
     private final Piece attackedPiece;
 
-    public AttackMove(final Board board, final Piece movePiece, final int destinationCoordinate, final Piece attackedPiece) {
-        super(board, movePiece, destinationCoordinate);
+    public AttackMove(Board board, Piece movedPiece, int destinationCoordinate, Piece attackedPiece) {
+        super(board, movedPiece, destinationCoordinate);
         this.attackedPiece = attackedPiece;
     }
 
@@ -18,14 +17,10 @@ public class AttackMove extends Move {
     }
 
     @Override
-    public boolean equals(final Object other) {
-        if (this == other) {
-            return false;
-        }
-        if (!(other instanceof AttackMove)) {
-            return false;
-        }
-        final AttackMove otherAttackMove = (AttackMove) other;
+    public boolean equals(Object other) {
+        if (this == other) return false;
+        if (!(other instanceof AttackMove)) return false;
+        AttackMove otherAttackMove = (AttackMove) other;
         return super.equals(otherAttackMove) && getAttackedPiece().equals(otherAttackMove.getAttackedPiece());
     }
 

@@ -54,7 +54,7 @@ public final class BoardBuilder {
     }
 
     public void setPiece(final Piece piece) {
-        this.boardConfig.put(piece.getPiecePosition(), piece);
+        this.boardConfig.put(piece.getCoordinate(), piece);
     }
 
     public void setMoveMaker(final Alliance nextMoveMaker) {

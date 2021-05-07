@@ -9,15 +9,11 @@ public final class BoardUtils {
     public static final String[]             ALGEBRAIC_NOTATION     = initializeAlgebraicNotation();
     public static final Map<String, Integer> POSITION_TO_COORDINATE = initializePositionToCoordinateMap();
 
-    public static final int NUM_TILES         = 64;
-    public static final int NUM_TILES_PER_ROW = 8;
-
-    private BoardUtils() throws IllegalCallerException {
-        throw new IllegalCallerException("You can't instantiate BoardUtils class");
-    }
+    public static final int TOTAL_NUMBER_OF_TILES  = 64;
+    public static final int NUMBER_OF_TILES_IN_ROW = 8;
 
     private static String[] initializeAlgebraicNotation() {
-        String[] notation = new String[NUM_TILES];
+        String[] notation = new String[TOTAL_NUMBER_OF_TILES];
         int idx = 0;
         for (int i = 8; i >= 1; i--) {
             for (char j = 'a'; j <= 'h'; j++) {
@@ -29,14 +25,14 @@ public final class BoardUtils {
 
     private static Map<String, Integer> initializePositionToCoordinateMap() {
         final Map<String, Integer> positionToCoordinate = new HashMap<>();
-        for (int i = 0; i < NUM_TILES; i++) {
+        for (int i = 0; i < TOTAL_NUMBER_OF_TILES; i++) {
             positionToCoordinate.put(ALGEBRAIC_NOTATION[i], i);
         }
         return ImmutableMap.copyOf(positionToCoordinate);
     }
 
     public static boolean isValidTileCoordinate(final int coordinate) {
-        return coordinate >= 0 && coordinate < NUM_TILES;
+        return coordinate >= 0 && coordinate < TOTAL_NUMBER_OF_TILES;
     }
 
     public static int getCoordinateAtPosition(final String position) {
@@ -44,7 +40,7 @@ public final class BoardUtils {
     }
 
     public static String getPositionAtCoordinate(final int coordinate) {
-        return coordinate >= 0 && coordinate < NUM_TILES ?
+        return coordinate >= 0 && coordinate < TOTAL_NUMBER_OF_TILES ?
                 ALGEBRAIC_NOTATION[coordinate] :
                 " ";
     }
@@ -56,12 +52,12 @@ public final class BoardUtils {
                 return true;
             }
             column += 8;
-        } while (column < NUM_TILES);
+        } while (column < TOTAL_NUMBER_OF_TILES);
         return false;
     }
 
     public static boolean isPositionInRow(final int position, int row) {
         row = 8 - row;
-        return row * NUM_TILES_PER_ROW <= position && position < (row + 1) * NUM_TILES_PER_ROW;
+        return row * NUMBER_OF_TILES_IN_ROW <= position && position < (row + 1) * NUMBER_OF_TILES_IN_ROW;
     }
 }

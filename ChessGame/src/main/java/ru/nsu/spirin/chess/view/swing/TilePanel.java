@@ -1,16 +1,12 @@
 package ru.nsu.spirin.chess.view.swing;
 
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableList;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.move.Move;
-import ru.nsu.spirin.chess.pieces.King;
 
-import javax.annotation.concurrent.Immutable;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,6 +18,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -62,7 +59,7 @@ public class TilePanel extends JPanel {
                         }
                         else {
                             boardPanel.setDestinationTile(board.getTile(tileID));
-                            boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(boardPanel.getSourceTile().getTileCoordinate()) + " " + BoardUtils.getPositionAtCoordinate(boardPanel.getDestinationTile().getTileCoordinate()), false);
+                            boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(boardPanel.getSourceTile().getCoordinate()) + " " + BoardUtils.getPositionAtCoordinate(boardPanel.getDestinationTile().getCoordinate()), false);
                             boardPanel.setSourceTile(null);
                             boardPanel.setDestinationTile(null);
                             boardPanel.setHumanMovedPiece(null);
@@ -108,7 +105,6 @@ public class TilePanel extends JPanel {
     private void highlightLegalMoves(final Board board) {
         if (true) {
             for (final Move move : pieceLegalMoves(board)) {
-                System.out.println(this.tileID);
                 if (move.getDestinationCoordinate() == this.tileID) {
                     try {
                         add(new JLabel(new ImageIcon(ImageIO.read(new File("textures/green_dot.png")))));
@@ -122,8 +118,14 @@ public class TilePanel extends JPanel {
     }
 
     private Collection<Move> pieceLegalMoves(final Board board) {
-        if (boardPanel.getHumanMovedPiece() != null && boardPanel.getHumanMovedPiece().getPieceAlliance() == board.getCurrentPlayer().getAlliance()) {
-            return  boardPanel.getHumanMovedPiece().calculateLegalMoves(board);
+        if (boardPanel.getHumanMovedPiece() != null && boardPanel.getHumanMovedPiece().getAlliance() == board.getCurrentPlayer().getAlliance()) {
+            Collection<Move> moves = new ArrayList<>();
+            for (var move : board.getCurrentPlayer().getLegalMoves()) {
+                if (move.getMovedPiece() == boardPanel.getHumanMovedPiece()) {
+                    moves.add(move);
+                }
+            }
+            return moves;
         }
         return Collections.emptyList();
     }
@@ -133,7 +135,7 @@ public class TilePanel extends JPanel {
         if (board.getTile(this.tileID).isTileOccupied()) {
             String pieceIconPath = "textures/";
             try {
-                final BufferedImage image = ImageIO.read(new File(pieceIconPath + board.getTile(this.tileID).getPiece().getPieceAlliance().toString().charAt(0) + board.getTile(this.tileID).toString() + ".gif"));
+                final BufferedImage image = ImageIO.read(new File(pieceIconPath + board.getTile(this.tileID).getPiece().getAlliance().toString().charAt(0) + board.getTile(this.tileID).toString() + ".gif"));
                 add(new JLabel(new ImageIcon(image)));
             }
             catch (IOException e) {
