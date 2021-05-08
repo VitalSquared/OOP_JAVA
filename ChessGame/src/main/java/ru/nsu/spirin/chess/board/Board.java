@@ -43,8 +43,8 @@ public final class Board {
         Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
-        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isWhiteAI(), boardBuilder.getWhitePlayerName());
-        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves, boardBuilder.isBlackAI(), boardBuilder.getBlackPlayerName());
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.currentPlayer = boardBuilder.getNextMoveMaker().choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 
@@ -135,26 +135,12 @@ public final class Board {
         boardBuilder.setPiece(new Knight(Alliance.WHITE, 62));
         boardBuilder.setPiece(new Rook(Alliance.WHITE, 63));
 
-        boardBuilder.setWhiteAI(isWhiteAI);
-        boardBuilder.setBlackAI(isBlackAI);
-
-        boardBuilder.setWhitePlayerName(whitePlayerName);
-        boardBuilder.setBlackPlayerName(blackPlayerName);
-
         boardBuilder.setMoveMaker(Alliance.WHITE);
         return boardBuilder.build();
     }
 
     public Iterable<Move> getAllLegalMoves() {
         return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
-    }
-
-    public Move checkAI(int miniMaxDepth) {
-        if (this.currentPlayer.isAI()) {
-            final MoveStrategy miniMax = new MiniMax(4);
-            return miniMax.execute(this);
-        }
-        return null;
     }
 
     private Collection<Piece> calculateActivePieces(Alliance alliance) {

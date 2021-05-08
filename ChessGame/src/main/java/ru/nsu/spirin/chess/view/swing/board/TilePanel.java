@@ -1,4 +1,4 @@
-package ru.nsu.spirin.chess.view.swing;
+package ru.nsu.spirin.chess.view.swing.board;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
@@ -6,6 +6,8 @@ import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.move.Move;
+import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.view.swing.SwingView;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -22,82 +24,36 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class TilePanel extends JPanel {
+class TilePanel extends JPanel {
     private final BoardPanel boardPanel;
-    private final Controller controller;
-    private final int tileID;
-    private Board board;
+    private final int normalTileID;
+    private int tileID;
+    private final Scene scene;
 
     private static final Color lightTileColor = Color.decode("#FFFACD");
     private static final Color darkTileColor = Color.decode("#593E1A");
 
-    public TilePanel(final Controller controller, final BoardPanel boardPanel, final int tileID) {
+    public TilePanel(Scene scene, Controller controller, BoardPanel boardPanel, int tileID) {
         super(new GridBagLayout());
         setDoubleBuffered(false);
 
+        this.scene = scene;
         this.boardPanel = boardPanel;
-        this.controller = controller;
+        this.normalTileID = tileID;
         this.tileID = tileID;
         setPreferredSize(SwingView.TILE_PANEL_DIMENSION);
 
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(final MouseEvent e) {
-                if (!board.getCurrentPlayer().isAI()) {
-                    if (isRightMouseButton(e)) {
-                        boardPanel.setSourceTile(null);
-                        boardPanel.setDestinationTile(null);
-                        boardPanel.setHumanMovedPiece(null);
-                    }
-                    else if (isLeftMouseButton(e)) {
-                        if (boardPanel.getSourceTile() == null) {
-                            boardPanel.setSourceTile(board.getTile(tileID));
-                            boardPanel.setHumanMovedPiece(boardPanel.getSourceTile().getPiece());
-                            if (boardPanel.getHumanMovedPiece() == null) {
-                                boardPanel.setSourceTile(null);
-                            }
-                        }
-                        else {
-                            boardPanel.setDestinationTile(board.getTile(tileID));
-                            boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(boardPanel.getSourceTile().getCoordinate()) + " " + BoardUtils.getPositionAtCoordinate(boardPanel.getDestinationTile().getCoordinate()), false);
-                            boardPanel.setSourceTile(null);
-                            boardPanel.setDestinationTile(null);
-                            boardPanel.setHumanMovedPiece(null);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void mousePressed(final MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(final MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(final MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(final MouseEvent e) {
-
-            }
-        });
+        addMouseListener(new TileMouseListener(this, controller));
 
         validate();
     }
 
-    public void drawTile(final Board board) {
+    public void drawTile(boolean isInverted) {
+        this.tileID = isInverted ? BoardUtils.TOTAL_NUMBER_OF_TILES - 1 - normalTileID : normalTileID;
         this.removeAll();
-        this.board = board;
         assignTileColor();
-        assignTilePieceIcon(board);
-        highlightLegalMoves(board);
+        assignTilePieceIcon(scene.getBoard());
+        highlightLegalMoves(scene.getBoard());
         validate();
         repaint();
     }
@@ -150,6 +106,64 @@ public class TilePanel extends JPanel {
         }
         else if (BoardUtils.isPositionInRow(this.tileID, 2)|| BoardUtils.isPositionInRow(this.tileID, 4) || BoardUtils.isPositionInRow(this.tileID, 6) || BoardUtils.isPositionInRow(this.tileID, 8)) {
             setBackground(this.tileID % 2 == 0 ? darkTileColor : lightTileColor);
+        }
+    }
+
+    private class TileMouseListener implements MouseListener {
+        private final TilePanel tilePanel;
+        private final Controller controller;
+
+        public TileMouseListener(TilePanel tilePanel, Controller controller) {
+            this.tilePanel = tilePanel;
+            this.controller = controller;
+        }
+
+        @Override
+        public void mouseClicked(final MouseEvent e) {
+            if (scene.getPlayerTeam() == scene.getBoard().getCurrentPlayer().getAlliance() && !BoardUtils.isEndGame(scene.getBoard())) {
+                if (isRightMouseButton(e)) {
+                    boardPanel.setSourceTile(null);
+                    boardPanel.setDestinationTile(null);
+                    boardPanel.setHumanMovedPiece(null);
+                }
+                else if (isLeftMouseButton(e)) {
+                    if (boardPanel.getSourceTile() == null) {
+                        boardPanel.setSourceTile(scene.getBoard().getTile(tilePanel.tileID));
+                        boardPanel.setHumanMovedPiece(boardPanel.getSourceTile().getPiece());
+                        if (boardPanel.getHumanMovedPiece() == null) {
+                            boardPanel.setSourceTile(null);
+                        }
+                    }
+                    else {
+                        boardPanel.setDestinationTile(scene.getBoard().getTile(tilePanel.tileID));
+                        boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(boardPanel.getSourceTile().getCoordinate()) +
+                                                                " " + BoardUtils.getPositionAtCoordinate(boardPanel.getDestinationTile().getCoordinate()), false);
+                        boardPanel.setSourceTile(null);
+                        boardPanel.setDestinationTile(null);
+                        boardPanel.setHumanMovedPiece(null);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void mousePressed(final MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(final MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseEntered(final MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(final MouseEvent e) {
+
         }
     }
 }

@@ -1,6 +1,7 @@
 package ru.nsu.spirin.chess.view.swing;
 
 import ru.nsu.spirin.chess.controller.Controller;
+import ru.nsu.spirin.chess.properties.SettingsFile;
 import ru.nsu.spirin.chess.scene.Scene;
 
 import javax.swing.JButton;
@@ -23,7 +24,7 @@ public final class NewGamePanel extends JPanel {
         JPanel playerNamePanel = new JPanel(new GridLayout(1, 2));
         playerNamePrompt = new JLabel("Your Name: ");
         playerNamePanel.add(playerNamePrompt);
-        playerName = new JTextField("");
+        playerName = new JTextField(SettingsFile.getSettingValue("LAST_USED_NAME"));
         playerNamePanel.add(playerName);
         add(playerNamePanel);
 

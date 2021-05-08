@@ -1,4 +1,4 @@
-package ru.nsu.spirin.chess.view.swing;
+package ru.nsu.spirin.chess.view.swing.board;
 
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.move.Move;
@@ -14,7 +14,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameHistoryPanel extends JPanel {
+class GameHistoryPanel extends JPanel {
     private final DataModel model;
     private final JScrollPane scrollPane;
 

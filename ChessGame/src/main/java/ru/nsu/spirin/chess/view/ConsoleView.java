@@ -14,35 +14,30 @@ import java.util.Scanner;
 public final class ConsoleView extends GameView {
     private final Scanner    scanner;
 
-    public ConsoleView(Controller controller) {
-        super(controller);
+    public ConsoleView(Scene scene, Controller controller) {
+        super(scene, controller);
         this.scanner = new Scanner(System.in);
     }
 
     @Override
-    public void render(Scene scene) {
-        switch (scene.getSceneState()) {
+    public void render() {
+        /*switch (getScene().getSceneState()) {
             case MAIN_MENU -> {
                 printCommands();
                 System.out.print("Enter command: ");
                 boolean execResult = getController().execute(scanner.nextLine(), false);
             }
             case BOARD_MENU -> {
-                printScene(scene);
-                if (scene.getBoard().getCurrentPlayer().isInCheckMate() || scene.getBoard().getCurrentPlayer().isInStaleMate() || scene.getBoard().getCurrentPlayer().hasSurrendered()) {
-                    System.out.println("[" + scene.getBoard().getCurrentPlayer().getOpponent().getAlliance() + "] " + scene.getBoard().getCurrentPlayer().getOpponent().getPlayerName() + " won!");
-                    scene.setBoard(null);
+                printScene(getScene());
+                if (getScene().getBoard().getCurrentPlayer().isInCheckMate() || getScene().getBoard().getCurrentPlayer().isInStaleMate() || getScene().getBoard().getCurrentPlayer().hasSurrendered()) {
+                    //System.out.println("[" + getScene().getBoard().getCurrentPlayer().getOpponent().getAlliance() + "] " + getScene().getBoard().getCurrentPlayer().getOpponent().getPlayerName() + " won!");
+                    getScene().setBoard(null);
                     return;
                 }
                 System.out.print("[" + scene.getBoard().getCurrentPlayer().getAlliance().toString() + "]" + " Enter command: ");
-                if (!scene.getBoard().getCurrentPlayer().isAI()) {
-                    boolean execResult = getController().execute(scanner.nextLine(), false);
-                }
-                else {
-                    boolean execResult = getController().execute("ai_move", true);
-                }
+                boolean execResult = getController().execute(scanner.nextLine(), false);
             }
-        }
+        }*/
     }
 
     @Override
@@ -58,7 +53,7 @@ public final class ConsoleView extends GameView {
     }
 
     private void printScene(final Scene scene) {
-        System.out.println("############################################################");
+        /*System.out.println("############################################################");
         printMoveLog(scene);
         System.out.println("------------------------------------------------------------");
         System.out.println("BLACK: " + scene.getBoard().getBlackPlayer().getPlayerName());
@@ -66,7 +61,7 @@ public final class ConsoleView extends GameView {
         printBoard(scene);
         printPlayerTakenPieces(scene, true);
         System.out.println("WHITE: " + scene.getBoard().getWhitePlayer().getPlayerName());
-        System.out.println("############################################################");
+        System.out.println("############################################################");*/
     }
 
     private void printBoard(final Scene scene) {

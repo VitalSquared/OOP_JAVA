@@ -16,12 +16,12 @@ public final class ChessGame {
     public ChessGame(boolean useSwing) throws IOException {
         this.scene = new Scene();
         Controller controller = new Controller(this.scene);
-        this.gameView = useSwing ? new SwingView(controller) : new ConsoleView(controller);
+        this.gameView = useSwing ? new SwingView(scene, controller) : new ConsoleView(scene, controller);
     }
 
     public void run() {
         while (this.scene.getSceneState() != SceneState.NONE) {
-            this.gameView.render(this.scene);
+            this.gameView.render();
         }
     }
 

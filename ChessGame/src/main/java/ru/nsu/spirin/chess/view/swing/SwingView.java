@@ -4,6 +4,7 @@ import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 import ru.nsu.spirin.chess.view.GameView;
+import ru.nsu.spirin.chess.view.swing.board.BoardPanel;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,12 +26,12 @@ public final class SwingView extends GameView {
     private final BoardPanel      boardPanel;
     private final ResultsPanel    resultsPanel;
 
-    public static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
+    public static final Dimension OUTER_FRAME_DIMENSION = new Dimension(620, 640);
     public static final Dimension TILE_PANEL_DIMENSION  = new Dimension(10, 10);
     public static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 400);
 
-    public SwingView(Controller controller) {
-        super(controller);
+    public SwingView(Scene scene, Controller controller) {
+        super(scene, controller);
 
         this.gameFrame = new JFrame("Chess");
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
@@ -49,8 +50,8 @@ public final class SwingView extends GameView {
         this.highScoresPanel = new HighScoresPanel(controller);
         this.aboutPanel = new AboutPanel(controller);
         this.connectionPanel = new ConnectionPanel(controller);
-        this.boardPanel = new BoardPanel(controller);
-        this.resultsPanel = new ResultsPanel(controller);
+        this.boardPanel = new BoardPanel(scene, controller);
+        this.resultsPanel = new ResultsPanel(scene, controller);
 
         panel.add(this.mainMenuPanel);
         panel.add(this.newGamePanel);
@@ -65,23 +66,14 @@ public final class SwingView extends GameView {
     }
 
     @Override
-    public void render(Scene scene) {
-        updateMainMenuPanel(scene);
-        updateNewGamePanel(scene);
-        updateHighScoresPanel(scene);
-        updateAboutPanel(scene);
-        updateConnectionPanel(scene);
-        updateBoardPanel(scene);
-        updateResultsPanel(scene);
-
-        if (scene.getSceneState() == SceneState.BOARD_MENU) {
-            try {
-                if (scene.getBoard().getCurrentPlayer().isAI()) {
-                    getController().execute("ai_move", true);
-                }
-            }
-            catch (Exception ignored) {}
-        }
+    public void render() {
+        updateMainMenuPanel(getScene());
+        updateNewGamePanel(getScene());
+        updateHighScoresPanel(getScene());
+        updateAboutPanel(getScene());
+        updateConnectionPanel(getScene());
+        updateBoardPanel(getScene());
+        updateResultsPanel(getScene());
     }
 
     @Override
@@ -102,6 +94,9 @@ public final class SwingView extends GameView {
 
     private void updateHighScoresPanel(Scene scene) {
         highScoresPanel.setVisible(scene.getSceneState() == SceneState.HIGH_SCORES_MENU);
+        if (scene.getSceneState() == SceneState.HIGH_SCORES_MENU) {
+            highScoresPanel.updatePanel();
+        }
     }
 
     private void updateAboutPanel(Scene scene) {
@@ -118,14 +113,14 @@ public final class SwingView extends GameView {
     private void updateBoardPanel(Scene scene) {
         boardPanel.setVisible(scene.getSceneState() == SceneState.BOARD_MENU);
         if (scene.getSceneState() == SceneState.BOARD_MENU) {
-            boardPanel.updatePanel(scene);
+            boardPanel.updatePanel();
         }
     }
 
     private void updateResultsPanel(Scene scene) {
         resultsPanel.setVisible(scene.getSceneState() == SceneState.RESULTS_MENU);
         if (scene.getSceneState() == SceneState.RESULTS_MENU) {
-            resultsPanel.updatePanel(scene);
+            resultsPanel.updatePanel();
         }
     }
 }

@@ -24,7 +24,6 @@ public final class PawnEnPassantAttackMove extends PawnAttackMove {
         }
         builder.setPiece(this.getMovedPiece().movePiece(this));
         builder.setMoveMaker(this.getBoard().getCurrentPlayer().getOpponent().getAlliance());
-        builder.copyPlayerInfo(this.getBoard().getWhitePlayer(), this.getBoard().getBlackPlayer());
         return builder.build();
     }
 }

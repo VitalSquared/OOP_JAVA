@@ -1,5 +1,7 @@
 package ru.nsu.spirin.chess;
 
+import ru.nsu.spirin.chess.properties.ScoresFile;
+
 import java.util.Arrays;
 
 public final class Main {

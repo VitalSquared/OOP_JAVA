@@ -65,7 +65,7 @@ public abstract class Move {
     }
 
     public Board execute() {
-        final BoardBuilder builder = new BoardBuilder();
+        BoardBuilder builder = new BoardBuilder();
         for (Piece piece : this.getBoard().getAllPieces()) {
             if (!this.movedPiece.equals(piece)) {
                 builder.setPiece(piece);
@@ -73,7 +73,6 @@ public abstract class Move {
         }
         builder.setPiece(this.movedPiece.movePiece(this));
         builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
-        builder.copyPlayerInfo(this.getBoard().getWhitePlayer(), this.getBoard().getBlackPlayer());
         return builder.build();
     }
 }

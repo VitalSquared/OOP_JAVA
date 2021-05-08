@@ -65,27 +65,8 @@ public final class BoardBuilder {
         this.enPassantPawn = enPassantPawn;
     }
 
-    public void setWhiteAI(final boolean isWhiteAI) {
-        this.isWhiteAI = isWhiteAI;
-    }
-
-    public void setBlackAI(final boolean isBlackAI) {
-        this.isBlackAI = isBlackAI;
-    }
-
-    public void setWhitePlayerName(final String whitePlayerName) {
-        this.whitePlayerName = whitePlayerName;
-    }
-
-    public void setBlackPlayerName(final String blackPlayerName) {
-        this.blackPlayerName = blackPlayerName;
-    }
-
-    public void copyPlayerInfo(final Player whitePlayer, final Player blackPlayer) {
-        setWhiteAI(whitePlayer.isAI());
-        setWhitePlayerName(whitePlayer.getPlayerName());
-        setBlackAI(blackPlayer.isAI());
-        setBlackPlayerName(blackPlayer.getPlayerName());
+    public void setPlayerResigned(Player player) {
+        player.resign();
     }
 
     public Board build() {

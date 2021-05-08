@@ -60,4 +60,9 @@ public final class BoardUtils {
         row = 8 - row;
         return row * NUMBER_OF_TILES_IN_ROW <= position && position < (row + 1) * NUMBER_OF_TILES_IN_ROW;
     }
+
+    public static boolean isEndGame(Board board) {
+        return board.getWhitePlayer().isInCheckMate() || board.getWhitePlayer().isInStaleMate() || board.getWhitePlayer().isResigned() ||
+               board.getBlackPlayer().isInCheckMate() || board.getBlackPlayer().isInStaleMate() || board.getBlackPlayer().isResigned();
+    }
 }

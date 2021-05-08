@@ -1,4 +1,4 @@
-package ru.nsu.spirin.chess.view.swing;
+package ru.nsu.spirin.chess.view.swing.board;
 
 import com.google.common.primitives.Ints;
 import ru.nsu.spirin.chess.move.Move;
@@ -23,13 +23,13 @@ public final class PlayerInfoPanel extends JPanel {
     private final JPanel playerNamePanel;
     private final JLabel playerNameLabel;
     private final JPanel playerTakenPieces;
-    private final boolean isWhite;
+    private boolean isWhite;
 
     private static final EtchedBorder PANEL_BORDER           = new EtchedBorder(EtchedBorder.RAISED);
     private static final Color        PANEL_COLOR            = Color.decode("0xFDFE6");
     private static final Dimension    TAKEN_PIECES_DIMENSION = new Dimension(40, 50);
 
-    public PlayerInfoPanel(final boolean isWhite) {
+    public PlayerInfoPanel() {
         super(new BorderLayout());
         setDoubleBuffered(false);
         setBackground(PANEL_COLOR);
@@ -43,8 +43,12 @@ public final class PlayerInfoPanel extends JPanel {
         this.playerNamePanel.add(this.playerNameLabel, BorderLayout.WEST);
         add(this.playerNamePanel, BorderLayout.WEST);
         add(this.playerTakenPieces, BorderLayout.EAST);
-        this.isWhite = isWhite;
+        this.isWhite = true;
         setPreferredSize(TAKEN_PIECES_DIMENSION);
+    }
+
+    public void setIsWhite(boolean isWhite) {
+        this.isWhite = isWhite;
     }
 
     public void redo(final String playerName, final MoveLog moveLog) {

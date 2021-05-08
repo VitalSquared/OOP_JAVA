@@ -17,22 +17,18 @@ import java.util.List;
 public abstract class Player {
     private final Board   board;
     private final King    playerKing;
-    private final boolean isAI;
     private final boolean isInCheck;
-    private final String  playerName;
     private       boolean resigned;
     private       int     promotedPawns;
 
     private final Collection<Move> legalMoves;
 
-    protected Player(Board board, Collection<Move> legalMoves, Collection<Move> opponentMoves, boolean isAI, String playerName) {
+    protected Player(Board board, Collection<Move> legalMoves, Collection<Move> opponentMoves) {
         this.board = board;
         this.playerKing = establishKing();
         this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getCoordinate(), opponentMoves).isEmpty();
-        this.isAI = isAI;
         this.promotedPawns = 0;
-        this.playerName = playerName;
     }
 
     public abstract Collection<Piece> getActivePieces();
@@ -55,10 +51,6 @@ public abstract class Player {
         return this.legalMoves;
     }
 
-    public boolean isAI() {
-        return this.isAI;
-    }
-
     public boolean isMoveLegal(final Move move) {
         return this.legalMoves.contains(move);
     }
@@ -67,16 +59,12 @@ public abstract class Player {
         return this.isInCheck;
     }
 
-    public boolean hasSurrendered() {
+    public boolean isResigned() {
         return this.resigned;
     }
 
     public int getPromotedPawns() {
         return this.promotedPawns;
-    }
-
-    public String getPlayerName() {
-        return this.playerName;
     }
 
     public boolean isInCheckMate() {

@@ -5,6 +5,7 @@ import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveFactory;
 import ru.nsu.spirin.chess.move.MoveTransition;
+import ru.nsu.spirin.chess.move.PawnPromotion;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
@@ -29,10 +30,23 @@ public class MoveCommand extends Command {
             if (transition.getMoveStatus().isDone()) {
                 getScene().setBoard(transition.getTransitionBoard());
                 getScene().getMoveLog().addMove(move);
+                calculateScore(move);
                 return true;
             }
             return false;
         }
         return false;
+    }
+
+    private void calculateScore(Move move) {
+        if (move.isAttack()) {
+            getScene().addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());
+        }
+        if (move.isCastlingMove()) {
+            getScene().addScoreText("Castling",  100);
+        }
+        if (move instanceof PawnPromotion) {
+            getScene().addScoreText("Promoted pawn",  200);
+        }
     }
 }
