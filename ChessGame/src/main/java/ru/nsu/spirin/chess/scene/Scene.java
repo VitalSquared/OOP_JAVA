@@ -6,18 +6,16 @@ import ru.nsu.spirin.chess.player.Alliance;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 public final class Scene {
-    private volatile Board                     board;
-    private final    MoveLog                   moveLog;
-    private volatile SceneState                sceneState;
-    private          String                    playerName;
-    private       Alliance                     playerTeam;
-    private final List<Entry<String, Integer>> scoreTexts;
+    private volatile Board                        board;
+    private final    MoveLog                      moveLog;
+    private volatile SceneState                   sceneState;
+    private          String                       playerName;
+    private          Alliance                     playerTeam;
+    private final    List<Entry<String, Integer>> scoreTexts;
 
     public Scene() {
         this.board = null;
