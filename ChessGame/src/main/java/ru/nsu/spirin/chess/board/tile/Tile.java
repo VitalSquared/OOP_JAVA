@@ -4,10 +4,11 @@ import com.google.common.collect.ImmutableMap;
 import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.pieces.Piece;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Tile {
+public abstract class Tile implements Serializable {
     private final int coordinate;
 
     private static final Map<Integer, EmptyTile> EMPTY_TILES_CACHE = createAllPossibleEmptyTiles();

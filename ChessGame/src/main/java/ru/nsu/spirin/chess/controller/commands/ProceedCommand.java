@@ -1,5 +1,6 @@
 package ru.nsu.spirin.chess.controller.commands;
 
+import ru.nsu.spirin.chess.communication.NetworkEntity;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.player.Player;
 import ru.nsu.spirin.chess.scene.Scene;
@@ -14,6 +15,7 @@ public final class ProceedCommand extends Command {
     public boolean execute(String[] args, boolean privileged) {
         calculateScore();
         getScene().setSceneState(SceneState.RESULTS_MENU);
+        ((NetworkEntity)getScene().getActiveGame()).closeConnection();
         return true;
     }
 

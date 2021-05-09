@@ -4,10 +4,11 @@ import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.move.Move;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
-public abstract class Piece {
+public abstract class Piece implements Serializable {
     private final PieceType type;
     private final int       coordinate;
     private final Alliance  alliance;

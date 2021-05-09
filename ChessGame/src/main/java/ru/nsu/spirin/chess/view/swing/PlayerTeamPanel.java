@@ -11,7 +11,7 @@ public final class PlayerTeamPanel extends JPanel {
     private       JRadioButton blackButton;
 
     public PlayerTeamPanel(String text) {
-        super(new GridLayout(10, 1));
+        super(new GridLayout(1, 1));
 
         final ButtonGroup group = new ButtonGroup();
 

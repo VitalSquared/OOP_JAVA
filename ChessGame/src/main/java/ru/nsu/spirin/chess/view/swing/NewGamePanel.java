@@ -1,5 +1,6 @@
 package ru.nsu.spirin.chess.view.swing;
 
+import com.google.common.net.InetAddresses;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.properties.SettingsFile;
 import ru.nsu.spirin.chess.scene.Scene;
@@ -8,27 +9,35 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import java.awt.Color;
 import java.awt.GridLayout;
 
 public final class NewGamePanel extends JPanel {
     private final JLabel     playerNamePrompt;
-    private final JTextField playerName;
+    private final JTextField playerNameInput;
+    private final JTextField hostIPInput;
+    private final JTextField hostPortInput;
+    private final JTextField joinIPInput;
+    private final JTextField joinPortInput;
     private final JButton    startButton;
     private final JButton    hostButton;
     private final JButton    joinButton;
 
     public NewGamePanel(Controller controller) {
-        super(new GridLayout(10, 1));
+        super(new GridLayout(12, 1));
 
         JPanel playerNamePanel = new JPanel(new GridLayout(1, 2));
         playerNamePrompt = new JLabel("Your Name: ");
+        playerNamePrompt.setHorizontalAlignment(SwingConstants.CENTER);
         playerNamePanel.add(playerNamePrompt);
-        playerName = new JTextField(SettingsFile.getSettingValue("LAST_USED_NAME"));
-        playerNamePanel.add(playerName);
+        playerNameInput = new JTextField(SettingsFile.getSettingValue("LAST_USED_NAME"));
+        playerNamePanel.add(playerNameInput);
         add(playerNamePanel);
 
-        add(new JLabel("----------PLAY WITH AI---------"));
+        JLabel playWithAICategoryLabel = new JLabel("--------------------PLAY WITH AI--------------------");
+        playWithAICategoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(playWithAICategoryLabel);
 
         PlayerTeamPanel playerTeamPanel = new PlayerTeamPanel("Choose your team: ");
         add(playerTeamPanel);
@@ -36,23 +45,55 @@ public final class NewGamePanel extends JPanel {
         startButton = new JButton("Start");
         startButton.addActionListener(e -> {
             String team = playerTeamPanel.getSelectedTeam();
-            controller.execute("start " + team + " " + playerName.getText(), false);
+            controller.execute("start " + team + " " + playerNameInput.getText(), false);
         });
         add(startButton);
 
-        add(new JLabel("----------HOST A GAME---------"));
+        JLabel hostGameCategoryLabel = new JLabel("--------------------HOST GAME--------------------");
+        hostGameCategoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(hostGameCategoryLabel);
+
+        JPanel hostInfo = new JPanel(new GridLayout(1, 4));
+        JLabel hostIPLabel = new JLabel("IP:");
+        hostIPLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        hostIPInput = new JTextField("localhost");
+        JLabel hostPortLabel = new JLabel("Port:");
+        hostPortLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        hostPortInput = new JTextField("5555");
+        hostInfo.add(hostIPLabel);
+        hostInfo.add(hostIPInput);
+        hostInfo.add(hostPortLabel);
+        hostInfo.add(hostPortInput);
+        add(hostInfo);
 
         hostButton = new JButton("Host");
-        hostButton.addActionListener(e -> controller.execute("host " + playerName.getText(), false));
+        hostButton.addActionListener(e -> controller.execute("host " + hostIPInput.getText() + " " + hostPortInput.getText() + " " + playerNameInput.getText(), false));
         add(hostButton);
 
-        add(new JLabel("----------JOIN GAME---------"));
+        JLabel joinGameCategoryLabel = new JLabel("--------------------JOIN GAME--------------------");
+        joinGameCategoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(joinGameCategoryLabel);
+
+        JPanel joinInfo = new JPanel(new GridLayout(1, 4));
+        JLabel joinIPLabel = new JLabel("IP:");
+        joinIPLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        joinIPInput = new JTextField("localhost");
+        JLabel joinPortLabel = new JLabel("Port:");
+        joinPortLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        joinPortInput = new JTextField("5555");
+        joinInfo.add(joinIPLabel);
+        joinInfo.add(joinIPInput);
+        joinInfo.add(joinPortLabel);
+        joinInfo.add(joinPortInput);
+        add(joinInfo);
 
         joinButton = new JButton("Join");
-        joinButton.addActionListener(e -> controller.execute("join " + playerName.getText(), false));
+        joinButton.addActionListener(e -> controller.execute("join " + joinIPInput.getText() + " " + joinPortInput.getText() + " " + playerNameInput.getText(), false));
         add(joinButton);
 
-        add(new JLabel("---------------------------"));
+        JLabel backCategory = new JLabel("----------------------------------------");
+        backCategory.setHorizontalAlignment(SwingConstants.CENTER);
+        add(backCategory);
 
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> controller.execute("back", false));
@@ -63,13 +104,27 @@ public final class NewGamePanel extends JPanel {
 
     public void updatePanel(Scene scene) {
         try {
-            startButton.setEnabled(playerName.getText().length() != 0);
-            hostButton.setEnabled(playerName.getText().length() != 0);
-            joinButton.setEnabled(playerName.getText().length() != 0);
-            playerNamePrompt.setForeground(playerName.getText().length() != 0 ?
+            startButton.setEnabled(playerNameInput.getText().length() != 0);
+            hostButton.setEnabled(playerNameInput.getText().length() != 0 && isIPInputValid(hostIPInput) && isPortInputValid(hostPortInput));
+            joinButton.setEnabled(playerNameInput.getText().length() != 0 && isIPInputValid(joinIPInput) && isPortInputValid(joinPortInput));
+            playerNamePrompt.setForeground(playerNameInput.getText().length() != 0 ?
                     Color.BLACK :
                     Color.RED);
         }
         catch (NullPointerException ignored) {}
+    }
+
+    private boolean isIPInputValid(JTextField input) {
+        return InetAddresses.isInetAddress(input.getText()) || input.getText().equals("localhost");
+    }
+
+    private boolean isPortInputValid(JTextField input) {
+        try {
+            int port = Integer.parseInt(input.getText());
+            return input.getText().length() != 0 && port >= 1 && port <= 65535;
+        }
+        catch (NumberFormatException ignored) {
+        }
+        return false;
     }
 }

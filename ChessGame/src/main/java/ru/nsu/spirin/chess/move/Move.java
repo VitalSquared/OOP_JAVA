@@ -4,9 +4,10 @@ import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.board.BoardBuilder;
 import ru.nsu.spirin.chess.pieces.Piece;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Move {
+public abstract class Move implements Serializable {
     private final Board board;
     private final Piece movedPiece;
     private final int   destinationCoordinate;

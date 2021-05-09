@@ -5,6 +5,7 @@ import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 import ru.nsu.spirin.chess.view.GameView;
 import ru.nsu.spirin.chess.view.swing.board.BoardPanel;
+import ru.nsu.spirin.chess.view.swing.connection.ConnectionPanel;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -49,7 +50,7 @@ public final class SwingView extends GameView {
         this.newGamePanel = new NewGamePanel(controller);
         this.highScoresPanel = new HighScoresPanel(controller);
         this.aboutPanel = new AboutPanel(controller);
-        this.connectionPanel = new ConnectionPanel(controller);
+        this.connectionPanel = new ConnectionPanel(scene, controller);
         this.boardPanel = new BoardPanel(scene, controller);
         this.resultsPanel = new ResultsPanel(scene, controller);
 
@@ -106,7 +107,7 @@ public final class SwingView extends GameView {
     private void updateConnectionPanel(Scene scene) {
         connectionPanel.setVisible(scene.getSceneState() == SceneState.CONNECTION_MENU);
         if (scene.getSceneState() == SceneState.CONNECTION_MENU) {
-            connectionPanel.updatePanel(scene);
+            connectionPanel.updatePanel();
         }
     }
 

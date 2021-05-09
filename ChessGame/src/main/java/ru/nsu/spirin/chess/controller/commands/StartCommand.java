@@ -4,7 +4,6 @@ import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.properties.SettingsFile;
 import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
 
 public final class StartCommand extends Command {
     public StartCommand(Scene scene) {
@@ -21,7 +20,6 @@ public final class StartCommand extends Command {
         catch (Exception ignored) {}
 
         getScene().startLocalGame(args[1], isWhitePlayer ? Alliance.WHITE : Alliance.BLACK);
-        getScene().setSceneState(SceneState.BOARD_MENU);
         return true;
     }
 }

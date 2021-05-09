@@ -4,6 +4,7 @@ import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveLog;
 import ru.nsu.spirin.chess.move.MoveTransition;
+import ru.nsu.spirin.chess.move.PawnPromotion;
 import ru.nsu.spirin.chess.player.Alliance;
 
 import java.util.AbstractMap;
@@ -19,11 +20,14 @@ public abstract class GameEntity {
     private final    List<Entry<String, Integer>> scoreTexts;
 
     protected GameEntity() {
+        this.board = null;
         this.moveLog = new MoveLog();
         this.scoreTexts = new ArrayList<>();
     }
 
     public abstract String getOpponentName();
+
+    public abstract Alliance getOpponentTeam();
 
     public abstract void makeMove(Move move, MoveTransition transition);
 
@@ -47,8 +51,11 @@ public abstract class GameEntity {
         return this.playerTeam;
     }
 
-    public void setPlayer(String playerName, Alliance playerTeam) {
+    public void setPlayerName(String playerName) {
         this.playerName = playerName;
+    }
+
+    public void setPlayerTeam(Alliance playerTeam) {
         this.playerTeam = playerTeam;
     }
 
@@ -58,5 +65,17 @@ public abstract class GameEntity {
 
     public void addScoreText(String text, int score) {
         this.scoreTexts.add(new AbstractMap.SimpleEntry<>(text, score));
+    }
+
+    protected void calculateScore(Move move) {
+        if (move.isAttack()) {
+            addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());
+        }
+        if (move.isCastlingMove()) {
+            addScoreText("Castling",  100);
+        }
+        if (move instanceof PawnPromotion) {
+            addScoreText("Promoted pawn",  200);
+        }
     }
 }

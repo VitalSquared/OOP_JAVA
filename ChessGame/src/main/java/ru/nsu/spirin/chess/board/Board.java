@@ -16,13 +16,14 @@ import ru.nsu.spirin.chess.player.BlackPlayer;
 import ru.nsu.spirin.chess.player.Player;
 import ru.nsu.spirin.chess.player.WhitePlayer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class Board {
+public final class Board implements Serializable {
 
     private final List<Tile>        gameBoard;
     private final Collection<Piece> whitePieces;

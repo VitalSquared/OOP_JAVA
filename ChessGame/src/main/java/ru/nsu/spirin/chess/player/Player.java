@@ -11,11 +11,12 @@ import ru.nsu.spirin.chess.move.ResignMove;
 import ru.nsu.spirin.chess.pieces.King;
 import ru.nsu.spirin.chess.pieces.Piece;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class Player {
+public abstract class Player implements Serializable {
     private final Board   board;
     private final King    playerKing;
     private final boolean isInCheck;

@@ -5,10 +5,11 @@ import ru.nsu.spirin.chess.pieces.Pawn;
 import ru.nsu.spirin.chess.pieces.Piece;
 import ru.nsu.spirin.chess.player.Player;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class BoardBuilder {
+public final class BoardBuilder implements Serializable {
     private final Map<Integer, Piece> boardConfig;
     private       Alliance            nextMoveMaker;
     private       Pawn                enPassantPawn;

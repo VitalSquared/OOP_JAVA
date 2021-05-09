@@ -25,6 +25,11 @@ public enum Alliance {
         }
 
         @Override
+        public Alliance getOpposite() {
+            return BLACK;
+        }
+
+        @Override
         public boolean isPawnPromotionTile(int tilePosition) {
             return BoardUtils.isPositionInRow(tilePosition, 8);
         }
@@ -56,6 +61,11 @@ public enum Alliance {
         }
 
         @Override
+        public Alliance getOpposite() {
+            return WHITE;
+        }
+
+        @Override
         public boolean isPawnPromotionTile(int tilePosition) {
             return BoardUtils.isPositionInRow(tilePosition, 1);
         }
@@ -73,6 +83,8 @@ public enum Alliance {
     public abstract boolean isWhite();
 
     public abstract boolean isBlack();
+
+    public abstract Alliance getOpposite();
 
     public abstract boolean isPawnPromotionTile(int tilePosition);
 
