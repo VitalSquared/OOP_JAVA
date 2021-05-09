@@ -52,8 +52,8 @@ class TilePanel extends JPanel {
         this.tileID = isInverted ? BoardUtils.TOTAL_NUMBER_OF_TILES - 1 - normalTileID : normalTileID;
         this.removeAll();
         assignTileColor();
-        assignTilePieceIcon(scene.getBoard());
-        highlightLegalMoves(scene.getBoard());
+        assignTilePieceIcon(scene.getActiveGame().getBoard());
+        highlightLegalMoves(scene.getActiveGame().getBoard());
         validate();
         repaint();
     }
@@ -120,7 +120,7 @@ class TilePanel extends JPanel {
 
         @Override
         public void mouseClicked(final MouseEvent e) {
-            if (scene.getPlayerTeam() == scene.getBoard().getCurrentPlayer().getAlliance() && !BoardUtils.isEndGame(scene.getBoard())) {
+            if (scene.getActiveGame().getPlayerAlliance() == scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() && !BoardUtils.isEndGame(scene.getActiveGame().getBoard())) {
                 if (isRightMouseButton(e)) {
                     boardPanel.setSourceTile(null);
                     boardPanel.setDestinationTile(null);
@@ -128,16 +128,16 @@ class TilePanel extends JPanel {
                 }
                 else if (isLeftMouseButton(e)) {
                     if (boardPanel.getSourceTile() == null) {
-                        boardPanel.setSourceTile(scene.getBoard().getTile(tilePanel.tileID));
+                        boardPanel.setSourceTile(scene.getActiveGame().getBoard().getTile(tilePanel.tileID));
                         boardPanel.setHumanMovedPiece(boardPanel.getSourceTile().getPiece());
                         if (boardPanel.getHumanMovedPiece() == null) {
                             boardPanel.setSourceTile(null);
                         }
                     }
                     else {
-                        boardPanel.setDestinationTile(scene.getBoard().getTile(tilePanel.tileID));
+                        boardPanel.setDestinationTile(scene.getActiveGame().getBoard().getTile(tilePanel.tileID));
                         boolean execResult = controller.execute("move " + BoardUtils.getPositionAtCoordinate(boardPanel.getSourceTile().getCoordinate()) +
-                                                                " " + BoardUtils.getPositionAtCoordinate(boardPanel.getDestinationTile().getCoordinate()), false);
+                                                                " " + BoardUtils.getPositionAtCoordinate(boardPanel.getDestinationTile().getCoordinate()) + " " + scene.getActiveGame().getPlayerAlliance().toString(), false);
                         boardPanel.setSourceTile(null);
                         boardPanel.setDestinationTile(null);
                         boardPanel.setHumanMovedPiece(null);

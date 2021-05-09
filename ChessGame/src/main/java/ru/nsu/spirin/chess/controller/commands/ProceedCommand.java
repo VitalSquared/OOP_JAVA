@@ -18,12 +18,12 @@ public final class ProceedCommand extends Command {
     }
 
     private void calculateScore() {
-        Player player = getScene().getPlayerTeam().choosePlayer(getScene().getBoard().getWhitePlayer(), getScene().getBoard().getBlackPlayer());
+        Player player = getScene().getActiveGame().getPlayerAlliance().choosePlayer(getScene().getActiveGame().getBoard().getWhitePlayer(), getScene().getActiveGame().getBoard().getBlackPlayer());
         if (player.isInStaleMate() || player.isInCheckMate() || player.isResigned()) {
-            getScene().addScoreText("Lost", -500);
+            getScene().getActiveGame().addScoreText("Lost", -500);
         }
         else {
-            getScene().addScoreText("Victory", 1000);
+            getScene().getActiveGame().addScoreText("Victory", 1000);
         }
     }
 }

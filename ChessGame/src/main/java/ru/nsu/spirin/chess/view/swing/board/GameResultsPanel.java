@@ -3,6 +3,7 @@ package ru.nsu.spirin.chess.view.swing.board;
 import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.player.Alliance;
+import ru.nsu.spirin.chess.player.Player;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
@@ -23,7 +24,7 @@ public final class GameResultsPanel extends JPanel {
         resultLabel = new JLabel("");
 
         resignButton.addActionListener(e -> {
-            controller.execute("resign", false);
+            controller.execute("move resign " + scene.getActiveGame().getPlayerAlliance().toString(), false);
         });
 
         proceedButton.addActionListener(e -> {
@@ -42,33 +43,27 @@ public final class GameResultsPanel extends JPanel {
             while (scene.getSceneState() != SceneState.NONE) {
                 try {
                     if (scene.getSceneState() == SceneState.BOARD_MENU) {
-                        if (BoardUtils.isEndGame(scene.getBoard())) {
+                        if (BoardUtils.isEndGame(scene.getActiveGame().getBoard())) {
                             resignButton.setVisible(false);
                             proceedButton.setVisible(true);
                             resultLabel.setVisible(true);
-                            if (scene.getBoard().getWhitePlayer().isInStaleMate() || scene.getBoard().getBlackPlayer().isInStaleMate()) {
+                            if (scene.getActiveGame().getBoard().getCurrentPlayer().isInStaleMate()) {
                                 resultLabel.setText("DRAW!");
                             }
-                            else if (scene.getPlayerTeam() == Alliance.WHITE) {
-                                if (scene.getBoard().getWhitePlayer().isInCheckMate() || scene.getBoard().getWhitePlayer().isResigned()) {
-                                    resultLabel.setText("YOU LOST!");
-                                }
-                                else {
-                                    resultLabel.setText("YOU WON!");
-                                }
-                            }
-                            else if (scene.getPlayerTeam() == Alliance.BLACK) {
-                                if (scene.getBoard().getBlackPlayer().isInCheckMate() || scene.getBoard().getBlackPlayer().isResigned()) {
-                                    resultLabel.setText("YOU LOST!");
-                                }
-                                else {
-                                    resultLabel.setText("YOU WON!");
+                            else {
+                                Player alliancePlayer = scene.getActiveGame().getPlayerAlliance().choosePlayer(scene.getActiveGame().getBoard().getWhitePlayer(), scene.getActiveGame().getBoard().getBlackPlayer());
+                                if (scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE) {
+                                    if (alliancePlayer.isInCheckMate() || alliancePlayer.isResigned()) {
+                                        resultLabel.setText("YOU LOST!");
+                                    }
+                                    else {
+                                        resultLabel.setText("YOU WON!");
+                                    }
                                 }
                             }
-
                         }
                         else {
-                            resignButton.setVisible(scene.getBoard().getCurrentPlayer().getAlliance() == scene.getPlayerTeam());
+                            resignButton.setVisible(true);
                             proceedButton.setVisible(false);
                             resultLabel.setVisible(false);
                         }

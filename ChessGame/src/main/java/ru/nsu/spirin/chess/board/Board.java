@@ -15,8 +15,6 @@ import ru.nsu.spirin.chess.pieces.Rook;
 import ru.nsu.spirin.chess.player.BlackPlayer;
 import ru.nsu.spirin.chess.player.Player;
 import ru.nsu.spirin.chess.player.WhitePlayer;
-import ru.nsu.spirin.chess.player.ai.MiniMax;
-import ru.nsu.spirin.chess.player.ai.MoveStrategy;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,6 +44,9 @@ public final class Board {
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.currentPlayer = boardBuilder.getNextMoveMaker().choosePlayer(this.whitePlayer, this.blackPlayer);
+
+        if (boardBuilder.isWhitePlayerResigned()) this.whitePlayer.resign();
+        if (boardBuilder.isBlackPlayerResigned()) this.blackPlayer.resign();
     }
 
     @Override
@@ -100,7 +101,7 @@ public final class Board {
         return ImmutableList.copyOf(tiles);
     }
 
-    public static Board createStandardBoard(boolean isWhiteAI, boolean isBlackAI, String whitePlayerName, String blackPlayerName) {
+    public static Board createStandardBoard() {
         final BoardBuilder boardBuilder = new BoardBuilder();
         boardBuilder.setPiece(new Rook(Alliance.BLACK, 0));
         boardBuilder.setPiece(new Knight(Alliance.BLACK, 1));

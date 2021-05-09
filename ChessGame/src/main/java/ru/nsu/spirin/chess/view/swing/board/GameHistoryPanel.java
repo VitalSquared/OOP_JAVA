@@ -3,6 +3,7 @@ package ru.nsu.spirin.chess.view.swing.board;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveLog;
+import ru.nsu.spirin.chess.pieces.King;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -39,10 +40,10 @@ class GameHistoryPanel extends JPanel {
         for (final Move move : moveHistory.getMoves()) {
             final String moveText = move.toString();
             if (move.getMovedPiece().getAlliance().isWhite()) {
-                this.model.setValueAt(moveText, currentRow, 0);
+                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board, move), currentRow, 0);
             }
             if (move.getMovedPiece().getAlliance().isBlack()) {
-                this.model.setValueAt(moveText, currentRow, 1);
+                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board, move), currentRow, 1);
                 currentRow++;
             }
         }
@@ -52,10 +53,10 @@ class GameHistoryPanel extends JPanel {
             final String moveText = lastMove.toString();
 
             if (lastMove.getMovedPiece().getAlliance().isWhite()) {
-                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow, 0);
+                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board, lastMove), currentRow, 0);
             }
             else if (lastMove.getMovedPiece().getAlliance().isBlack()) {
-                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow - 1, 1);
+                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board, lastMove), currentRow - 1, 1);
             }
         }
 
@@ -63,12 +64,12 @@ class GameHistoryPanel extends JPanel {
         vertical.setValue(vertical.getMaximum());
     }
 
-    private String calculateCheckAndCheckMateHash(Board board) {
-        if (board.getCurrentPlayer().isInCheckMate()) {
-            return "#";
-        }
-        else if (board.getCurrentPlayer().isInCheck()) {
+    private String calculateCheckAndCheckMateHash(Board board, Move move) {
+        if (move.isAttack() && (move.getAttackedPiece() instanceof King))  {
             return "+";
+        }
+        else if (board.getCurrentPlayer().isInCheckMate()) {
+            return "#";
         }
         return "";
     }

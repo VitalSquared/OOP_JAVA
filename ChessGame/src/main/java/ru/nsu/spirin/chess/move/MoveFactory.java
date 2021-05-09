@@ -1,6 +1,7 @@
 package ru.nsu.spirin.chess.move;
 
 import ru.nsu.spirin.chess.board.Board;
+import ru.nsu.spirin.chess.player.Alliance;
 
 public class MoveFactory {
     private static final Move NULL_MOVE = new NullMove();
@@ -17,5 +18,9 @@ public class MoveFactory {
             }
         }
         return NULL_MOVE;
+    }
+
+    public static Move createResignMove(Board board, Alliance alliance) {
+        return new ResignMove(board, alliance);
     }
 }

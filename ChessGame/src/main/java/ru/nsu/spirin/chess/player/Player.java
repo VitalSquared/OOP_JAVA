@@ -7,6 +7,7 @@ import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveStatus;
 import ru.nsu.spirin.chess.move.MoveTransition;
 import ru.nsu.spirin.chess.move.PawnPromotion;
+import ru.nsu.spirin.chess.move.ResignMove;
 import ru.nsu.spirin.chess.pieces.King;
 import ru.nsu.spirin.chess.pieces.Piece;
 
@@ -51,8 +52,8 @@ public abstract class Player {
         return this.legalMoves;
     }
 
-    public boolean isMoveLegal(final Move move) {
-        return this.legalMoves.contains(move);
+    private boolean isMoveLegal(Move move, boolean checkForTurn) {
+        return (!checkForTurn || board.getCurrentPlayer() == this) && this.legalMoves.contains(move);
     }
 
     public boolean isInCheck() {
@@ -92,7 +93,14 @@ public abstract class Player {
     }
 
     public MoveTransition makeMove(Move move) {
-        if (!isMoveLegal(move)) return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
+        return makeMovePrivileged(move, true);
+    }
+
+    private MoveTransition makeMovePrivileged(Move move, boolean checkForTurn) {
+        if (move instanceof ResignMove) {
+            return new MoveTransition(move.execute(), move, MoveStatus.DONE);
+        }
+        if (!isMoveLegal(move, checkForTurn)) return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
         Board transitionBoard = move.execute();
         Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getPlayerKing().getCoordinate(), transitionBoard.getCurrentPlayer().getLegalMoves());
         if (!kingAttacks.isEmpty()) return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
@@ -101,9 +109,10 @@ public abstract class Player {
     }
 
     protected boolean hasEscapeMoves() {
-        for (final Move move : legalMoves) {
-            MoveTransition transition = makeMove(move);
-            if (transition.getMoveStatus().isDone()) return true;
+        for (Move move : legalMoves) {
+            MoveTransition transition = makeMovePrivileged(move, false);
+            if (transition.getMoveStatus().isDone())
+                return true;
         }
         return false;
     }

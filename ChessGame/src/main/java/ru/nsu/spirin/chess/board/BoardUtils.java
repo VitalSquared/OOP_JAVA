@@ -62,7 +62,7 @@ public final class BoardUtils {
     }
 
     public static boolean isEndGame(Board board) {
-        return board.getWhitePlayer().isInCheckMate() || board.getWhitePlayer().isInStaleMate() || board.getWhitePlayer().isResigned() ||
-               board.getBlackPlayer().isInCheckMate() || board.getBlackPlayer().isInStaleMate() || board.getBlackPlayer().isResigned();
+        return board.getBlackPlayer().isResigned() || board.getWhitePlayer().isResigned() ||
+               board.getCurrentPlayer().isInCheckMate() || board.getCurrentPlayer().isInStaleMate();
     }
 }

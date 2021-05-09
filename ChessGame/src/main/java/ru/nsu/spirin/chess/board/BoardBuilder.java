@@ -12,17 +12,13 @@ public final class BoardBuilder {
     private final Map<Integer, Piece> boardConfig;
     private       Alliance            nextMoveMaker;
     private       Pawn                enPassantPawn;
-    private       boolean             isWhiteAI;
-    private       boolean             isBlackAI;
-    private       String              whitePlayerName;
-    private       String              blackPlayerName;
+    private       boolean             isWhiteResigned;
+    private       boolean             isBlackResigned;
 
     public BoardBuilder() {
         this.boardConfig = new HashMap<>();
         this.nextMoveMaker = Alliance.WHITE;
         this.enPassantPawn = null;
-        this.isBlackAI = false;
-        this.isWhiteAI = false;
     }
 
     public Map<Integer, Piece> getBoardConfig() {
@@ -37,21 +33,14 @@ public final class BoardBuilder {
         return this.enPassantPawn;
     }
 
-    public boolean isWhiteAI() {
-        return this.isWhiteAI;
+    public boolean isWhitePlayerResigned() {
+        return this.isWhiteResigned;
     }
 
-    public boolean isBlackAI() {
-        return this.isBlackAI;
+    public boolean isBlackPlayerResigned() {
+        return this.isBlackResigned;
     }
 
-    public String getWhitePlayerName() {
-        return this.whitePlayerName;
-    }
-
-    public String getBlackPlayerName() {
-        return this.blackPlayerName;
-    }
 
     public void setPiece(final Piece piece) {
         this.boardConfig.put(piece.getCoordinate(), piece);
@@ -66,7 +55,10 @@ public final class BoardBuilder {
     }
 
     public void setPlayerResigned(Player player) {
-        player.resign();
+        switch (player.getAlliance()) {
+            case WHITE -> isWhiteResigned = true;
+            case BLACK -> isBlackResigned = true;
+        }
     }
 
     public Board build() {

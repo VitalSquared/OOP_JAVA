@@ -65,7 +65,7 @@ public final class ConsoleView extends GameView {
     }
 
     private void printBoard(final Scene scene) {
-        final StringBuilder builder = new StringBuilder();
+        /*final StringBuilder builder = new StringBuilder();
         builder.append("8| ");
         for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
             final String tileText = scene.getBoard().getTile(i).toString();
@@ -87,11 +87,11 @@ public final class ConsoleView extends GameView {
             builder.append(i).append(" ");
         }
         builder.append(System.lineSeparator());
-        System.out.println(builder.toString());
+        System.out.println(builder.toString());*/
     }
 
     private void printPlayerTakenPieces(final Scene scene, final boolean isWhite) {
-        final List<Piece> takenPieces = new ArrayList<>();
+        /*final List<Piece> takenPieces = new ArrayList<>();
         for (final Move move : scene.getMoveLog().getMoves()) {
             if (move.isAttack()) {
                 final Piece takenPiece = move.getAttackedPiece();
@@ -107,11 +107,11 @@ public final class ConsoleView extends GameView {
         for (final Piece piece : takenPieces) {
             System.out.print(piece.toString() + " ");
         }
-        System.out.println();
+        System.out.println();*/
     }
 
     private void printMoveLog(final Scene scene) {
-        System.out.println(" WHITE | BLACK ");
+        /*System.out.println(" WHITE | BLACK ");
         for (final Move move : scene.getMoveLog().getMoves()) {
             final String moveText = move.toString();
             if (move.getMovedPiece().getAlliance().isWhite()) {
@@ -121,6 +121,6 @@ public final class ConsoleView extends GameView {
                 System.out.printf("|%7s\n", moveText);
             }
         }
-        System.out.println();
+        System.out.println();*/
     }
 }

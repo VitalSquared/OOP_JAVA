@@ -86,13 +86,13 @@ public class BoardPanel extends JPanel {
                 if (isVisible()) {
                     try {
                         drawBoard();
-                        gameHistoryPanel.redo(scene.getBoard(), scene.getMoveLog());
-                        topPlayerInfo.setIsWhite(scene.getPlayerTeam().isBlack());
-                        topPlayerInfo.redo(scene.getOpponentName(), scene.getMoveLog());
-                        bottomPlayerInfo.setIsWhite(scene.getPlayerTeam().isWhite());
-                        bottomPlayerInfo.redo(scene.getPlayerName(), scene.getMoveLog());
+                        gameHistoryPanel.redo(scene.getActiveGame().getBoard(), scene.getActiveGame().getMoveLog());
+                        topPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isBlack());
+                        topPlayerInfo.redo(scene.getActiveGame().getOpponentName(), scene.getActiveGame().getMoveLog());
+                        bottomPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isWhite());
+                        bottomPlayerInfo.redo(scene.getActiveGame().getPlayerName(), scene.getActiveGame().getMoveLog());
                         for (TileCaptionPanel tileCaption : tileCaptions) {
-                            tileCaption.updateText(scene.getPlayerTeam().isBlack());
+                            tileCaption.updateText(scene.getActiveGame().getPlayerAlliance().isBlack());
                         }
                     }
                     catch (Exception ignored) {
@@ -114,7 +114,7 @@ public class BoardPanel extends JPanel {
     private void drawBoard() {
         try {
             for (TilePanel tilePanel : boardTiles) {
-                tilePanel.drawTile(scene.getPlayerTeam().isBlack());
+                tilePanel.drawTile(scene.getActiveGame().getPlayerAlliance().isBlack());
             }
         }
         catch (Exception ignored) {

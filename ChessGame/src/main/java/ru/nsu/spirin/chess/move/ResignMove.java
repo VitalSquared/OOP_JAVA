@@ -19,8 +19,12 @@ public final class ResignMove extends Move {
         for (Piece piece : this.getBoard().getAllPieces()) {
                 builder.setPiece(piece);
         }
-        builder.setMoveMaker(getBoard().getCurrentPlayer().getAlliance());
         builder.setPlayerResigned(alliance.choosePlayer(getBoard().getWhitePlayer(), getBoard().getBlackPlayer()));
         return builder.build();
+    }
+
+    @Override
+    public String toString() {
+        return "resign";
     }
 }

@@ -34,7 +34,7 @@ public final class ResultsPanel extends JPanel {
 
         backButton.addActionListener(e -> {
             try {
-                ScoresFile.saveScore(scene.getPlayerName(), calculateTotal());
+                ScoresFile.saveScore(scene.getActiveGame().getPlayerName(), calculateTotal());
             }
             catch (Exception ignored) {}
             controller.execute("back", false);
@@ -50,7 +50,7 @@ public final class ResultsPanel extends JPanel {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("Your score:\n\n");
-            for (Entry<String, Integer> score : scene.getScoreTexts()) {
+            for (Entry<String, Integer> score : scene.getActiveGame().getScoreTexts()) {
                 sb.append(score.getKey()).append(":").append(" ".repeat(20 - score.getKey().length())).append("\t").append(score.getValue()).append("\n");
             }
             sb.append("-".repeat(20)).append("\n");
@@ -64,7 +64,7 @@ public final class ResultsPanel extends JPanel {
 
     private int calculateTotal() {
         int total = 0;
-        for (Entry<String, Integer> score : scene.getScoreTexts()) {
+        for (Entry<String, Integer> score : scene.getActiveGame().getScoreTexts()) {
             total += score.getValue();
         }
         return total;
