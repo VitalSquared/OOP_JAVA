@@ -68,14 +68,20 @@ public abstract class GameEntity {
     }
 
     protected void calculateScore(Move move) {
-        if (move.isAttack()) {
-            addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());
+        try {
+            if (move.getMovedPiece().getAlliance() == getPlayerAlliance()) {
+                if (move.isAttack()) {
+                    addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());
+                }
+                if (move.isCastlingMove()) {
+                    addScoreText("Castling", 100);
+                }
+                if (move instanceof PawnPromotion) {
+                    addScoreText("Promoted pawn", 200);
+                }
+            }
         }
-        if (move.isCastlingMove()) {
-            addScoreText("Castling",  100);
-        }
-        if (move instanceof PawnPromotion) {
-            addScoreText("Promoted pawn",  200);
+        catch (Exception ignored) {
         }
     }
 }

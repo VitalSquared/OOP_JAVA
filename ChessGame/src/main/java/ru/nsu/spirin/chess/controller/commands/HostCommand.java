@@ -2,6 +2,7 @@ package ru.nsu.spirin.chess.controller.commands;
 
 import com.google.common.net.InetAddresses;
 import ru.nsu.spirin.chess.controller.Command;
+import ru.nsu.spirin.chess.properties.SettingsFile;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
@@ -26,6 +27,11 @@ public final class HostCommand extends Command {
             if (port < 1 || port > 65535) return false;
 
             getScene().hostServerGame(args[0], port, args[2]);
+
+            try {
+                SettingsFile.saveSetting("LAST_USED_NAME", args[2]);
+            }
+            catch (Exception ignored) {}
         }
         catch (NumberFormatException | IOException ignored) {
             return false;

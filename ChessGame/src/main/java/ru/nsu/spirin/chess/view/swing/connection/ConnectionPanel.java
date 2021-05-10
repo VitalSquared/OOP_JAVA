@@ -8,7 +8,6 @@ import ru.nsu.spirin.chess.scene.Scene;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.LayoutManager;
 
 public final class ConnectionPanel extends JPanel {
@@ -30,7 +29,7 @@ public final class ConnectionPanel extends JPanel {
         LayoutManager overlay = new OverlayLayout(panel);
         panel.setLayout(overlay);
 
-        this.connectionWaitPanel = new ConnectionWaitPanel();
+        this.connectionWaitPanel = new ConnectionWaitPanel(controller);
         this.connectionFailedPanel = new ConnectionFailedPanel(controller);
         this.connectionSetupPanel = new ConnectionSetupPanel(scene, controller);
 

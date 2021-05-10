@@ -2,7 +2,6 @@ package ru.nsu.spirin.chess.view.swing.board;
 
 import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.controller.Controller;
-import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.player.Player;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
@@ -52,7 +51,7 @@ public final class GameResultsPanel extends JPanel {
                             }
                             else {
                                 Player alliancePlayer = scene.getActiveGame().getPlayerAlliance().choosePlayer(scene.getActiveGame().getBoard().getWhitePlayer(), scene.getActiveGame().getBoard().getBlackPlayer());
-                                if (scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE) {
+                                if (scene.getActiveGame().getPlayerAlliance() == scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance()) {
                                     if (alliancePlayer.isInCheckMate() || alliancePlayer.isResigned()) {
                                         resultLabel.setText("YOU LOST!");
                                     }

@@ -8,40 +8,60 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public final class Client extends NetworkEntity {
-    private Socket socket;
-    private int errors;
+    private Socket  socket;
+    private int     errors;
+    private boolean closed;
+
+    private final String ipAddress;
+    private final int    port;
 
     public Client(String ipAddress, int port, String playerName) throws IOException {
         super(playerName);
-        ThreadUtils.submitThread(
-                new Thread(() -> {
-                    do {
-                        try {
-                            socket = new Socket(ipAddress, port);
-                            setObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
-                            new Thread(new ConnectionHandler(socket)).start();
-                            sendMessage(MessageType.PLAYER_NAME, getPlayerName());
-                        }
-                        catch (IOException e) {
-                            errors++;
-                            socket = null;
-                            e.printStackTrace();
-                        }
-                    } while (errors < 5 && socket == null);
-                })
-        );
+        this.ipAddress = ipAddress;
+        this.port = port;
+        this.closed = false;
+        listenForConnections();
     }
 
     @Override
     public ConnectionStatus connected() {
-        return errors >= 5 ? ConnectionStatus.FAILED : socket != null ? ConnectionStatus.CONNECTED : ConnectionStatus.NOT_CONNECTED;
+        return errors >= 5 ?
+                ConnectionStatus.FAILED :
+                socket != null ?
+                        ConnectionStatus.CONNECTED :
+                        ConnectionStatus.NOT_CONNECTED;
     }
 
     @Override
     public void closeConnection() {
         try {
-            if (socket != null) socket.close();
+            if (this.socket != null) this.socket.close();
+            this.socket = null;
+            this.closed = true;
         }
-        catch (IOException ignored) {}
+        catch (IOException e) {
+            System.out.println("Unable to close socket: " + e.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void listenForConnections() {
+        this.errors = 0;
+        this.socket = null;
+        ThreadUtils.submitThread(new Thread(() -> {
+            do {
+                try {
+                    socket = new Socket(ipAddress, port);
+                    setObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
+                    new Thread(new ConnectionHandler(socket)).start();
+                    sendMessage(MessageType.PLAYER_NAME, getPlayerName());
+                }
+                catch (IOException e) {
+                    errors++;
+                    socket = null;
+                    System.out.println("Error in client: " + e.getLocalizedMessage());
+                }
+            } while (!closed && errors < 5 && socket == null);
+        }));
     }
 }

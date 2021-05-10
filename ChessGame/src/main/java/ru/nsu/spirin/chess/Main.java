@@ -1,5 +1,7 @@
 package ru.nsu.spirin.chess;
 
+import ru.nsu.spirin.chess.utils.ThreadUtils;
+
 import java.util.Arrays;
 
 public final class Main {
@@ -18,5 +20,6 @@ public final class Main {
                 chessGame.close();
             }
         }
+        ThreadUtils.shutdown();
     }
 }

@@ -1,11 +1,9 @@
 package ru.nsu.spirin.chess.scene;
 
-import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.communication.Client;
 import ru.nsu.spirin.chess.communication.GameEntity;
 import ru.nsu.spirin.chess.communication.Local;
-import ru.nsu.spirin.chess.communication.NetworkEntity;
 import ru.nsu.spirin.chess.communication.Server;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.utils.ThreadUtils;

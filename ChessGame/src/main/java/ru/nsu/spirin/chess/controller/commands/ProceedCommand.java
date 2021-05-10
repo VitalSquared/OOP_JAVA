@@ -15,7 +15,11 @@ public final class ProceedCommand extends Command {
     public boolean execute(String[] args, boolean privileged) {
         calculateScore();
         getScene().setSceneState(SceneState.RESULTS_MENU);
-        ((NetworkEntity)getScene().getActiveGame()).closeConnection();
+        try {
+            ((NetworkEntity) getScene().getActiveGame()).closeConnection();
+        }
+        catch (Exception ignored) {
+        }
         return true;
     }
 

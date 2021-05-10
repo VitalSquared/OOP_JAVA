@@ -164,7 +164,13 @@ final class ConnectionSetupPanel extends JPanel {
         add(mainPanel, BorderLayout.CENTER);
 
         JButton disconnectButton = new JButton("Disconnect");
-        disconnectButton.addActionListener(e -> controller.execute("disconnect", false));
+        disconnectButton.addActionListener(e -> {
+            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
+            if (networkEntity.isPlayerReady()) {
+                controller.execute("ready", false);
+            }
+            controller.execute("disconnect", false);
+        });
         add(disconnectButton, BorderLayout.SOUTH);
         setVisible(false);
     }

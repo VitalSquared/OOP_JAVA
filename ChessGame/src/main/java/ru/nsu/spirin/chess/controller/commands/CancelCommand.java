@@ -5,8 +5,8 @@ import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
-public final class DisconnectCommand extends Command {
-    public DisconnectCommand(Scene scene) {
+public final class CancelCommand extends Command {
+    public CancelCommand(Scene scene) {
         super(scene);
     }
 

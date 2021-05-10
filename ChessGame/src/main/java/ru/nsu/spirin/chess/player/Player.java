@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Player implements Serializable {
     private final Board   board;
@@ -95,6 +96,11 @@ public abstract class Player implements Serializable {
 
     public MoveTransition makeMove(Move move) {
         return makeMovePrivileged(move, true);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerKing, isInCheck, resigned, promotedPawns);
     }
 
     private MoveTransition makeMovePrivileged(Move move, boolean checkForTurn) {

@@ -6,19 +6,19 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-import java.awt.GridLayout;
+import java.awt.BorderLayout;
 
 final class ConnectionFailedPanel extends JPanel {
 
     public ConnectionFailedPanel(Controller controller) {
-        super(new GridLayout(2, 1));
+        super(new BorderLayout());
         JLabel message = new JLabel("Connection failed...");
         message.setHorizontalAlignment(SwingConstants.CENTER);
-        add(message);
+        add(message, BorderLayout.CENTER);
 
         JButton backButton = new JButton("back");
         backButton.addActionListener(e -> controller.execute("back", false));
-        add(backButton);
+        add(backButton, BorderLayout.SOUTH);
 
         setVisible(false);
     }

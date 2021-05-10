@@ -10,10 +10,12 @@ import ru.nsu.spirin.chess.move.ResignMove;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.utils.ThreadUtils;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 public abstract class NetworkEntity extends GameEntity {
     private volatile boolean playerReady;
@@ -43,6 +45,8 @@ public abstract class NetworkEntity extends GameEntity {
     public abstract ConnectionStatus connected();
 
     public abstract void closeConnection();
+
+    public abstract void listenForConnections();
 
     public boolean isPlayerReady() {
         return this.playerReady;
@@ -97,17 +101,17 @@ public abstract class NetworkEntity extends GameEntity {
     }
 
     private void applyMove(Move move, MoveTransition transition) {
-        if (getBoard().getCurrentPlayer().getAlliance() == getPlayerAlliance()) {
-            calculateScore(move);
-        }
+        calculateScore(move);
         setBoard(transition.getTransitionBoard());
         getMoveLog().addMove(move);
     }
 
     protected final class ConnectionHandler implements Runnable {
         private final ObjectInputStream objectInputStream;
+        private final Socket socket;
 
         public ConnectionHandler(Socket socket) throws IOException {
+            this.socket = socket;
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         }
 
@@ -115,8 +119,15 @@ public abstract class NetworkEntity extends GameEntity {
         public void run() {
             while (getBoard() == null || !BoardUtils.isEndGame(getBoard())) {
                 try {
+                    if (socket.isClosed() || !socket.isConnected()) {
+                        throw new SocketException("");
+                    }
                     Object message = objectInputStream.readObject();
                     manageMessages((Message) message);
+                }
+                catch (EOFException | SocketException e) {
+                    listenForConnections();
+                    break;
                 }
                 catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
@@ -131,6 +142,10 @@ public abstract class NetworkEntity extends GameEntity {
                 }
                 case PLAYER_TEAM -> {
                     opponentTeam =  (Alliance) message.getContent();
+                    if (opponentTeam == getPlayerAlliance()) {
+                        playerReady = false;
+                        sendMessage(MessageType.PLAYER_READY, playerReady);
+                    }
                 }
                 case PLAYER_READY -> {
                     opponentReady = (Boolean) message.getContent();

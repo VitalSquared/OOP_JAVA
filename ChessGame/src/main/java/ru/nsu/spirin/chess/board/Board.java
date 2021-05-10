@@ -59,6 +59,8 @@ public final class Board implements Serializable {
             if (piece != null) cur = piece.hashCode();
             hash += cur * tile.getCoordinate();
         }
+        hash += 31 * blackPlayer.hashCode();
+        hash += 31 * whitePlayer.hashCode();
         return hash;
     }
 

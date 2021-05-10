@@ -59,9 +59,7 @@ public final class Local extends GameEntity {
 
     @Override
     public void makeMove(Move move, MoveTransition transition) {
-        if (getBoard().getCurrentPlayer().getAlliance() == getPlayerAlliance()) {
-            calculateScore(move);
-        }
+        calculateScore(move);
         setBoard(transition.getTransitionBoard());
         getMoveLog().addMove(move);
     }
