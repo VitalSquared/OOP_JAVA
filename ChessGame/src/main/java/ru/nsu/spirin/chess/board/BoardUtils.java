@@ -24,39 +24,37 @@ public final class BoardUtils {
     }
 
     private static Map<String, Integer> initializePositionToCoordinateMap() {
-        final Map<String, Integer> positionToCoordinate = new HashMap<>();
+        Map<String, Integer> positionToCoordinate = new HashMap<>();
         for (int i = 0; i < TOTAL_NUMBER_OF_TILES; i++) {
             positionToCoordinate.put(ALGEBRAIC_NOTATION[i], i);
         }
         return ImmutableMap.copyOf(positionToCoordinate);
     }
 
-    public static boolean isValidTileCoordinate(final int coordinate) {
+    public static boolean isValidTileCoordinate(int coordinate) {
         return coordinate >= 0 && coordinate < TOTAL_NUMBER_OF_TILES;
     }
 
-    public static int getCoordinateAtPosition(final String position) {
+    public static int getCoordinateAtPosition(String position) {
         return POSITION_TO_COORDINATE.getOrDefault(position, -1);
     }
 
-    public static String getPositionAtCoordinate(final int coordinate) {
+    public static String getPositionAtCoordinate(int coordinate) {
         return coordinate >= 0 && coordinate < TOTAL_NUMBER_OF_TILES ?
                 ALGEBRAIC_NOTATION[coordinate] :
                 " ";
     }
 
-    public static boolean isPositionInColumn(final int position, int column) {
+    public static boolean isPositionInColumn(int position, int column) {
         column--;
         do {
-            if (position == column) {
-                return true;
-            }
+            if (position == column) return true;
             column += 8;
         } while (column < TOTAL_NUMBER_OF_TILES);
         return false;
     }
 
-    public static boolean isPositionInRow(final int position, int row) {
+    public static boolean isPositionInRow(int position, int row) {
         row = 8 - row;
         return row * NUMBER_OF_TILES_IN_ROW <= position && position < (row + 1) * NUMBER_OF_TILES_IN_ROW;
     }

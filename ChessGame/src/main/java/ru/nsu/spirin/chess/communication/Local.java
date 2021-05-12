@@ -11,40 +11,37 @@ import ru.nsu.spirin.chess.player.ai.MoveStrategy;
 import ru.nsu.spirin.chess.utils.ThreadUtils;
 
 public final class Local extends GameEntity {
-
     public Local(String playerName, Alliance playerTeam) {
         setBoard(Board.createStandardBoard());
         setPlayerName(playerName);
-        setPlayerTeam(playerTeam);
+        setPlayerAlliance(playerTeam);
 
-        ThreadUtils.submitThread(
-            new Thread(() -> {
-                while (true) {
-                    boolean shouldStop = false;
-                    try {
-                        while (!BoardUtils.isEndGame(getBoard())) {
-                            if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
-                                MoveStrategy miniMax = new MiniMax(4);
-                                Move aiMove = miniMax.execute(getBoard());
-                                if (aiMove == null) {
-                                    aiMove = MoveFactory.createResignMove(getBoard(), getBoard().getCurrentPlayer().getAlliance());
-                                }
-                                MoveTransition transition = getBoard().getCurrentPlayer().makeMove(aiMove);
-                                if (transition.getMoveStatus().isDone() && !BoardUtils.isEndGame(getBoard())) {
-                                    makeMove(aiMove, transition);
-                                }
+        ThreadUtils.submitThread(new Thread(() -> {
+            while (true) {
+                boolean shouldStop = false;
+                try {
+                    while (!BoardUtils.isEndGame(getBoard())) {
+                        if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
+                            MoveStrategy miniMax = new MiniMax(4);
+                            Move aiMove = miniMax.execute(getBoard());
+                            if (aiMove == null) {
+                                aiMove = MoveFactory.createResignMove(getBoard(), getBoard().getCurrentPlayer().getAlliance());
+                            }
+                            MoveTransition transition = getBoard().getCurrentPlayer().makeMove(aiMove);
+                            if (transition.getMoveStatus().isDone() && !BoardUtils.isEndGame(getBoard())) {
+                                makeMove(aiMove, transition);
                             }
                         }
-                        if (BoardUtils.isEndGame(getBoard())) {
-                            shouldStop = true;
-                        }
                     }
-                    catch (Exception ignored) {
+                    if (BoardUtils.isEndGame(getBoard())) {
+                        shouldStop = true;
                     }
-                    if (shouldStop || getBoard() == null) break;
                 }
-            })
-        );
+                catch (Exception ignored) {
+                }
+                if (shouldStop || getBoard() == null) break;
+            }
+        }));
     }
 
     @Override
@@ -53,7 +50,7 @@ public final class Local extends GameEntity {
     }
 
     @Override
-    public Alliance getOpponentTeam() {
+    public Alliance getOpponentAlliance() {
         return getPlayerAlliance().getOpposite();
     }
 

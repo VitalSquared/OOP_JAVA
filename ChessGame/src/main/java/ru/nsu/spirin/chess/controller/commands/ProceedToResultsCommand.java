@@ -2,17 +2,21 @@ package ru.nsu.spirin.chess.controller.commands;
 
 import ru.nsu.spirin.chess.communication.NetworkEntity;
 import ru.nsu.spirin.chess.controller.Command;
+import ru.nsu.spirin.chess.controller.CommandStatus;
 import ru.nsu.spirin.chess.player.Player;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
-public final class ProceedCommand extends Command {
-    public ProceedCommand(Scene scene) {
+public final class ProceedToResultsCommand extends Command {
+    public ProceedToResultsCommand(Scene scene) {
         super(scene);
     }
 
     @Override
-    public boolean execute(String[] args, boolean privileged) {
+    public CommandStatus execute(String[] args) {
+        if (getScene().getSceneState() != SceneState.BOARD_MENU) return CommandStatus.INVALID_MENU;
+        if (args.length != 0) return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
+
         calculateScore();
         getScene().setSceneState(SceneState.RESULTS_MENU);
         try {
@@ -20,12 +24,12 @@ public final class ProceedCommand extends Command {
         }
         catch (Exception ignored) {
         }
-        return true;
+        return CommandStatus.NORMAL;
     }
 
     private void calculateScore() {
         Player player = getScene().getActiveGame().getPlayerAlliance().choosePlayer(getScene().getActiveGame().getBoard().getWhitePlayer(), getScene().getActiveGame().getBoard().getBlackPlayer());
-        if (player.isInStaleMate() || player.isInCheckMate() || player.isResigned()) {
+        if (player.isInCheckMate() || player.isResigned()) {
             getScene().getActiveGame().addScoreText("Lost", -500);
         }
         else {

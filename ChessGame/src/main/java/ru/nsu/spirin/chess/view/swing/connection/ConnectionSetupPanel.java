@@ -60,10 +60,10 @@ final class ConnectionSetupPanel extends JPanel {
         playerNameWhitePanel.add(playerNameWhite, BorderLayout.CENTER);
         JButton whiteToNone = new JButton(">");
         whiteToNone.addActionListener(e -> {
-            controller.execute("team none", false);
+            controller.execute("team none");
             NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
             if (networkEntity.isPlayerReady()) {
-                controller.execute("ready", false);
+                controller.execute("ready");
             }
         });
         playerNameWhitePanel.add(whiteToNone, BorderLayout.EAST);
@@ -74,7 +74,7 @@ final class ConnectionSetupPanel extends JPanel {
         whitePanel.add(opponentWhiteReady);
 
         playerWhiteReady = new JButton("");
-        playerWhiteReady.addActionListener(e -> controller.execute("ready", false));
+        playerWhiteReady.addActionListener(e -> controller.execute("ready"));
         whitePanel.add(playerWhiteReady);
 
         mainPanel.add(whitePanel);
@@ -97,17 +97,17 @@ final class ConnectionSetupPanel extends JPanel {
         JButton noneToWhite = new JButton("<");
         JButton noneToBlack = new JButton(">");
         noneToWhite.addActionListener(e -> {
-            controller.execute("team white", false);
+            controller.execute("team white");
             NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
             if (networkEntity.isPlayerReady()) {
-                controller.execute("ready", false);
+                controller.execute("ready");
             }
         });
         noneToBlack.addActionListener(e -> {
-            controller.execute("team black", false);
+            controller.execute("team black");
             NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
             if (networkEntity.isPlayerReady()) {
-                controller.execute("ready", false);
+                controller.execute("ready");
             }
         });
         playerNameNonePanel.add(noneToWhite, BorderLayout.WEST);
@@ -140,10 +140,10 @@ final class ConnectionSetupPanel extends JPanel {
         playerNameBlackPanel.add(playerNameBlack, BorderLayout.CENTER);
         JButton blackToNone = new JButton("<");
         blackToNone.addActionListener(e -> {
-            controller.execute("team none", false);
+            controller.execute("team none");
             NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
             if (networkEntity.isPlayerReady()) {
-                controller.execute("ready", false);
+                controller.execute("ready");
             }
         });
         playerNameBlackPanel.add(blackToNone, BorderLayout.WEST);
@@ -154,7 +154,7 @@ final class ConnectionSetupPanel extends JPanel {
         blackPanel.add(opponentBlackReady);
 
         playerBlackReady = new JButton("");
-        playerBlackReady.addActionListener(e -> controller.execute("ready", false));
+        playerBlackReady.addActionListener(e -> controller.execute("ready"));
         blackPanel.add(playerBlackReady);
 
         mainPanel.add(blackPanel);
@@ -167,9 +167,9 @@ final class ConnectionSetupPanel extends JPanel {
         disconnectButton.addActionListener(e -> {
             NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
             if (networkEntity.isPlayerReady()) {
-                controller.execute("ready", false);
+                controller.execute("ready");
             }
-            controller.execute("disconnect", false);
+            controller.execute("disconnect");
         });
         add(disconnectButton, BorderLayout.SOUTH);
         setVisible(false);
@@ -180,35 +180,35 @@ final class ConnectionSetupPanel extends JPanel {
             NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
 
             //update white panel
-            opponentNameWhite.setVisible(networkEntity.getOpponentTeam() == Alliance.WHITE);
+            opponentNameWhite.setVisible(networkEntity.getOpponentAlliance() == Alliance.WHITE);
             opponentNameWhite.setText(networkEntity.getOpponentName());
 
             playerNameWhitePanel.setVisible(networkEntity.getPlayerAlliance() == Alliance.WHITE);
             playerNameWhite.setText(networkEntity.getPlayerName());
 
-            opponentWhiteReady.setVisible(networkEntity.getOpponentTeam() == Alliance.WHITE && networkEntity.getPlayerAlliance() != Alliance.WHITE);
+            opponentWhiteReady.setVisible(networkEntity.getOpponentAlliance() == Alliance.WHITE && networkEntity.getPlayerAlliance() != Alliance.WHITE);
             opponentWhiteReady.setText(networkEntity.isOpponentReady() ? "Ready" : "Not Ready");
 
-            playerWhiteReady.setVisible(networkEntity.getOpponentTeam() != Alliance.WHITE && networkEntity.getPlayerAlliance() == Alliance.WHITE);
+            playerWhiteReady.setVisible(networkEntity.getOpponentAlliance() != Alliance.WHITE && networkEntity.getPlayerAlliance() == Alliance.WHITE);
             playerWhiteReady.setText(networkEntity.isPlayerReady() ? "Unready" : "Ready");
             //update none panel
-            opponentNameNone.setVisible(networkEntity.getOpponentTeam() == null);
+            opponentNameNone.setVisible(networkEntity.getOpponentAlliance() == null);
             opponentNameNone.setText(networkEntity.getOpponentName());
 
             playerNameNonePanel.setVisible(networkEntity.getPlayerAlliance() == null);
             playerNameNone.setText(networkEntity.getPlayerName());
 
             //update black panel
-            opponentNameBlack.setVisible(networkEntity.getOpponentTeam() == Alliance.BLACK);
+            opponentNameBlack.setVisible(networkEntity.getOpponentAlliance() == Alliance.BLACK);
             opponentNameBlack.setText(networkEntity.getOpponentName());
 
             playerNameBlackPanel.setVisible(networkEntity.getPlayerAlliance() == Alliance.BLACK);
             playerNameBlack.setText(networkEntity.getPlayerName());
 
-            opponentBlackReady.setVisible(networkEntity.getOpponentTeam() == Alliance.BLACK && networkEntity.getPlayerAlliance() != Alliance.BLACK);
+            opponentBlackReady.setVisible(networkEntity.getOpponentAlliance() == Alliance.BLACK && networkEntity.getPlayerAlliance() != Alliance.BLACK);
             opponentBlackReady.setText(networkEntity.isOpponentReady() ? "Ready" : "Not Ready");
 
-            playerBlackReady.setVisible(networkEntity.getOpponentTeam() != Alliance.BLACK && networkEntity.getPlayerAlliance() == Alliance.BLACK);
+            playerBlackReady.setVisible(networkEntity.getOpponentAlliance() != Alliance.BLACK && networkEntity.getPlayerAlliance() == Alliance.BLACK);
             playerBlackReady.setText(networkEntity.isPlayerReady() ? "Unready" : "Ready");
         }
         catch (Exception ignored) {}

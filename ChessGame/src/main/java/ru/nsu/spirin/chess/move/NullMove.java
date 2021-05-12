@@ -4,7 +4,7 @@ import ru.nsu.spirin.chess.board.Board;
 
 public final class NullMove extends Move {
     public NullMove() {
-        super(null, 65);
+        super(null,null, 65);
     }
 
     @Override

@@ -34,7 +34,7 @@ public final class ConsoleView extends GameView {
                         extra = "";
                     }
                 }
-                controller.execute(command + " " + extra, false);
+                getController().execute(command + " " + extra);
             }
         }));
     }
@@ -78,16 +78,16 @@ public final class ConsoleView extends GameView {
 
     private void updateHighScoresPanel() {
         if (getScene().getSceneState() == SceneState.HIGH_SCORES_MENU) {
-            System.out.println("List of top 10 high scores: ");
-
+            System.out.println("HIGH SCORES");
+            System.out.println(getHighScores());
             System.out.println("\n\nback \treturn to previous menu");
         }
     }
 
     private void updateAboutPanel() {
         if (getScene().getSceneState() == SceneState.ABOUT_MENU) {
-            System.out.println("This is a chess game. Created by Vitaly Spirin");
-
+            System.out.println("ABOUT");
+            System.out.println(getAbout());
             System.out.println("\n\nback \treturn to previous menu");
         }
     }
@@ -105,32 +105,30 @@ public final class ConsoleView extends GameView {
                     System.out.println("\n\ncancel \tCancel connection and return to previous menu");
                 }
                 case CONNECTED -> {
-                    System.out.println("WHITE TEAM\t\t\t\tBLACK TEAM");
+                    System.out.printf("%15s ", "WHITE TEAM");
+                    System.out.printf("%15s ", "");
+                    System.out.printf("%15s\n", "BLACK TEAM");
 
-                    System.out.print((networkEntity.getOpponentTeam() == Alliance.WHITE ? networkEntity.getOpponentName() : "") + "\t\t");
-                    System.out.print((networkEntity.getOpponentTeam() == null ? networkEntity.getOpponentName() : "") + "\t\t");
-                    System.out.print((networkEntity.getOpponentTeam() == Alliance.BLACK ? networkEntity.getOpponentName() : ""));
+                    System.out.printf("%15s ", (networkEntity.getOpponentAlliance() == Alliance.WHITE ? networkEntity.getOpponentName() : ""));
+                    System.out.printf("%15s ", (networkEntity.getOpponentAlliance() == null ? networkEntity.getOpponentName() : ""));
+                    System.out.printf("%15s\n", (networkEntity.getOpponentAlliance() == Alliance.BLACK ? networkEntity.getOpponentName() : ""));
+
+                    System.out.printf("%15s ", (networkEntity.getPlayerAlliance() == Alliance.WHITE ? networkEntity.getPlayerName() : ""));
+                    System.out.printf("%15s ", (networkEntity.getPlayerAlliance() == null ? networkEntity.getPlayerName() : ""));
+                    System.out.printf("%15s\n", (networkEntity.getPlayerAlliance() == Alliance.BLACK ? networkEntity.getPlayerName() : ""));
+
                     System.out.println();
 
-                    System.out.print((networkEntity.getPlayerAlliance() == Alliance.WHITE ? networkEntity.getPlayerName() : "") + "\t\t");
-                    System.out.print((networkEntity.getPlayerAlliance() == null ? networkEntity.getPlayerName() : "") + "\t\t");
-                    System.out.print((networkEntity.getPlayerAlliance() == Alliance.BLACK ? networkEntity.getPlayerName() : ""));
-                    System.out.println();
+                    System.out.printf("%15s ", (networkEntity.getOpponentAlliance() == Alliance.WHITE && networkEntity.getPlayerAlliance() != Alliance.WHITE ? (networkEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s ", "");
+                    System.out.printf("%15s\n", (networkEntity.getOpponentAlliance() == Alliance.BLACK && networkEntity.getPlayerAlliance() != Alliance.BLACK ? (networkEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
 
-                    System.out.println();
-
-                    System.out.println((networkEntity.getOpponentTeam() == Alliance.WHITE && networkEntity.getPlayerAlliance() != Alliance.WHITE ? (networkEntity.isOpponentReady() ? "Ready" : "Not Ready") : "") + "\t\t");
-                    System.out.println("\t\t");
-                    System.out.println((networkEntity.getOpponentTeam() == Alliance.BLACK && networkEntity.getPlayerAlliance() != Alliance.BLACK ? (networkEntity.isOpponentReady() ? "Ready" : "Not Ready") : "") + "\t\t");
-                    System.out.println();
-
-                    System.out.println((networkEntity.getPlayerAlliance() == Alliance.WHITE && networkEntity.getOpponentTeam() != Alliance.WHITE ? (networkEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
-                    System.out.println("\t\t");
-                    System.out.println((networkEntity.getPlayerAlliance() == Alliance.BLACK && networkEntity.getOpponentTeam() != Alliance.BLACK ? (networkEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
-                    System.out.println();
+                    System.out.printf("%15s ", (networkEntity.getPlayerAlliance() == Alliance.WHITE && networkEntity.getOpponentAlliance() != Alliance.WHITE ? (networkEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s ", "");
+                    System.out.printf("%15s\n", (networkEntity.getPlayerAlliance() == Alliance.BLACK && networkEntity.getOpponentAlliance() != Alliance.BLACK ? (networkEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
 
                     System.out.println("\n\nteam <[white | none | black] \tchoose team");
-                    if (networkEntity.getPlayerAlliance() != null && networkEntity.getPlayerAlliance() != networkEntity.getOpponentTeam()) {
+                    if (networkEntity.getPlayerAlliance() != null && networkEntity.getPlayerAlliance() != networkEntity.getOpponentAlliance()) {
                         System.out.println("ready \tset ready state");
                     }
                     System.out.println("disconnect \tdisconnect from game and return to previous menu");
@@ -147,7 +145,7 @@ public final class ConsoleView extends GameView {
                 System.out.println("move resign \tresign/surrender");
             }
             else {
-                System.out.println("\n\n");
+                System.out.println(getRoundResult());
                 System.out.println("\nproceed \tenter results menu");
             }
         }
@@ -155,7 +153,8 @@ public final class ConsoleView extends GameView {
 
     private void updateResultsPanel() {
         if (getScene().getSceneState() == SceneState.RESULTS_MENU) {
-
+            System.out.println("RESULTS");
+            System.out.println(getResultScores());
             System.out.println("\n\nback \treturn to main menu");
         }
     }
@@ -165,10 +164,10 @@ public final class ConsoleView extends GameView {
         System.out.println("############################################################");
         printMoveLog(scene);
         System.out.println("------------------------------------------------------------");
-        System.out.println(scene.getActiveGame().getOpponentTeam().toString() + ": " + scene.getActiveGame().getOpponentName());
-        printPlayerTakenPieces(scene, false);
+        System.out.println(scene.getActiveGame().getOpponentAlliance().toString() + ": " + scene.getActiveGame().getOpponentName());
+        printPlayerTakenPieces(scene, scene.getActiveGame().getOpponentAlliance().isWhite());
         printBoard(scene);
-        printPlayerTakenPieces(scene, true);
+        printPlayerTakenPieces(scene, scene.getActiveGame().getPlayerAlliance().isWhite());
         System.out.println(scene.getActiveGame().getPlayerAlliance().toString() + ": " + scene.getActiveGame().getPlayerName());
         System.out.println("############################################################");
     }
@@ -208,11 +207,11 @@ public final class ConsoleView extends GameView {
         System.out.println(builder);
     }
 
-    private void printPlayerTakenPieces(final Scene scene, final boolean isWhite) {
-        final List<Piece> takenPieces = new ArrayList<>();
-        for (final Move move : scene.getActiveGame().getMoveLog().getMoves()) {
+    private void printPlayerTakenPieces(Scene scene, boolean isWhite) {
+        List<Piece> takenPieces = new ArrayList<>();
+        for (Move move : scene.getActiveGame().getMoveLog().getMoves()) {
             if (move.isAttack()) {
-                final Piece takenPiece = move.getAttackedPiece();
+                Piece takenPiece = move.getAttackedPiece();
                 if (takenPiece.getAlliance().isWhite() && !isWhite) {
                     takenPieces.add(takenPiece);
                 }
@@ -222,7 +221,7 @@ public final class ConsoleView extends GameView {
             }
         }
         takenPieces.sort((o1, o2) -> Ints.compare(o1.getType().getPieceValue(), o2.getType().getPieceValue()));
-        for (final Piece piece : takenPieces) {
+        for (Piece piece : takenPieces) {
             System.out.print(piece.toString() + " ");
         }
         System.out.println();
@@ -232,10 +231,10 @@ public final class ConsoleView extends GameView {
         System.out.println(" WHITE | BLACK ");
         for (Move move : scene.getActiveGame().getMoveLog().getMoves()) {
             String moveText = move.toString();
-            if (move.getMovedPiece().getAlliance().isWhite()) {
+            if (move.getMovedPiece() == null || move.getMovedPiece().getAlliance().isWhite()) {
                 System.out.printf("%7s", moveText);
             }
-            if (move.getMovedPiece().getAlliance().isBlack()) {
+            if (move.getMovedPiece() == null || move.getMovedPiece().getAlliance().isBlack()) {
                 System.out.printf("|%7s\n", moveText);
             }
         }

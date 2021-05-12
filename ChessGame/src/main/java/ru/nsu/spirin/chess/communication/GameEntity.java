@@ -13,11 +13,13 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public abstract class GameEntity {
-    private volatile Board                        board;
-    private final    MoveLog                      moveLog;
-    private          String                       playerName;
-    private          Alliance                     playerTeam;
-    private final    List<Entry<String, Integer>> scoreTexts;
+    private volatile Board   board;
+    private final    MoveLog moveLog;
+
+    private String   playerName;
+    private Alliance playerTeam;
+
+    private final List<Entry<String, Integer>> scoreTexts;
 
     protected GameEntity() {
         this.board = null;
@@ -27,7 +29,7 @@ public abstract class GameEntity {
 
     public abstract String getOpponentName();
 
-    public abstract Alliance getOpponentTeam();
+    public abstract Alliance getOpponentAlliance();
 
     public abstract void makeMove(Move move, MoveTransition transition);
 
@@ -55,7 +57,7 @@ public abstract class GameEntity {
         this.playerName = playerName;
     }
 
-    public void setPlayerTeam(Alliance playerTeam) {
+    public void setPlayerAlliance(Alliance playerTeam) {
         this.playerTeam = playerTeam;
     }
 
@@ -69,7 +71,7 @@ public abstract class GameEntity {
 
     protected void calculateScore(Move move) {
         try {
-            if (move.getMovedPiece().getAlliance() == getPlayerAlliance()) {
+            if (move.getMovedPiece() != null && move.getMovedPiece().getAlliance() == getPlayerAlliance()) {
                 if (move.isAttack()) {
                     addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());
                 }

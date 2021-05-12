@@ -13,15 +13,16 @@ public final class ScoresFile {
 
     static {
         try {
-            InputStream stream = null;
+            InputStream stream;
             try {
                 stream = new FileInputStream("stats.properties");
             }
             catch (Exception e) {
+                stream = null;
                 OutputStream outputStream = new FileOutputStream("stats.properties");
                 outputStream.close();
             }
-            stream = new FileInputStream("stats.properties");
+            if (stream == null) stream = new FileInputStream("stats.properties");
             properties.load(stream);
 
             stream.close();
@@ -31,14 +32,16 @@ public final class ScoresFile {
         }
     }
 
-    public static void saveScore(String playerName, int score) throws IOException {
+    public static void saveScore(String playerName, int score) {
         if (properties.containsKey(playerName)) {
             score = Math.max(score, Integer.parseInt((String) properties.get(playerName)));
         }
         properties.put(playerName, score + "");
-        OutputStream outputStream = new FileOutputStream("stats.properties");
-        properties.store(new OutputStreamWriter(outputStream), "");
-        outputStream.close();
+        try (OutputStream outputStream = new FileOutputStream("stats.properties")) {
+            properties.store(new OutputStreamWriter(outputStream), "");
+        }
+        catch (Exception ignored) {
+        }
     }
 
     public static Properties getScores() {

@@ -13,5 +13,5 @@ public abstract class Command {
         return this.scene;
     }
 
-    public abstract boolean execute(String[] args, boolean privileged);
+    public abstract CommandStatus execute(String[] args);
 }

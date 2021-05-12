@@ -17,7 +17,7 @@ final class ConnectionFailedPanel extends JPanel {
         add(message, BorderLayout.CENTER);
 
         JButton backButton = new JButton("back");
-        backButton.addActionListener(e -> controller.execute("back", false));
+        backButton.addActionListener(e -> controller.execute("back"));
         add(backButton, BorderLayout.SOUTH);
 
         setVisible(false);

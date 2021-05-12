@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,35 +34,26 @@ public final class Board implements Serializable {
     private final Player            currentPlayer;
     private final Pawn              enPassantPawn;
 
-    Board(BoardBuilder boardBuilder) {
-        this.gameBoard = createGameBoard(boardBuilder);
+    Board(BoardBuilder builder) {
+        this.gameBoard = createGameBoard(builder);
         this.whitePieces = calculateActivePieces(Alliance.WHITE);
         this.blackPieces = calculateActivePieces(Alliance.BLACK);
-        this.enPassantPawn = boardBuilder.getEnPassantPawn();
+        this.enPassantPawn = builder.getEnPassantPawn();
 
         Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
-        this.currentPlayer = boardBuilder.getNextMoveMaker().choosePlayer(this.whitePlayer, this.blackPlayer);
+        this.currentPlayer = builder.getNextMoveMaker().choosePlayer(this.whitePlayer, this.blackPlayer);
 
-        if (boardBuilder.isWhitePlayerResigned()) this.whitePlayer.resign();
-        if (boardBuilder.isBlackPlayerResigned()) this.blackPlayer.resign();
+        if (builder.isWhitePlayerResigned()) this.whitePlayer.resign();
+        if (builder.isBlackPlayerResigned()) this.blackPlayer.resign();
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        for (Tile tile : gameBoard) {
-            int cur = 31;
-            Piece piece = tile.getPiece();
-            if (piece != null) cur = piece.hashCode();
-            hash += cur * tile.getCoordinate();
-        }
-        hash += 31 * blackPlayer.hashCode();
-        hash += 31 * whitePlayer.hashCode();
-        return hash;
+        return Objects.hash(this.gameBoard, this.whitePlayer, this.blackPlayer);
     }
 
     public Collection<Piece> getWhitePieces() {
@@ -97,7 +89,7 @@ public final class Board implements Serializable {
     }
 
     public static List<Tile> createGameBoard(BoardBuilder boardBuilder) {
-        final Tile[] tiles = new Tile[BoardUtils.TOTAL_NUMBER_OF_TILES];
+        Tile[] tiles = new Tile[BoardUtils.TOTAL_NUMBER_OF_TILES];
         for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
             tiles[i] = Tile.createTile(i, boardBuilder.getBoardConfig().get(i));
         }
@@ -105,42 +97,41 @@ public final class Board implements Serializable {
     }
 
     public static Board createStandardBoard() {
-        final BoardBuilder boardBuilder = new BoardBuilder();
-        boardBuilder.setPiece(new Rook(Alliance.BLACK, 0));
-        boardBuilder.setPiece(new Knight(Alliance.BLACK, 1));
-        boardBuilder.setPiece(new Bishop(Alliance.BLACK, 2));
-        boardBuilder.setPiece(new Queen(Alliance.BLACK, 3));
-        boardBuilder.setPiece(new King(Alliance.BLACK, 4, true, true));
-        boardBuilder.setPiece(new Bishop(Alliance.BLACK, 5));
-        boardBuilder.setPiece(new Knight(Alliance.BLACK, 6));
-        boardBuilder.setPiece(new Rook(Alliance.BLACK, 7));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 8));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 9));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 10));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 11));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 12));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 13));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 14));
-        boardBuilder.setPiece(new Pawn(Alliance.BLACK, 15));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 48));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 49));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 50));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 51));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 52));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 53));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 54));
-        boardBuilder.setPiece(new Pawn(Alliance.WHITE, 55));
-        boardBuilder.setPiece(new Rook(Alliance.WHITE, 56));
-        boardBuilder.setPiece(new Knight(Alliance.WHITE, 57));
-        boardBuilder.setPiece(new Bishop(Alliance.WHITE, 58));
-        boardBuilder.setPiece(new Queen(Alliance.WHITE, 59));
-        boardBuilder.setPiece(new King(Alliance.WHITE, 60, true, true));
-        boardBuilder.setPiece(new Bishop(Alliance.WHITE, 61));
-        boardBuilder.setPiece(new Knight(Alliance.WHITE, 62));
-        boardBuilder.setPiece(new Rook(Alliance.WHITE, 63));
-
-        boardBuilder.setMoveMaker(Alliance.WHITE);
-        return boardBuilder.build();
+        BoardBuilder builder = new BoardBuilder();
+        builder.setPiece(new Rook(Alliance.BLACK, 0));
+        builder.setPiece(new Knight(Alliance.BLACK, 1));
+        builder.setPiece(new Bishop(Alliance.BLACK, 2));
+        builder.setPiece(new Queen(Alliance.BLACK, 3));
+        builder.setPiece(new King(Alliance.BLACK, 4, true, true));
+        builder.setPiece(new Bishop(Alliance.BLACK, 5));
+        builder.setPiece(new Knight(Alliance.BLACK, 6));
+        builder.setPiece(new Rook(Alliance.BLACK, 7));
+        builder.setPiece(new Pawn(Alliance.BLACK, 8));
+        builder.setPiece(new Pawn(Alliance.BLACK, 9));
+        builder.setPiece(new Pawn(Alliance.BLACK, 10));
+        builder.setPiece(new Pawn(Alliance.BLACK, 11));
+        builder.setPiece(new Pawn(Alliance.BLACK, 12));
+        builder.setPiece(new Pawn(Alliance.BLACK, 13));
+        builder.setPiece(new Pawn(Alliance.BLACK, 14));
+        builder.setPiece(new Pawn(Alliance.BLACK, 15));
+        builder.setPiece(new Pawn(Alliance.WHITE, 48));
+        builder.setPiece(new Pawn(Alliance.WHITE, 49));
+        builder.setPiece(new Pawn(Alliance.WHITE, 50));
+        builder.setPiece(new Pawn(Alliance.WHITE, 51));
+        builder.setPiece(new Pawn(Alliance.WHITE, 52));
+        builder.setPiece(new Pawn(Alliance.WHITE, 53));
+        builder.setPiece(new Pawn(Alliance.WHITE, 54));
+        builder.setPiece(new Pawn(Alliance.WHITE, 55));
+        builder.setPiece(new Rook(Alliance.WHITE, 56));
+        builder.setPiece(new Knight(Alliance.WHITE, 57));
+        builder.setPiece(new Bishop(Alliance.WHITE, 58));
+        builder.setPiece(new Queen(Alliance.WHITE, 59));
+        builder.setPiece(new King(Alliance.WHITE, 60, true, true));
+        builder.setPiece(new Bishop(Alliance.WHITE, 61));
+        builder.setPiece(new Knight(Alliance.WHITE, 62));
+        builder.setPiece(new Rook(Alliance.WHITE, 63));
+        builder.setMoveMaker(Alliance.WHITE);
+        return builder.build();
     }
 
     public Iterable<Move> getAllLegalMoves() {
@@ -151,7 +142,7 @@ public final class Board implements Serializable {
         List<Piece> activePieces = new ArrayList<>();
         for (Tile tile : this.gameBoard) {
             if (tile.isTileOccupied()) {
-                final Piece piece = tile.getPiece();
+                Piece piece = tile.getPiece();
                 if (piece.getAlliance() == alliance) {
                     activePieces.add(piece);
                 }
@@ -161,8 +152,8 @@ public final class Board implements Serializable {
     }
 
     private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
-        final List<Move> legalMoves = new ArrayList<>();
-        for (final Piece piece : pieces) {
+        List<Move> legalMoves = new ArrayList<>();
+        for (Piece piece : pieces) {
             legalMoves.addAll(piece.calculateLegalMoves(this));
         }
         return ImmutableList.copyOf(legalMoves);

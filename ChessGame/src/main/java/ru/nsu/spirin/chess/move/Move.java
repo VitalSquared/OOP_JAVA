@@ -18,10 +18,6 @@ public abstract class Move implements Serializable {
         this.destinationCoordinate = destinationCoordinate;
     }
 
-    protected Move(Board board, int destinationCoordinate) {
-        this(board, null, destinationCoordinate);
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(1, this.destinationCoordinate, this.movedPiece, this.movedPiece.getCoordinate());
@@ -32,9 +28,9 @@ public abstract class Move implements Serializable {
         if (this == other) return true;
         if (!(other instanceof Move)) return false;
         Move otherMove = (Move) other;
-        return getCurrentCoordinate() == otherMove.getCurrentCoordinate() &&
-               getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
-               getMovedPiece() == otherMove.getMovedPiece();
+        return this.getCurrentCoordinate() == otherMove.getCurrentCoordinate() &&
+               this.getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
+               this.getMovedPiece() == otherMove.getMovedPiece();
     }
 
     public Board getBoard() {

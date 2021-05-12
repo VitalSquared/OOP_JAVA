@@ -5,8 +5,8 @@ import ru.nsu.spirin.chess.pieces.Piece;
 import ru.nsu.spirin.chess.pieces.Rook;
 
 public final class QueenSideCastleMove extends CastleMove {
-    public QueenSideCastleMove(Board board, Piece movePiece, int destinationCoordinate, Rook castleRook, int castleRookStart, int castleRookDestination) {
-        super(board, movePiece, destinationCoordinate, castleRook, castleRookStart, castleRookDestination);
+    public QueenSideCastleMove(Board board, Piece movePiece, int destinationCoordinate, Rook castleRook, int castleRookDestination) {
+        super(board, movePiece, destinationCoordinate, castleRook, castleRookDestination);
     }
 
     @Override
@@ -16,6 +16,6 @@ public final class QueenSideCastleMove extends CastleMove {
 
     @Override
     public String toString() {
-        return "-0-0-0-";
+        return "0-0-0";
     }
 }

@@ -25,6 +25,11 @@ public abstract class Tile implements Serializable {
         return this.coordinate;
     }
 
+    @Override
+    public int hashCode() {
+        return getPiece() == null ? coordinate : getPiece().hashCode();
+    }
+
     public static Tile createTile(int tileCoordinate, Piece piece) {
         return piece != null ?
                 new OccupiedTile(tileCoordinate, piece) :

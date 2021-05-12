@@ -45,7 +45,7 @@ public final class NewGamePanel extends JPanel {
         startButton = new JButton("Start");
         startButton.addActionListener(e -> {
             String team = playerTeamPanel.getSelectedTeam();
-            controller.execute("start " + team + " " + playerNameInput.getText(), false);
+            controller.execute("start " + team + " " + playerNameInput.getText());
         });
         add(startButton);
 
@@ -67,7 +67,7 @@ public final class NewGamePanel extends JPanel {
         add(hostInfo);
 
         hostButton = new JButton("Host");
-        hostButton.addActionListener(e -> controller.execute("host " + hostIPInput.getText() + " " + hostPortInput.getText() + " " + playerNameInput.getText(), false));
+        hostButton.addActionListener(e -> controller.execute("host " + hostIPInput.getText() + " " + hostPortInput.getText() + " " + playerNameInput.getText()));
         add(hostButton);
 
         JLabel joinGameCategoryLabel = new JLabel("--------------------JOIN GAME--------------------");
@@ -88,7 +88,7 @@ public final class NewGamePanel extends JPanel {
         add(joinInfo);
 
         joinButton = new JButton("Join");
-        joinButton.addActionListener(e -> controller.execute("join " + joinIPInput.getText() + " " + joinPortInput.getText() + " " + playerNameInput.getText(), false));
+        joinButton.addActionListener(e -> controller.execute("join " + joinIPInput.getText() + " " + joinPortInput.getText() + " " + playerNameInput.getText()));
         add(joinButton);
 
         JLabel backCategory = new JLabel("----------------------------------------");
@@ -96,7 +96,7 @@ public final class NewGamePanel extends JPanel {
         add(backCategory);
 
         JButton backButton = new JButton("Back");
-        backButton.addActionListener(e -> controller.execute("back", false));
+        backButton.addActionListener(e -> controller.execute("back"));
         add(backButton);
 
         setVisible(true);
@@ -111,7 +111,9 @@ public final class NewGamePanel extends JPanel {
                     Color.BLACK :
                     Color.RED);
         }
-        catch (NullPointerException ignored) {}
+        catch (NullPointerException ignored) {
+            updatePanel(scene);
+        }
     }
 
     private boolean isIPInputValid(JTextField input) {

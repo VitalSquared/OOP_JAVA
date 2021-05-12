@@ -16,7 +16,9 @@ public final class ChessGame {
     public ChessGame(boolean useSwing) throws IOException {
         this.scene = new Scene();
         Controller controller = new Controller(this.scene);
-        this.gameView = useSwing ? new SwingView(scene, controller) : new ConsoleView(scene, controller);
+        this.gameView = useSwing ?
+                new SwingView(scene, controller) :
+                new ConsoleView(scene, controller);
     }
 
     public void run() {

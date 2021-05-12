@@ -71,11 +71,11 @@ public abstract class Player implements Serializable {
     }
 
     public boolean isInCheckMate() {
-        return this.isInCheck && !hasEscapeMoves();
+        return this.isInCheck && noEscapeMoves();
     }
 
     public boolean isInStaleMate() {
-        return !this.isInCheck && !hasEscapeMoves();
+        return !this.isInCheck && noEscapeMoves();
     }
 
     public boolean isCastled() {
@@ -115,23 +115,24 @@ public abstract class Player implements Serializable {
         return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
     }
 
-    protected boolean hasEscapeMoves() {
+    protected boolean noEscapeMoves() {
         for (Move move : legalMoves) {
             MoveTransition transition = makeMovePrivileged(move, false);
-            if (transition.getMoveStatus().isDone())
-                return true;
+            if (transition.getMoveStatus().isDone()) return false;
         }
-        return false;
+        return true;
     }
 
-    protected boolean hasCastleOpportunities() {
-        return !this.isInCheck && !this.playerKing.isCastled() && (this.isKingSideCastleCapable() || this.isQueenSideCastleCapable());
+    protected boolean noCastleOpportunities() {
+        return this.isInCheck || this.playerKing.isCastled() || (!this.isKingSideCastleCapable() && !this.isQueenSideCastleCapable());
     }
 
     protected static Collection<Move> calculateAttacksOnTile(int piecePosition, Collection<Move> moves) {
         List<Move> attackMoves = new ArrayList<>();
         for (Move move : moves) {
-            if (piecePosition == move.getDestinationCoordinate()) attackMoves.add(move);
+            if (piecePosition == move.getDestinationCoordinate()) {
+                attackMoves.add(move);
+            }
         }
         return ImmutableList.copyOf(attackMoves);
     }

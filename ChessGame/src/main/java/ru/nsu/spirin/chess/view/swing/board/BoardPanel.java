@@ -3,13 +3,16 @@ package ru.nsu.spirin.chess.view.swing.board;
 import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.board.tile.Tile;
 import ru.nsu.spirin.chess.controller.Controller;
+import ru.nsu.spirin.chess.factory.Factory;
 import ru.nsu.spirin.chess.pieces.Piece;
 import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.view.GameView;
 import ru.nsu.spirin.chess.view.swing.SwingView;
 
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +28,9 @@ public class BoardPanel extends JPanel {
     private final GameHistoryPanel gameHistoryPanel;
     private final PlayerInfoPanel  topPlayerInfo;
     private final PlayerInfoPanel  bottomPlayerInfo;
-    private final GameResultsPanel gameResultsPanel;
 
-    public BoardPanel(Scene scene, Controller controller) {
+
+    public BoardPanel(GameView swingView, Scene scene, Controller controller, Factory<BufferedImage> imageFactory) {
         super(new BorderLayout());
         setDoubleBuffered(false);
 
@@ -36,13 +39,13 @@ public class BoardPanel extends JPanel {
         JPanel tilesPanel = new JPanel(new GridLayout(10, 10));
 
         this.gameHistoryPanel = new GameHistoryPanel();
-        this.topPlayerInfo = new PlayerInfoPanel();
-        this.bottomPlayerInfo = new PlayerInfoPanel();
-        this.gameResultsPanel = new GameResultsPanel(scene, controller);
+        this.topPlayerInfo = new PlayerInfoPanel(imageFactory);
+        this.bottomPlayerInfo = new PlayerInfoPanel(imageFactory);
+        GameResultsPanel gameResultsPanel = new GameResultsPanel(swingView, scene, controller);
 
         JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
         bottomPanel.add(this.bottomPlayerInfo);
-        bottomPanel.add(this.gameResultsPanel);
+        bottomPanel.add(gameResultsPanel);
 
         add(this.topPlayerInfo, BorderLayout.NORTH);
         add(bottomPanel, BorderLayout.SOUTH);
@@ -62,7 +65,7 @@ public class BoardPanel extends JPanel {
                 this.tileCaptions.add(tileCaption);
                 tilesPanel.add(tileCaption);
             }
-            TilePanel tilePanel = new TilePanel(scene, controller, this, i);
+            TilePanel tilePanel = new TilePanel(scene, controller, this, i, imageFactory);
             this.boardTiles.add(tilePanel);
             tilesPanel.add(tilePanel);
             if (i % 8 == 7) {
@@ -80,35 +83,25 @@ public class BoardPanel extends JPanel {
         validate();
 
         setVisible(false);
-
-        new Thread(() -> {
-            while (true) {
-                if (isVisible()) {
-                    try {
-                        drawBoard();
-                        gameHistoryPanel.redo(scene.getActiveGame().getBoard(), scene.getActiveGame().getMoveLog());
-                        topPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isBlack());
-                        topPlayerInfo.redo(scene.getActiveGame().getOpponentName(), scene.getActiveGame().getMoveLog());
-                        bottomPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isWhite());
-                        bottomPlayerInfo.redo(scene.getActiveGame().getPlayerName(), scene.getActiveGame().getMoveLog());
-                        for (TileCaptionPanel tileCaption : tileCaptions) {
-                            tileCaption.updateText(scene.getActiveGame().getPlayerAlliance().isBlack());
-                        }
-                    }
-                    catch (Exception ignored) {
-                    }
-                }
-                try {
-                    Thread.sleep(100);
-                }
-                catch (Exception ignored) {
-                }
-            }
-        }).start();
     }
 
     public void updatePanel() {
-
+        try {
+            drawBoard();
+            gameHistoryPanel.redo(scene.getActiveGame().getBoard(), scene.getActiveGame().getMoveLog());
+            topPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isBlack());
+            topPlayerInfo.redo(scene.getActiveGame().getOpponentName(), scene.getActiveGame().getMoveLog());
+            bottomPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isWhite());
+            bottomPlayerInfo.redo(scene.getActiveGame().getPlayerName(), scene.getActiveGame().getMoveLog());
+            for (TileCaptionPanel tileCaption : tileCaptions) {
+                tileCaption.updateText(scene.getActiveGame().getPlayerAlliance().isBlack());
+            }
+        }
+        catch (Exception ignored) {
+            if (!BoardUtils.isEndGame(scene.getActiveGame().getBoard())) {
+                updatePanel();
+            }
+        }
     }
 
     private void drawBoard() {
@@ -118,6 +111,7 @@ public class BoardPanel extends JPanel {
             }
         }
         catch (Exception ignored) {
+            drawBoard();
         }
         validate();
         repaint();

@@ -18,11 +18,11 @@ import java.net.Socket;
 import java.net.SocketException;
 
 public abstract class NetworkEntity extends GameEntity {
-    private volatile boolean playerReady;
-    private String  opponentName;
-    private Alliance opponentTeam;
-    private volatile boolean opponentReady;
-    private ObjectOutputStream objectOutputStream;
+    private volatile boolean            playerReady;
+    private          String             opponentName;
+    private          Alliance           opponentTeam;
+    private volatile boolean            opponentReady;
+    private          ObjectOutputStream objectOutputStream;
 
     protected NetworkEntity(String playerName) {
         super();
@@ -31,15 +31,13 @@ public abstract class NetworkEntity extends GameEntity {
         this.opponentTeam = null;
         this.opponentReady = false;
         setPlayerName(playerName);
-        ThreadUtils.submitThread(
-                new Thread(() -> {
-                    while (getBoard() == null) {
-                        if (isPlayerReady() && isOpponentReady()) {
-                            setBoard(Board.createStandardBoard());
-                        }
-                    }
-                })
-        );
+        ThreadUtils.submitThread(new Thread(() -> {
+            while (getBoard() == null) {
+                if (isPlayerReady() && isOpponentReady()) {
+                    setBoard(Board.createStandardBoard());
+                }
+            }
+        }));
     }
 
     public abstract ConnectionStatus connected();
@@ -58,8 +56,8 @@ public abstract class NetworkEntity extends GameEntity {
     }
 
     @Override
-    public void setPlayerTeam(Alliance playerTeam) {
-        super.setPlayerTeam(playerTeam);
+    public void setPlayerAlliance(Alliance playerTeam) {
+        super.setPlayerAlliance(playerTeam);
         sendMessage(MessageType.PLAYER_TEAM, playerTeam);
     }
 
@@ -69,7 +67,7 @@ public abstract class NetworkEntity extends GameEntity {
     }
 
     @Override
-    public Alliance getOpponentTeam() {
+    public Alliance getOpponentAlliance() {
         return this.opponentTeam;
     }
 
@@ -108,7 +106,7 @@ public abstract class NetworkEntity extends GameEntity {
 
     protected final class ConnectionHandler implements Runnable {
         private final ObjectInputStream objectInputStream;
-        private final Socket socket;
+        private final Socket            socket;
 
         public ConnectionHandler(Socket socket) throws IOException {
             this.socket = socket;
@@ -141,7 +139,7 @@ public abstract class NetworkEntity extends GameEntity {
                     opponentName = (String) message.getContent();
                 }
                 case PLAYER_TEAM -> {
-                    opponentTeam =  (Alliance) message.getContent();
+                    opponentTeam = (Alliance) message.getContent();
                     if (opponentTeam == getPlayerAlliance()) {
                         playerReady = false;
                         sendMessage(MessageType.PLAYER_READY, playerReady);

@@ -1,6 +1,5 @@
 package ru.nsu.spirin.chess.properties;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,16 +15,17 @@ public class SettingsFile {
 
     static {
         try {
-            InputStream stream = null;
+            InputStream stream;
             try {
                 stream = new FileInputStream("settings.properties");
             }
             catch (Exception e) {
+                stream = null;
                 BufferedWriter writer = new BufferedWriter(new FileWriter("settings.properties"));
                 writer.write("LAST_USED_NAME=Name\n");
                 writer.close();
             }
-            stream = new FileInputStream("settings.properties");
+            if (stream == null) stream = new FileInputStream("settings.properties");
             properties.load(stream);
 
             stream.close();
@@ -35,11 +35,13 @@ public class SettingsFile {
         }
     }
 
-    public static void saveSetting(String name, String value) throws IOException {
+    public static void saveSetting(String name, String value) {
         properties.put(name, value);
-        OutputStream outputStream = new FileOutputStream("settings.properties");
-        properties.store(new OutputStreamWriter(outputStream), "");
-        outputStream.close();
+        try (OutputStream outputStream = new FileOutputStream("settings.properties")) {
+            properties.store(new OutputStreamWriter(outputStream), "");
+        }
+        catch (IOException ignored) {
+        }
     }
 
     public static String getSettingValue(String name) {

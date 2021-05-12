@@ -17,7 +17,7 @@ public final class ResignMove extends Move {
     public Board execute() {
         BoardBuilder builder = new BoardBuilder();
         for (Piece piece : this.getBoard().getAllPieces()) {
-                builder.setPiece(piece);
+            builder.setPiece(piece);
         }
         builder.setPlayerResigned(alliance.choosePlayer(getBoard().getWhitePlayer(), getBoard().getBlackPlayer()));
         return builder.build();

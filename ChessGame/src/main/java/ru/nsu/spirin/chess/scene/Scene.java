@@ -66,8 +66,4 @@ public final class Scene {
     public SceneState getSceneState() {
         return this.sceneState;
     }
-
-    public void destroyScene() {
-        this.sceneState = SceneState.NONE;
-    }
 }

@@ -1,5 +1,7 @@
 package ru.nsu.spirin.chess.controller;
 
+import ru.nsu.spirin.chess.factory.CommandFactory;
+import ru.nsu.spirin.chess.factory.Factory;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.utils.Pair;
 
@@ -8,17 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Controller {
-    private final CommandFactory commandFactory;
+    private final Factory<Command> commandFactory;
 
     public Controller(Scene scene) throws IOException {
         this.commandFactory = new CommandFactory(scene);
     }
 
-    public boolean execute(String command, boolean privileged) {
-        if (command == null || command.equals("")) return true;
+    public void execute(String command) {
+        if (command == null || command.trim().equals("")) return;
         Pair<String, String[]> split = disassembleCommand(command);
-        Command cmd = commandFactory.getCommand(split.getFirst().toUpperCase());
-        return cmd.execute(split.getSecond(), privileged);
+        Command cmd = commandFactory.get(split.getFirst().toUpperCase());
+        CommandStatus status = cmd.execute(split.getSecond());
+        System.out.print(status.getMessage());
     }
 
     private Pair<String, String[]> disassembleCommand(String command) {

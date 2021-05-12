@@ -21,16 +21,4 @@ public class MoveLog {
     public int size() {
         return this.moves.size();
     }
-
-    public void clear() {
-        this.moves.clear();
-    }
-
-    public Move removeMove(int index) {
-        return this.moves.remove(index);
-    }
-
-    public boolean removeMove(final Move move) {
-        return this.moves.remove(move);
-    }
 }

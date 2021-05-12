@@ -11,7 +11,7 @@ public abstract class CastleMove extends Move {
     private final Rook castleRook;
     private final int  castleRookDestination;
 
-    public CastleMove(Board board, Piece movePiece, int destinationCoordinate, Rook castleRook, int castleRookStart, int castleRookDestination) {
+    public CastleMove(Board board, Piece movePiece, int destinationCoordinate, Rook castleRook, int castleRookDestination) {
         super(board, movePiece, destinationCoordinate);
         this.castleRook = castleRook;
         this.castleRookDestination = castleRookDestination;
@@ -28,7 +28,7 @@ public abstract class CastleMove extends Move {
 
     @Override
     public Board execute() {
-        final BoardBuilder builder = new BoardBuilder();
+        BoardBuilder builder = new BoardBuilder();
         for (Piece piece : this.getBoard().getAllPieces()) {
             if (!this.getMovedPiece().equals(piece) && !this.castleRook.equals(piece)) {
                 builder.setPiece(piece);
@@ -50,6 +50,7 @@ public abstract class CastleMove extends Move {
         if (this == other) return true;
         if (!(other instanceof CastleMove)) return false;
         CastleMove otherCastleMove = (CastleMove) other;
-        return super.equals(otherCastleMove) && this.castleRook.equals(otherCastleMove.getCastleRook());
+        return super.equals(otherCastleMove) && this.castleRook.equals(otherCastleMove.getCastleRook()) &&
+               this.castleRookDestination == otherCastleMove.castleRookDestination;
     }
 }

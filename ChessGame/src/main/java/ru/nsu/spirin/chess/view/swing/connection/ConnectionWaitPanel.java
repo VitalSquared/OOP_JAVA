@@ -18,7 +18,7 @@ final class ConnectionWaitPanel extends JPanel {
 
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> {
-            controller.execute("cancel", false);
+            controller.execute("cancel");
         });
         add(cancelButton, BorderLayout.SOUTH);
 

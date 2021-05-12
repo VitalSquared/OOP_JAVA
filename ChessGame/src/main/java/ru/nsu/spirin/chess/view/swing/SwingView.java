@@ -1,6 +1,8 @@
 package ru.nsu.spirin.chess.view.swing;
 
 import ru.nsu.spirin.chess.controller.Controller;
+import ru.nsu.spirin.chess.factory.Factory;
+import ru.nsu.spirin.chess.factory.ImageFactory;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 import ru.nsu.spirin.chess.view.GameView;
@@ -14,6 +16,8 @@ import javax.swing.WindowConstants;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public final class SwingView extends GameView {
 
@@ -31,8 +35,10 @@ public final class SwingView extends GameView {
     public static final Dimension TILE_PANEL_DIMENSION  = new Dimension(10, 10);
     public static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 400);
 
-    public SwingView(Scene scene, Controller controller) {
+    public SwingView(Scene scene, Controller controller) throws IOException {
         super(scene, controller);
+
+        Factory<BufferedImage> imageFactory = new ImageFactory();
 
         this.gameFrame = new JFrame("Chess");
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
@@ -48,11 +54,11 @@ public final class SwingView extends GameView {
 
         this.mainMenuPanel = new MainMenuPanel(controller);
         this.newGamePanel = new NewGamePanel(controller);
-        this.highScoresPanel = new HighScoresPanel(controller);
-        this.aboutPanel = new AboutPanel(controller);
+        this.highScoresPanel = new HighScoresPanel(this, controller);
+        this.aboutPanel = new AboutPanel(this, controller);
         this.connectionPanel = new ConnectionPanel(scene, controller);
-        this.boardPanel = new BoardPanel(scene, controller);
-        this.resultsPanel = new ResultsPanel(scene, controller);
+        this.boardPanel = new BoardPanel(this, scene, controller, imageFactory);
+        this.resultsPanel = new ResultsPanel(this, controller);
 
         panel.add(this.mainMenuPanel);
         panel.add(this.newGamePanel);
@@ -68,13 +74,15 @@ public final class SwingView extends GameView {
 
     @Override
     public void render() {
-        updateMainMenuPanel(getScene());
-        updateNewGamePanel(getScene());
-        updateHighScoresPanel(getScene());
-        updateAboutPanel(getScene());
-        updateConnectionPanel(getScene());
-        updateBoardPanel(getScene());
-        updateResultsPanel(getScene());
+        if (viewChanged()) {
+            updateMainMenuPanel(getScene());
+            updateNewGamePanel(getScene());
+            updateHighScoresPanel(getScene());
+            updateAboutPanel(getScene());
+            updateConnectionPanel(getScene());
+            updateBoardPanel(getScene());
+            updateResultsPanel(getScene());
+        }
     }
 
     @Override
@@ -123,5 +131,20 @@ public final class SwingView extends GameView {
         if (scene.getSceneState() == SceneState.RESULTS_MENU) {
             resultsPanel.updatePanel();
         }
+    }
+
+    @Override
+    protected boolean viewChanged() {
+        boolean changed = super.viewChanged();
+        if (changed) return true;
+
+        if (mainMenuPanel.isVisible() != (getScene().getSceneState() == SceneState.MAIN_MENU)) return true;
+        if (newGamePanel.isVisible() != (getScene().getSceneState() == SceneState.NEW_GAME_MENU)) return true;
+        if (highScoresPanel.isVisible() != (getScene().getSceneState() == SceneState.HIGH_SCORES_MENU)) return true;
+        if (aboutPanel.isVisible() != (getScene().getSceneState() == SceneState.ABOUT_MENU)) return true;
+        if (connectionPanel.isVisible() != (getScene().getSceneState() == SceneState.CONNECTION_MENU)) return true;
+        if (boardPanel.isVisible() != (getScene().getSceneState() == SceneState.BOARD_MENU)) return true;
+
+        return resultsPanel.isVisible() != (getScene().getSceneState() == SceneState.RESULTS_MENU);
     }
 }

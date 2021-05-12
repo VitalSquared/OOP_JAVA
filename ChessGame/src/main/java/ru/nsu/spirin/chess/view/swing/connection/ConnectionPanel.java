@@ -54,6 +54,8 @@ public final class ConnectionPanel extends JPanel {
                 this.connectionSetupPanel.updatePanel();
             }
         }
-        catch (Exception ignored) {}
+        catch (Exception ignored) {
+            updatePanel();
+        }
     }
 }

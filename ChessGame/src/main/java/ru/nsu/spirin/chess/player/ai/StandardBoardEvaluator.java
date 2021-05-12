@@ -13,10 +13,10 @@ public class StandardBoardEvaluator implements BoardEvaluator {
 
     @Override
     public int evaluate(Board board, int depth) {
-        return scorePlayer(board, board.getWhitePlayer(), depth) - scorePlayer(board, board.getBlackPlayer(), depth);
+        return scorePlayer(board.getWhitePlayer(), depth) - scorePlayer(board.getBlackPlayer(), depth);
     }
 
-    private int scorePlayer(Board board, Player player, int depth) {
+    private int scorePlayer(Player player, int depth) {
         return pieceValue(player) + mobility(player) + check(player) + checkmate(player, depth) + castled(player) +
                promotions(player);
     }

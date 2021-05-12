@@ -1,25 +1,31 @@
 package ru.nsu.spirin.chess.view.swing;
 
 import ru.nsu.spirin.chess.controller.Controller;
+import ru.nsu.spirin.chess.view.GameView;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 public final class AboutPanel extends JPanel {
 
-    public AboutPanel(Controller controller) {
-        super(new GridLayout(2, 1));
+    public AboutPanel(GameView swingView, Controller controller) {
+        super(new BorderLayout());
 
-        String ABOUT_TEXT = "<html>This is a chess game<br>Created by Vitaly Spirin</html>";
+        String ABOUT_TEXT = "<html><pre>" + swingView.getAbout() + "</pre></html>";
         JLabel label = new JLabel(ABOUT_TEXT);
+        label.setFont(new Font("Arial", Font.PLAIN, 20));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
         JButton backButton = new JButton("Back");
 
-        backButton.addActionListener(e -> controller.execute("back", false));
+        backButton.addActionListener(e -> controller.execute("back"));
 
-        add(label);
-        add(backButton);
+        add(label, BorderLayout.CENTER);
+        add(backButton, BorderLayout.SOUTH);
 
         setVisible(false);
     }

@@ -3,7 +3,7 @@ package ru.nsu.spirin.chess.move;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.pieces.Piece;
 
-public class AttackMove extends Move {
+public abstract class AttackMove extends Move {
     private final Piece attackedPiece;
 
     public AttackMove(Board board, Piece movedPiece, int destinationCoordinate, Piece attackedPiece) {

@@ -43,15 +43,15 @@ public final class BoardBuilder implements Serializable {
     }
 
 
-    public void setPiece(final Piece piece) {
+    public void setPiece(Piece piece) {
         this.boardConfig.put(piece.getCoordinate(), piece);
     }
 
-    public void setMoveMaker(final Alliance nextMoveMaker) {
+    public void setMoveMaker(Alliance nextMoveMaker) {
         this.nextMoveMaker = nextMoveMaker;
     }
 
-    public void setEnPassantPawn(final Pawn enPassantPawn) {
+    public void setEnPassantPawn(Pawn enPassantPawn) {
         this.enPassantPawn = enPassantPawn;
     }
 

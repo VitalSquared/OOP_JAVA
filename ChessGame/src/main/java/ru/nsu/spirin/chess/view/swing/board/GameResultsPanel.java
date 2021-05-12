@@ -5,6 +5,8 @@ import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.player.Player;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.view.GameView;
+import ru.nsu.spirin.chess.view.swing.SwingView;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,19 +18,15 @@ public final class GameResultsPanel extends JPanel {
     private final JButton proceedButton;
     private final JLabel  resultLabel;
 
-    public GameResultsPanel(Scene scene, Controller controller) {
+    public GameResultsPanel(GameView swingView, Scene scene, Controller controller) {
         super(new GridLayout(1, 3));
         resignButton = new JButton("Resign");
         proceedButton = new JButton("Proceed");
         resultLabel = new JLabel("");
 
-        resignButton.addActionListener(e -> {
-            controller.execute("move resign " + scene.getActiveGame().getPlayerAlliance().toString(), false);
-        });
+        resignButton.addActionListener(e -> controller.execute("move resign " + scene.getActiveGame().getPlayerAlliance().toString()));
 
-        proceedButton.addActionListener(e -> {
-            controller.execute("proceed", false);
-        });
+        proceedButton.addActionListener(e -> controller.execute("proceed"));
 
         resignButton.setVisible(true);
         proceedButton.setVisible(false);
@@ -46,20 +44,7 @@ public final class GameResultsPanel extends JPanel {
                             resignButton.setVisible(false);
                             proceedButton.setVisible(true);
                             resultLabel.setVisible(true);
-                            if (scene.getActiveGame().getBoard().getCurrentPlayer().isInStaleMate()) {
-                                resultLabel.setText("DRAW!");
-                            }
-                            else {
-                                Player alliancePlayer = scene.getActiveGame().getPlayerAlliance().choosePlayer(scene.getActiveGame().getBoard().getWhitePlayer(), scene.getActiveGame().getBoard().getBlackPlayer());
-                                if (scene.getActiveGame().getPlayerAlliance() == scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance()) {
-                                    if (alliancePlayer.isInCheckMate() || alliancePlayer.isResigned()) {
-                                        resultLabel.setText("YOU LOST!");
-                                    }
-                                    else {
-                                        resultLabel.setText("YOU WON!");
-                                    }
-                                }
-                            }
+                            resultLabel.setText(swingView.getRoundResult());
                         }
                         else {
                             resignButton.setVisible(true);

@@ -15,10 +15,10 @@ public final class MainMenuPanel extends JPanel {
         JButton aboutButton = new JButton("About");
         JButton exitButton = new JButton("Exit");
 
-        newGameButton.addActionListener(e -> controller.execute("new_game", false));
-        highScoresButton.addActionListener(e -> controller.execute("high_scores", false));
-        aboutButton.addActionListener(e -> controller.execute("about", false));
-        exitButton.addActionListener(e -> controller.execute("exit", false));
+        newGameButton.addActionListener(e -> controller.execute("new_game"));
+        highScoresButton.addActionListener(e -> controller.execute("high_scores"));
+        aboutButton.addActionListener(e -> controller.execute("about"));
+        exitButton.addActionListener(e -> controller.execute("exit"));
 
         add(newGameButton);
         add(highScoresButton);
