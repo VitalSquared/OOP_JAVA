@@ -1,6 +1,6 @@
 package ru.nsu.spirin.chess.controller.commands;
 
-import ru.nsu.spirin.chess.communication.NetworkEntity;
+import ru.nsu.spirin.chess.game.NetworkEntity;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
 import ru.nsu.spirin.chess.player.Player;
@@ -29,7 +29,10 @@ public final class ProceedToResultsCommand extends Command {
 
     private void calculateScore() {
         Player player = getScene().getActiveGame().getPlayerAlliance().choosePlayer(getScene().getActiveGame().getBoard().getWhitePlayer(), getScene().getActiveGame().getBoard().getBlackPlayer());
-        if (player.isInCheckMate() || player.isResigned()) {
+        if (getScene().getActiveGame().getBoard().getWhitePlayer().isInStaleMate() || getScene().getActiveGame().getBoard().getBlackPlayer().isInStaleMate()) {
+            getScene().getActiveGame().addScoreText("DRAW", 500);
+        }
+        else if (player.isInCheckMate() || player.isResigned()) {
             getScene().getActiveGame().addScoreText("Lost", -500);
         }
         else {

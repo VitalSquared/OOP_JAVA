@@ -1,7 +1,7 @@
 package ru.nsu.spirin.chess.controller.commands;
 
-import ru.nsu.spirin.chess.communication.ConnectionStatus;
-import ru.nsu.spirin.chess.communication.NetworkEntity;
+import ru.nsu.spirin.chess.game.ConnectionStatus;
+import ru.nsu.spirin.chess.game.NetworkEntity;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
 import ru.nsu.spirin.chess.player.Alliance;

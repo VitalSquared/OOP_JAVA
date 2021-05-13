@@ -1,6 +1,6 @@
 package ru.nsu.spirin.chess.view.swing.connection;
 
-import ru.nsu.spirin.chess.communication.NetworkEntity;
+import ru.nsu.spirin.chess.game.NetworkEntity;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.scene.Scene;

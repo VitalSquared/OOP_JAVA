@@ -2,6 +2,7 @@ package ru.nsu.spirin.chess.move;
 
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.board.BoardBuilder;
+import ru.nsu.spirin.chess.board.BoardUtils;
 import ru.nsu.spirin.chess.pieces.Piece;
 
 import java.io.Serializable;
@@ -71,5 +72,15 @@ public abstract class Move implements Serializable {
         builder.setPiece(this.movedPiece.movePiece(this));
         builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
         return builder.build();
+    }
+
+    protected String disambiguationSolver() {
+        for (Move move : this.board.getCurrentPlayer().getLegalMoves()) {
+            if (move.getDestinationCoordinate() == this.destinationCoordinate && !this.equals(move) &&
+               this.movedPiece.getType().equals(move.getMovedPiece().getType())) {
+                return BoardUtils.getPositionAtCoordinate(this.movedPiece.getCoordinate()).substring(0, 1);
+            }
+        }
+        return "";
     }
 }

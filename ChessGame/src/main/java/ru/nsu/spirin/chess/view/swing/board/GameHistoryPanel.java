@@ -3,6 +3,7 @@ package ru.nsu.spirin.chess.view.swing.board;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveLog;
+import ru.nsu.spirin.chess.utils.Pair;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -33,11 +34,12 @@ class GameHistoryPanel extends JPanel {
         this.setVisible(true);
     }
 
-    void redo(final Board board, final MoveLog moveHistory) {
+    void updatePanel(MoveLog moveHistory) {
         int currentRow = 0;
         this.model.clear();
-        for (final Move move : moveHistory.getMoves()) {
-            final String moveText = move.toString();
+        for (Pair<Move, String> logEntry : moveHistory.getMoves()) {
+            Move move = logEntry.getFirst();
+            String moveText = logEntry.getSecond();
             if (move.getMovedPiece().getAlliance().isWhite()) {
                 this.model.setValueAt(moveText, currentRow, 0);
             }
@@ -48,29 +50,20 @@ class GameHistoryPanel extends JPanel {
         }
 
         if (moveHistory.getMoves().size() > 0) {
-            final Move lastMove = moveHistory.getMoves().get(moveHistory.size() - 1);
-            final String moveText = lastMove.toString();
+            Pair<Move, String> logEntry = moveHistory.getMoves().get(moveHistory.size() - 1);
+            Move lastMove = logEntry.getFirst();
+            String moveText = logEntry.getSecond();
 
             if (lastMove.getMovedPiece().getAlliance().isWhite()) {
-                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow, 0);
+                this.model.setValueAt(moveText, currentRow, 0);
             }
             else if (lastMove.getMovedPiece().getAlliance().isBlack()) {
-                this.model.setValueAt(moveText + calculateCheckAndCheckMateHash(board), currentRow - 1, 1);
+                this.model.setValueAt(moveText, currentRow - 1, 1);
             }
         }
 
-        final JScrollBar vertical = scrollPane.getVerticalScrollBar();
+        JScrollBar vertical = scrollPane.getVerticalScrollBar();
         vertical.setValue(vertical.getMaximum());
-    }
-
-    private String calculateCheckAndCheckMateHash(Board board) {
-        if (board.getCurrentPlayer().isInCheck())  {
-            return "+";
-        }
-        else if (board.getCurrentPlayer().isInCheckMate()) {
-            return "#";
-        }
-        return "";
     }
 
     private static final class DataModel extends DefaultTableModel {

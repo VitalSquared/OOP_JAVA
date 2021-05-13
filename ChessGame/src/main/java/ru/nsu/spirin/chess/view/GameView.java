@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.player.Player;
-import ru.nsu.spirin.chess.properties.ScoresFile;
+import ru.nsu.spirin.chess.utils.ScoresFile;
 import ru.nsu.spirin.chess.scene.Scene;
 
 import java.util.AbstractMap;
@@ -110,6 +110,6 @@ public abstract class GameView {
             scoresList.add(new AbstractMap.SimpleEntry<>(score, Integer.parseInt((String) scores.get(score))));
         }
         scoresList.sort(Entry.comparingByValue());
-        return Lists.reverse(scoresList).stream().skip(Math.max(0, scoresList.size() - 10)).collect(Collectors.toList());
+        return Lists.reverse(scoresList.stream().skip(Math.max(0, scoresList.size() - 10)).collect(Collectors.toList()));
     }
 }

@@ -16,6 +16,6 @@ public final class MajorAttackMove extends AttackMove {
 
     @Override
     public String toString() {
-        return getMovedPiece().getType().toString() + BoardUtils.getPositionAtCoordinate(this.getDestinationCoordinate());
+        return getMovedPiece().getType().toString() + disambiguationSolver() + "x" + BoardUtils.getPositionAtCoordinate(this.getDestinationCoordinate());
     }
 }

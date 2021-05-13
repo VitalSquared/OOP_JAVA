@@ -5,6 +5,8 @@ import ru.nsu.spirin.chess.factory.Factory;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveLog;
 import ru.nsu.spirin.chess.pieces.Piece;
+import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.utils.Pair;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -54,13 +56,15 @@ public final class PlayerInfoPanel extends JPanel {
         this.isWhite = isWhite;
     }
 
-    public void redo(final String playerName, final MoveLog moveLog) {
+    public void updatePanel(Scene scene, String playerName, MoveLog moveLog) {
         this.playerNameLabel.setText(playerName);
+        this.playerNameLabel.setForeground(scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance().isWhite() == isWhite ? Color.RED : Color.BLACK);
         this.playerTakenPieces.removeAll();
 
         List<Piece> takenPieces = new ArrayList<>();
 
-        for (Move move : moveLog.getMoves()) {
+        for (Pair<Move, String> logEntry : moveLog.getMoves()) {
+            Move move = logEntry.getFirst();
             if (move.isAttack()) {
                 Piece takenPiece = move.getAttackedPiece();
                 if (takenPiece.getAlliance().isWhite() && !isWhite) {

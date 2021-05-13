@@ -1,9 +1,9 @@
 package ru.nsu.spirin.chess.view;
 
 import ru.nsu.spirin.chess.board.Board;
-import ru.nsu.spirin.chess.communication.ConnectionStatus;
-import ru.nsu.spirin.chess.communication.GameEntity;
-import ru.nsu.spirin.chess.communication.NetworkEntity;
+import ru.nsu.spirin.chess.game.ConnectionStatus;
+import ru.nsu.spirin.chess.game.GameEntity;
+import ru.nsu.spirin.chess.game.NetworkEntity;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;

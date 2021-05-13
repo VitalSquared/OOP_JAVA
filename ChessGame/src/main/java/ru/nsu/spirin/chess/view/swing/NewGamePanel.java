@@ -1,8 +1,8 @@
 package ru.nsu.spirin.chess.view.swing;
 
-import com.google.common.net.InetAddresses;
+import org.apache.commons.validator.routines.InetAddressValidator;
 import ru.nsu.spirin.chess.controller.Controller;
-import ru.nsu.spirin.chess.properties.SettingsFile;
+import ru.nsu.spirin.chess.utils.SettingsFile;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -115,9 +115,8 @@ public final class NewGamePanel extends JPanel {
         }
     }
 
-    //TODO: change IP validation method
     private boolean isIPInputValid(JTextField input) {
-        return InetAddresses.isInetAddress(input.getText()) || input.getText().equals("localhost");
+        return InetAddressValidator.getInstance().isValidInet4Address(input.getText()) || input.getText().equals("localhost");
     }
 
     private boolean isPortInputValid(JTextField input) {

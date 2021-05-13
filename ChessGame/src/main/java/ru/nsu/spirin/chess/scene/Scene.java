@@ -1,9 +1,9 @@
 package ru.nsu.spirin.chess.scene;
 
-import ru.nsu.spirin.chess.communication.Client;
-import ru.nsu.spirin.chess.communication.GameEntity;
-import ru.nsu.spirin.chess.communication.Local;
-import ru.nsu.spirin.chess.communication.Server;
+import ru.nsu.spirin.chess.game.Client;
+import ru.nsu.spirin.chess.game.GameEntity;
+import ru.nsu.spirin.chess.game.Local;
+import ru.nsu.spirin.chess.game.Server;
 import ru.nsu.spirin.chess.player.Alliance;
 
 import java.io.IOException;

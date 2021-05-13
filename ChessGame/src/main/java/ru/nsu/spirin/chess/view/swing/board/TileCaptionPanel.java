@@ -18,7 +18,7 @@ class TileCaptionPanel extends JLabel {
         this.number = number;
     }
 
-    public void updateText(boolean inverted) {
+    public void updatePanel(boolean inverted) {
         this.setText(isEmpty ?
                 "" :
                 (isLetter ?

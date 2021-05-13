@@ -12,7 +12,7 @@ public final class Main {
             chessGame.run();
         }
         catch (Exception e) {
-            System.out.println(e.getLocalizedMessage());
+            e.printStackTrace();
         }
         finally {
             if (chessGame != null) {

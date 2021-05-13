@@ -13,7 +13,7 @@ import ru.nsu.spirin.chess.view.swing.SwingView;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.OverlayLayout;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -33,10 +33,8 @@ class TilePanel extends JPanel {
 
     private final Factory<BufferedImage> imageFactory;
 
-    //TODO: put tile content in the center
     public TilePanel(Scene scene, Controller controller, BoardPanel boardPanel, int tileID, Factory<BufferedImage> imageFactory) {
-        OverlayLayout overlayLayout = new OverlayLayout(this);
-        setLayout(overlayLayout);
+        super(new BorderLayout());
         setDoubleBuffered(false);
 
         this.imageFactory = imageFactory;
@@ -52,24 +50,15 @@ class TilePanel extends JPanel {
         validate();
     }
 
-    public void drawTile(boolean isInverted) {
+    public void updatePanel(boolean isInverted) {
         this.tileID = isInverted ?
                 BoardUtils.TOTAL_NUMBER_OF_TILES - 1 - normalTileID :
                 normalTileID;
         this.removeAll();
         assignTileColor();
         assignTilePieceIcon(scene.getActiveGame().getBoard());
-        highlightLegalMoves(scene.getActiveGame().getBoard());
         validate();
         repaint();
-    }
-
-    private void highlightLegalMoves(Board board) {
-        for (Move move : pieceLegalMoves(board)) {
-            if (move.getDestinationCoordinate() == this.tileID) {
-                add(new JLabel(new ImageIcon(imageFactory.get("GREEN_DOT"))));
-            }
-        }
     }
 
     private Collection<Move> pieceLegalMoves(Board board) {
@@ -87,11 +76,23 @@ class TilePanel extends JPanel {
     }
 
     private void assignTilePieceIcon(Board board) {
-        this.removeAll();
         if (board.getTile(this.tileID).isTileOccupied()) {
-            BufferedImage image = imageFactory.get(
-                    board.getTile(this.tileID).getPiece().getAlliance().toString().charAt(0) + board.getTile(this.tileID).toString());
-            add(new JLabel(new ImageIcon(image)));
+            String pieceID = board.getTile(this.tileID).getPiece().getAlliance().toString().charAt(0) + board.getTile(this.tileID).toString();
+            for (Move move : pieceLegalMoves(board)) {
+                if (move.getDestinationCoordinate() == this.tileID) {
+                    add(new JLabel(new ImageIcon(imageFactory.get(pieceID + "A"))));
+                    return;
+                }
+            }
+            add(new JLabel(new ImageIcon(imageFactory.get(pieceID))));
+        }
+        else {
+            for (Move move : pieceLegalMoves(board)) {
+                if (move.getDestinationCoordinate() == this.tileID) {
+                    add(new JLabel(new ImageIcon(imageFactory.get("GREEN_DOT"))));
+                    return;
+                }
+            }
         }
     }
 

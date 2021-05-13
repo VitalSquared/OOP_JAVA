@@ -16,6 +16,6 @@ public final class KingSideCastleMove extends CastleMove {
 
     @Override
     public String toString() {
-        return "0-0";
+        return "O-O";
     }
 }

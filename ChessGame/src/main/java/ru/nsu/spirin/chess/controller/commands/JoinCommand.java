@@ -1,9 +1,9 @@
 package ru.nsu.spirin.chess.controller.commands;
 
-import com.google.common.net.InetAddresses;
+import org.apache.commons.validator.routines.InetAddressValidator;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
-import ru.nsu.spirin.chess.properties.SettingsFile;
+import ru.nsu.spirin.chess.utils.SettingsFile;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
 
@@ -19,8 +19,7 @@ public final class JoinCommand extends Command {
         if (getScene().getSceneState() != SceneState.NEW_GAME_MENU) return CommandStatus.INVALID_MENU;
         if (args.length != 3) return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
 
-        //TODO: Change IP address validation
-        if (!InetAddresses.isInetAddress(args[0]) && !args[0].equals("localhost")) return CommandStatus.INVALID_IP;
+        if (!InetAddressValidator.getInstance().isValidInet4Address(args[0]) && !args[0].equals("localhost")) return CommandStatus.INVALID_IP;
 
         int port;
         try {

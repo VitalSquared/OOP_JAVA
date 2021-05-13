@@ -44,7 +44,7 @@ public final class PawnPromotion extends Move {
 
     @Override
     public String toString() {
-        return BoardUtils.getPositionAtCoordinate(getDestinationCoordinate()) + this.promotedPawn.getPromotionPiece().getType().toString().charAt(0);
+        return BoardUtils.getPositionAtCoordinate(getDestinationCoordinate()) + "=" + this.promotedPawn.getPromotionPiece().getType().toString().charAt(0);
     }
 
     @Override

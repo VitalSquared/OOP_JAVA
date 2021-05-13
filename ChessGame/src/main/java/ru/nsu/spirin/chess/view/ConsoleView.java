@@ -2,13 +2,14 @@ package ru.nsu.spirin.chess.view;
 
 import com.google.common.primitives.Ints;
 import ru.nsu.spirin.chess.board.BoardUtils;
-import ru.nsu.spirin.chess.communication.NetworkEntity;
+import ru.nsu.spirin.chess.game.NetworkEntity;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.pieces.Piece;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.utils.Pair;
 import ru.nsu.spirin.chess.utils.ThreadUtils;
 
 import java.util.ArrayList;
@@ -58,42 +59,51 @@ public final class ConsoleView extends GameView {
 
     private void updateMainMenuPanel() {
         if (getScene().getSceneState() == SceneState.MAIN_MENU) {
+            System.out.println("############################################################");
             System.out.println("CHESS\n");
             System.out.println("new_game \tenter new game menu");
             System.out.println("high_scores \tenter high scores menu");
             System.out.println("about \tenter about menu");
             System.out.println("exit \texit game");
+            System.out.println("############################################################");
         }
     }
 
     private void updateNewGamePanel() {
         if (getScene().getSceneState() == SceneState.NEW_GAME_MENU) {
-            System.out.println("NEW GAME");
+            System.out.println("############################################################");
+            System.out.println("NEW GAME\n");
             System.out.println("start <player team: [white | black]> <player name>\tplay game with ai");
             System.out.println("host <ip> <port> <player name> \thost game");
             System.out.println("join <ip> <port> <player name> \tjoin game");
             System.out.println("back \treturn to previous menu");
+            System.out.println("############################################################");
         }
     }
 
     private void updateHighScoresPanel() {
         if (getScene().getSceneState() == SceneState.HIGH_SCORES_MENU) {
-            System.out.println("HIGH SCORES");
+            System.out.println("############################################################");
+            System.out.println("HIGH SCORES\n");
             System.out.println(getHighScores());
-            System.out.println("\n\nback \treturn to previous menu");
+            System.out.println("\nback \treturn to previous menu");
+            System.out.println("############################################################");
         }
     }
 
     private void updateAboutPanel() {
         if (getScene().getSceneState() == SceneState.ABOUT_MENU) {
-            System.out.println("ABOUT");
+            System.out.println("############################################################");
+            System.out.println("ABOUT\n");
             System.out.println(getAbout());
-            System.out.println("\n\nback \treturn to previous menu");
+            System.out.println("\nback \treturn to previous menu");
+            System.out.println("############################################################");
         }
     }
 
     private void updateConnectionPanel() {
         if (getScene().getSceneState() == SceneState.CONNECTION_MENU) {
+            System.out.println("############################################################");
             NetworkEntity networkEntity = (NetworkEntity) getScene().getActiveGame();
             switch (networkEntity.connected()) {
                 case FAILED -> {
@@ -134,6 +144,7 @@ public final class ConsoleView extends GameView {
                     System.out.println("disconnect \tdisconnect from game and return to previous menu");
                 }
             }
+            System.out.println("############################################################");
         }
     }
 
@@ -148,6 +159,7 @@ public final class ConsoleView extends GameView {
                 System.out.println(getRoundResult());
                 System.out.println("\nproceed \tenter results menu");
             }
+            System.out.println("############################################################");
         }
     }
 
@@ -161,14 +173,16 @@ public final class ConsoleView extends GameView {
 
     private void printBoardPanel() {
         Scene scene = getScene();
+        String opponentTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getOpponentAlliance() ? " - makes a move" : "";
+        String playerTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getPlayerAlliance() ? " - makes a move" : "";
         System.out.println("############################################################");
         printMoveLog(scene);
         System.out.println("------------------------------------------------------------");
-        System.out.println(scene.getActiveGame().getOpponentAlliance().toString() + ": " + scene.getActiveGame().getOpponentName());
+        System.out.println(scene.getActiveGame().getOpponentAlliance().toString() + ": " + scene.getActiveGame().getOpponentName() + opponentTurn);
         printPlayerTakenPieces(scene, scene.getActiveGame().getOpponentAlliance().isWhite());
         printBoard(scene);
         printPlayerTakenPieces(scene, scene.getActiveGame().getPlayerAlliance().isWhite());
-        System.out.println(scene.getActiveGame().getPlayerAlliance().toString() + ": " + scene.getActiveGame().getPlayerName());
+        System.out.println(scene.getActiveGame().getPlayerAlliance().toString() + ": " + scene.getActiveGame().getPlayerName() + playerTurn);
         System.out.println("############################################################");
     }
 
@@ -207,7 +221,8 @@ public final class ConsoleView extends GameView {
 
     private void printPlayerTakenPieces(Scene scene, boolean isWhite) {
         List<Piece> takenPieces = new ArrayList<>();
-        for (Move move : scene.getActiveGame().getMoveLog().getMoves()) {
+        for (Pair<Move, String> logEntry : scene.getActiveGame().getMoveLog().getMoves()) {
+            Move move = logEntry.getFirst();
             if (move.isAttack()) {
                 Piece takenPiece = move.getAttackedPiece();
                 if (takenPiece.getAlliance().isWhite() && !isWhite) {
@@ -226,14 +241,15 @@ public final class ConsoleView extends GameView {
     }
 
     private void printMoveLog(final Scene scene) {
-        System.out.println(" WHITE | BLACK ");
-        for (Move move : scene.getActiveGame().getMoveLog().getMoves()) {
-            String moveText = move.toString();
+        System.out.println("  WHITE  |  BLACK  ");
+        for (Pair<Move, String> logEntry : scene.getActiveGame().getMoveLog().getMoves()) {
+            Move move = logEntry.getFirst();
+            String moveText = logEntry.getSecond();
             if (move.getMovedPiece() == null || move.getMovedPiece().getAlliance().isWhite()) {
-                System.out.printf("%7s", moveText);
+                System.out.printf("%9s", moveText);
             }
             if (move.getMovedPiece() == null || move.getMovedPiece().getAlliance().isBlack()) {
-                System.out.printf("|%7s\n", moveText);
+                System.out.printf("|%9s\n", moveText);
             }
         }
         System.out.println();

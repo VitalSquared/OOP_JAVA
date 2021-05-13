@@ -103,7 +103,7 @@ public class BoardPanel extends JPanel {
         }
 
         try {
-            gameHistoryPanel.redo(scene.getActiveGame().getBoard(), scene.getActiveGame().getMoveLog());
+            gameHistoryPanel.updatePanel(scene.getActiveGame().getMoveLog());
         }
         catch (Exception e) {
             exception = true;
@@ -111,7 +111,7 @@ public class BoardPanel extends JPanel {
 
         try {
             topPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isBlack());
-            topPlayerInfo.redo(scene.getActiveGame().getOpponentName(), scene.getActiveGame().getMoveLog());
+            topPlayerInfo.updatePanel(scene, scene.getActiveGame().getOpponentName(), scene.getActiveGame().getMoveLog());
         }
         catch (Exception e) {
             exception = true;
@@ -119,16 +119,7 @@ public class BoardPanel extends JPanel {
 
         try {
             bottomPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isWhite());
-            bottomPlayerInfo.redo(scene.getActiveGame().getPlayerName(), scene.getActiveGame().getMoveLog());
-        }
-        catch (Exception e) {
-            exception = true;
-        }
-
-        try {
-            for (TileCaptionPanel tileCaption : tileCaptions) {
-                tileCaption.updateText(scene.getActiveGame().getPlayerAlliance().isBlack());
-            }
+            bottomPlayerInfo.updatePanel(scene, scene.getActiveGame().getPlayerName(), scene.getActiveGame().getMoveLog());
         }
         catch (Exception e) {
             exception = true;
@@ -140,13 +131,11 @@ public class BoardPanel extends JPanel {
     }
 
     private void drawBoard() {
-        try {
-            for (TilePanel tilePanel : boardTiles) {
-                tilePanel.drawTile(scene.getActiveGame().getPlayerAlliance().isBlack());
-            }
+        for (TilePanel tilePanel : boardTiles) {
+            tilePanel.updatePanel(scene.getActiveGame().getPlayerAlliance().isBlack());
         }
-        catch (Exception ignored) {
-            drawBoard();
+        for (TileCaptionPanel tileCaption : tileCaptions) {
+            tileCaption.updatePanel(scene.getActiveGame().getPlayerAlliance().isBlack());
         }
         validate();
         repaint();
