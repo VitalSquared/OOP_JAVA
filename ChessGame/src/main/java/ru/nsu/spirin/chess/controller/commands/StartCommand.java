@@ -24,6 +24,7 @@ public final class StartCommand extends Command {
 
         SettingsFile.saveSetting("LAST_USED_NAME", args[1]);
         getScene().startLocalGame(args[1], isWhitePlayer ? Alliance.WHITE : Alliance.BLACK);
+        getScene().setSceneState(SceneState.BOARD_MENU);
         return CommandStatus.NORMAL;
     }
 }

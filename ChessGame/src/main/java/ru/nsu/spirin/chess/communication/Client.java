@@ -1,6 +1,7 @@
 package ru.nsu.spirin.chess.communication;
 
 import ru.nsu.spirin.chess.communication.message.MessageType;
+import ru.nsu.spirin.chess.scene.Scene;
 import ru.nsu.spirin.chess.utils.ThreadUtils;
 
 import java.io.IOException;
@@ -15,8 +16,8 @@ public final class Client extends NetworkEntity {
     private final String ipAddress;
     private final int    port;
 
-    public Client(String ipAddress, int port, String playerName) throws IOException {
-        super(playerName);
+    public Client(Scene scene, String ipAddress, int port, String playerName) throws IOException {
+        super(scene, playerName);
         this.ipAddress = ipAddress;
         this.port = port;
         this.closed = false;
@@ -53,7 +54,7 @@ public final class Client extends NetworkEntity {
                 try {
                     socket = new Socket(ipAddress, port);
                     setObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
-                    new Thread(new ConnectionHandler(socket)).start();
+                    ThreadUtils.submitThread((new ConnectionHandler(socket)));
                     sendMessage(MessageType.PLAYER_NAME, getPlayerName());
                 }
                 catch (IOException e) {

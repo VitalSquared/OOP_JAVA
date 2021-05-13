@@ -23,7 +23,6 @@ public final class ResultsPanel extends JPanel {
         JButton backButton = new JButton("Back");
 
         backButton.addActionListener(e -> {
-            swingView.saveResults();
             controller.execute("back");
         });
 

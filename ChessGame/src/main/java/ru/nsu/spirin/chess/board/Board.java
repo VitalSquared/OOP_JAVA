@@ -1,7 +1,6 @@
 package ru.nsu.spirin.chess.board;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import ru.nsu.spirin.chess.player.Alliance;
 import ru.nsu.spirin.chess.board.tile.Tile;
 import ru.nsu.spirin.chess.move.Move;
@@ -20,19 +19,20 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class Board implements Serializable {
+    private final List<Tile> gameBoard;
 
-    private final List<Tile>        gameBoard;
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
-    private final WhitePlayer       whitePlayer;
-    private final BlackPlayer       blackPlayer;
-    private final Player            currentPlayer;
-    private final Pawn              enPassantPawn;
+
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
+    private final Player      currentPlayer;
+
+    private final Pawn enPassantPawn;
 
     Board(BoardBuilder builder) {
         this.gameBoard = createGameBoard(builder);
@@ -51,47 +51,10 @@ public final class Board implements Serializable {
         if (builder.isBlackPlayerResigned()) this.blackPlayer.resign();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.gameBoard, this.whitePlayer, this.blackPlayer);
-    }
-
-    public Collection<Piece> getWhitePieces() {
-        return this.whitePieces;
-    }
-
-    public Collection<Piece> getBlackPieces() {
-        return this.blackPieces;
-    }
-
-    public Collection<Piece> getAllPieces() {
-        return Stream.concat(this.whitePieces.stream(), this.blackPieces.stream()).collect(Collectors.toList());
-    }
-
-    public Player getWhitePlayer() {
-        return whitePlayer;
-    }
-
-    public Player getBlackPlayer() {
-        return blackPlayer;
-    }
-
-    public Player getCurrentPlayer() {
-        return this.currentPlayer;
-    }
-
-    public Pawn getEnPassantPawn() {
-        return this.enPassantPawn;
-    }
-
-    public Tile getTile(int coordinate) {
-        return this.gameBoard.get(coordinate);
-    }
-
-    public static List<Tile> createGameBoard(BoardBuilder boardBuilder) {
+    public static List<Tile> createGameBoard(BoardBuilder builder) {
         Tile[] tiles = new Tile[BoardUtils.TOTAL_NUMBER_OF_TILES];
         for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
-            tiles[i] = Tile.createTile(i, boardBuilder.getBoardConfig().get(i));
+            tiles[i] = Tile.createTile(i, builder.getBoardConfig().get(i));
         }
         return ImmutableList.copyOf(tiles);
     }
@@ -134,8 +97,36 @@ public final class Board implements Serializable {
         return builder.build();
     }
 
-    public Iterable<Move> getAllLegalMoves() {
-        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
+    public Collection<Piece> getWhitePieces() {
+        return this.whitePieces;
+    }
+
+    public Collection<Piece> getBlackPieces() {
+        return this.blackPieces;
+    }
+
+    public Collection<Piece> getAllPieces() {
+        return Stream.concat(this.whitePieces.stream(), this.blackPieces.stream()).collect(Collectors.toList());
+    }
+
+    public Player getWhitePlayer() {
+        return whitePlayer;
+    }
+
+    public Player getBlackPlayer() {
+        return blackPlayer;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
+    }
+
+    public Pawn getEnPassantPawn() {
+        return this.enPassantPawn;
+    }
+
+    public Tile getTile(int coordinate) {
+        return this.gameBoard.get(coordinate);
     }
 
     private Collection<Piece> calculateActivePieces(Alliance alliance) {

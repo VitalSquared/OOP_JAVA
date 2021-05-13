@@ -1,11 +1,14 @@
 package ru.nsu.spirin.chess.properties;
 
+import ru.nsu.spirin.chess.scene.Scene;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 public final class ScoresFile {
@@ -46,5 +49,13 @@ public final class ScoresFile {
 
     public static Properties getScores() {
         return properties;
+    }
+
+    public static int calculateTotalScore(Scene scene) {
+        int total = 0;
+        for (Entry<String, Integer> score : scene.getActiveGame().getScoreTexts()) {
+            total += score.getValue();
+        }
+        return total;
     }
 }

@@ -11,7 +11,7 @@ public final class KingSideCastleMove extends CastleMove {
 
     @Override
     public boolean equals(Object other) {
-        return this == other || other instanceof KingSideCastleMove && super.equals(other);
+        return this == other || (other instanceof KingSideCastleMove) && super.equals(other);
     }
 
     @Override

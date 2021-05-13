@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 
 public final class PlayerTeamPanel extends JPanel {
     private final JRadioButton whiteButton;
-    private       JRadioButton blackButton;
 
     public PlayerTeamPanel(String text) {
         super(new GridLayout(1, 1));
@@ -16,7 +15,7 @@ public final class PlayerTeamPanel extends JPanel {
         final ButtonGroup group = new ButtonGroup();
 
         whiteButton = new JRadioButton("WHITE");
-        blackButton = new JRadioButton("BLACK");
+        JRadioButton blackButton = new JRadioButton("BLACK");
 
         group.add(whiteButton);
         group.add(blackButton);

@@ -33,7 +33,7 @@ public final class Pawn extends Piece {
     @Override
     public Collection<Move> calculateLegalMoves(Board board) {
         List<Move> legalMoves = new ArrayList<>();
-        for (final int offset : MOVE_DIRECTIONS) {
+        for (int offset : MOVE_DIRECTIONS) {
             int destinationCoordinate = this.getCoordinate() + (this.getAlliance().getDirection() * offset);
             if (!BoardUtils.isValidTileCoordinate(destinationCoordinate)) {
                 continue;

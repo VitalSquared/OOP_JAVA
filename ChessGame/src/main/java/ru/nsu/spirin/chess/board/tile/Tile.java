@@ -27,7 +27,9 @@ public abstract class Tile implements Serializable {
 
     @Override
     public int hashCode() {
-        return getPiece() == null ? coordinate : getPiece().hashCode();
+        return getPiece() == null ?
+                coordinate :
+                getPiece().hashCode();
     }
 
     public static Tile createTile(int tileCoordinate, Piece piece) {

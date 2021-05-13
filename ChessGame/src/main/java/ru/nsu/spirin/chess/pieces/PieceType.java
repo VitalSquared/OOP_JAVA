@@ -71,7 +71,7 @@ public enum PieceType {
     private final String pieceName;
     private final int    pieceValue;
 
-    PieceType(final String pieceName, final int pieceValue) {
+    PieceType(String pieceName, int pieceValue) {
         this.pieceName = pieceName;
         this.pieceValue = pieceValue;
     }

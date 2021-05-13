@@ -28,6 +28,7 @@ public class BoardPanel extends JPanel {
     private final GameHistoryPanel gameHistoryPanel;
     private final PlayerInfoPanel  topPlayerInfo;
     private final PlayerInfoPanel  bottomPlayerInfo;
+    private final GameResultsPanel gameResultsPanel;
 
 
     public BoardPanel(GameView swingView, Scene scene, Controller controller, Factory<BufferedImage> imageFactory) {
@@ -41,7 +42,7 @@ public class BoardPanel extends JPanel {
         this.gameHistoryPanel = new GameHistoryPanel();
         this.topPlayerInfo = new PlayerInfoPanel(imageFactory);
         this.bottomPlayerInfo = new PlayerInfoPanel(imageFactory);
-        GameResultsPanel gameResultsPanel = new GameResultsPanel(swingView, scene, controller);
+        this.gameResultsPanel = new GameResultsPanel(swingView, scene, controller);
 
         JPanel bottomPanel = new JPanel(new GridLayout(2, 1));
         bottomPanel.add(this.bottomPlayerInfo);
@@ -86,21 +87,55 @@ public class BoardPanel extends JPanel {
     }
 
     public void updatePanel() {
+        boolean exception = false;
         try {
             drawBoard();
+        }
+        catch (Exception e) {
+            exception = true;
+        }
+
+        try {
+            gameResultsPanel.updatePanel();
+        }
+        catch (Exception e) {
+            exception = true;
+        }
+
+        try {
             gameHistoryPanel.redo(scene.getActiveGame().getBoard(), scene.getActiveGame().getMoveLog());
+        }
+        catch (Exception e) {
+            exception = true;
+        }
+
+        try {
             topPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isBlack());
             topPlayerInfo.redo(scene.getActiveGame().getOpponentName(), scene.getActiveGame().getMoveLog());
+        }
+        catch (Exception e) {
+            exception = true;
+        }
+
+        try {
             bottomPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isWhite());
             bottomPlayerInfo.redo(scene.getActiveGame().getPlayerName(), scene.getActiveGame().getMoveLog());
+        }
+        catch (Exception e) {
+            exception = true;
+        }
+
+        try {
             for (TileCaptionPanel tileCaption : tileCaptions) {
                 tileCaption.updateText(scene.getActiveGame().getPlayerAlliance().isBlack());
             }
         }
-        catch (Exception ignored) {
-            if (!BoardUtils.isEndGame(scene.getActiveGame().getBoard())) {
-                updatePanel();
-            }
+        catch (Exception e) {
+            exception = true;
+        }
+
+        if (exception && !BoardUtils.isEndGame(scene.getActiveGame().getBoard())) {
+            updatePanel();
         }
     }
 

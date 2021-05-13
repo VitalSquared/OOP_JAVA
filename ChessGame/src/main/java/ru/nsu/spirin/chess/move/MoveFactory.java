@@ -3,7 +3,7 @@ package ru.nsu.spirin.chess.move;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.player.Alliance;
 
-public class MoveFactory {
+public final class MoveFactory {
     private static final Move NULL_MOVE = new NullMove();
 
     private MoveFactory() {
@@ -11,7 +11,13 @@ public class MoveFactory {
     }
 
     public static Move createMove(Board board, int currentCoordinate, int destinationCoordinate) {
-        for (Move move : board.getAllLegalMoves()) {
+        for (Move move : board.getWhitePlayer().getLegalMoves()) {
+            if (move.getCurrentCoordinate() == currentCoordinate &&
+                move.getDestinationCoordinate() == destinationCoordinate) {
+                return move;
+            }
+        }
+        for (Move move : board.getBlackPlayer().getLegalMoves()) {
             if (move.getCurrentCoordinate() == currentCoordinate &&
                 move.getDestinationCoordinate() == destinationCoordinate) {
                 return move;

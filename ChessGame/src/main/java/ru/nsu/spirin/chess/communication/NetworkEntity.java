@@ -8,7 +8,8 @@ import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveTransition;
 import ru.nsu.spirin.chess.move.ResignMove;
 import ru.nsu.spirin.chess.player.Alliance;
-import ru.nsu.spirin.chess.utils.ThreadUtils;
+import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.scene.SceneState;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -22,22 +23,17 @@ public abstract class NetworkEntity extends GameEntity {
     private          String             opponentName;
     private          Alliance           opponentTeam;
     private volatile boolean            opponentReady;
-    private          ObjectOutputStream objectOutputStream;
+    private ObjectOutputStream objectOutputStream;
+    private Scene              scene;
 
-    protected NetworkEntity(String playerName) {
+    protected NetworkEntity(Scene scene, String playerName) {
         super();
+        this.scene = scene;
         this.playerReady = false;
         this.opponentName = "";
         this.opponentTeam = null;
         this.opponentReady = false;
-        setPlayerName(playerName);
-        ThreadUtils.submitThread(new Thread(() -> {
-            while (getBoard() == null) {
-                if (isPlayerReady() && isOpponentReady()) {
-                    setBoard(Board.createStandardBoard());
-                }
-            }
-        }));
+        this.setPlayerName(playerName);
     }
 
     public abstract ConnectionStatus connected();
@@ -50,15 +46,8 @@ public abstract class NetworkEntity extends GameEntity {
         return this.playerReady;
     }
 
-    public void setPlayerReady(boolean playerReady) {
-        this.playerReady = playerReady;
-        sendMessage(MessageType.PLAYER_READY, playerReady);
-    }
-
-    @Override
-    public void setPlayerAlliance(Alliance playerTeam) {
-        super.setPlayerAlliance(playerTeam);
-        sendMessage(MessageType.PLAYER_TEAM, playerTeam);
+    public boolean isOpponentReady() {
+        return this.opponentReady;
     }
 
     @Override
@@ -71,12 +60,23 @@ public abstract class NetworkEntity extends GameEntity {
         return this.opponentTeam;
     }
 
-    public boolean isOpponentReady() {
-        return this.opponentReady;
-    }
-
     protected ObjectOutputStream getObjectOutputStream() {
         return this.objectOutputStream;
+    }
+
+    public void setPlayerReady(boolean playerReady) {
+        this.playerReady = playerReady;
+        sendMessage(MessageType.PLAYER_READY, playerReady);
+        if (this.opponentReady && this.playerReady) {
+            setBoard(Board.createStandardBoard());
+            scene.setSceneState(SceneState.BOARD_MENU);
+        }
+    }
+
+    @Override
+    public void setPlayerAlliance(Alliance playerTeam) {
+        super.setPlayerAlliance(playerTeam);
+        sendMessage(MessageType.PLAYER_TEAM, playerTeam);
     }
 
     protected void setObjectOutputStream(ObjectOutputStream objectOutputStream) {
@@ -147,6 +147,10 @@ public abstract class NetworkEntity extends GameEntity {
                 }
                 case PLAYER_READY -> {
                     opponentReady = (Boolean) message.getContent();
+                    if (opponentReady && playerReady) {
+                        setBoard(Board.createStandardBoard());
+                        scene.setSceneState(SceneState.BOARD_MENU);
+                    }
                 }
                 case PLAYER_MOVE -> {
                     MoveTransition transition = (MoveTransition) message.getContent();

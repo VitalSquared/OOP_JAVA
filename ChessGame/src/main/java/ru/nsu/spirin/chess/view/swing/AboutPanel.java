@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 
 public final class AboutPanel extends JPanel {
 

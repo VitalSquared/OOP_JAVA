@@ -3,7 +3,6 @@ package ru.nsu.spirin.chess.view.swing.board;
 import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveLog;
-import ru.nsu.spirin.chess.pieces.King;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;

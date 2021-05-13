@@ -42,7 +42,6 @@ public final class BoardBuilder implements Serializable {
         return this.isBlackResigned;
     }
 
-
     public void setPiece(Piece piece) {
         this.boardConfig.put(piece.getCoordinate(), piece);
     }

@@ -33,6 +33,7 @@ class TilePanel extends JPanel {
 
     private final Factory<BufferedImage> imageFactory;
 
+    //TODO: put tile content in the center
     public TilePanel(Scene scene, Controller controller, BoardPanel boardPanel, int tileID, Factory<BufferedImage> imageFactory) {
         OverlayLayout overlayLayout = new OverlayLayout(this);
         setLayout(overlayLayout);
@@ -134,7 +135,6 @@ class TilePanel extends JPanel {
                         if (boardPanel.getHumanMovedPiece() == null) {
                             boardPanel.setSourceTile(null);
                         }
-                        boardPanel.updatePanel();
                     }
                     else {
                         boardPanel.setDestinationTile(scene.getActiveGame().getBoard().getTile(tilePanel.tileID));
@@ -146,8 +146,8 @@ class TilePanel extends JPanel {
                         boardPanel.setSourceTile(null);
                         boardPanel.setDestinationTile(null);
                         boardPanel.setHumanMovedPiece(null);
-                        boardPanel.updatePanel();
                     }
+                    boardPanel.updatePanel();
                 }
             }
         }

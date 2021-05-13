@@ -26,8 +26,8 @@ public final class Rook extends Piece {
 
     @Override
     public Collection<Move> calculateLegalMoves(Board board) {
-        final List<Move> legalMoves = new ArrayList<>();
-        for (final int offset : MOVE_VECTOR_DIRECTIONS) {
+        List<Move> legalMoves = new ArrayList<>();
+        for (int offset : MOVE_VECTOR_DIRECTIONS) {
             int destinationCoordinate = this.getCoordinate();
             while (BoardUtils.isValidTileCoordinate(destinationCoordinate)) {
                 if (isFirstColumnExclusion(destinationCoordinate, offset) || isEighthColumnExclusion(destinationCoordinate, offset)) {

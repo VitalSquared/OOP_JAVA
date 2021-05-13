@@ -14,7 +14,7 @@ public final class PawnJump extends Move {
     @Override
     public Board execute() {
         BoardBuilder builder = new BoardBuilder();
-        for (final Piece piece : this.getBoard().getAllPieces()) {
+        for (Piece piece : this.getBoard().getAllPieces()) {
             if (!this.getMovedPiece().equals(piece)) {
                 builder.setPiece(piece);
             }

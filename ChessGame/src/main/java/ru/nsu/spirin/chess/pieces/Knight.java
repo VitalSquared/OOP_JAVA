@@ -59,15 +59,15 @@ public final class Knight extends Piece {
         return BoardUtils.isPositionInColumn(coordinate, 1) && ((offset == -17) || (offset == -10) || offset == 6 || offset == 15);
     }
 
-    private static boolean isSecondColumnExclusion(int coordinate, final int offset) {
+    private static boolean isSecondColumnExclusion(int coordinate, int offset) {
         return BoardUtils.isPositionInColumn(coordinate, 2) && ((offset == -10) || (offset == 6));
     }
 
-    private static boolean isSeventhColumnExclusion(int coordinate, final int offset) {
+    private static boolean isSeventhColumnExclusion(int coordinate, int offset) {
         return BoardUtils.isPositionInColumn(coordinate, 7) && ((offset == -6) || (offset == 10));
     }
 
-    private static boolean isEighthColumnExclusion(int coordinate, final int offset) {
+    private static boolean isEighthColumnExclusion(int coordinate, int offset) {
         return BoardUtils.isPositionInColumn(coordinate, 8) && ((offset == -15) || (offset == -6) || offset == 10 || offset == 17);
     }
 }

@@ -4,8 +4,7 @@ import ru.nsu.spirin.chess.board.Board;
 
 import java.io.Serializable;
 
-public class MoveTransition implements Serializable {
-
+public final class MoveTransition implements Serializable {
     private final Board      transitionBoard;
     private final Move       move;
     private final MoveStatus moveStatus;
@@ -16,15 +15,15 @@ public class MoveTransition implements Serializable {
         this.moveStatus = moveStatus;
     }
 
-    public MoveStatus getMoveStatus() {
-        return this.moveStatus;
+    public Board getTransitionBoard() {
+        return this.transitionBoard;
     }
 
     public Move getMove() {
         return this.move;
     }
 
-    public Board getTransitionBoard() {
-        return this.transitionBoard;
+    public MoveStatus getMoveStatus() {
+        return this.moveStatus;
     }
 }

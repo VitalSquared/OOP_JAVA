@@ -11,7 +11,7 @@ public final class MajorAttackMove extends AttackMove {
 
     @Override
     public boolean equals(Object other) {
-        return this == other || other instanceof MajorAttackMove && super.equals(other);
+        return this == other || (other instanceof MajorAttackMove) && super.equals(other);
     }
 
     @Override

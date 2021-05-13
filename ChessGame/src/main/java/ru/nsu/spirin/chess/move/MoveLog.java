@@ -3,7 +3,7 @@ package ru.nsu.spirin.chess.move;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoveLog {
+public final class MoveLog {
     private final List<Move> moves;
 
     public MoveLog() {

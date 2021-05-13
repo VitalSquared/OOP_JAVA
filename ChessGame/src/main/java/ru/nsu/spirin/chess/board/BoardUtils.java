@@ -12,27 +12,8 @@ public final class BoardUtils {
     public static final int TOTAL_NUMBER_OF_TILES  = 64;
     public static final int NUMBER_OF_TILES_IN_ROW = 8;
 
-    private static String[] initializeAlgebraicNotation() {
-        String[] notation = new String[TOTAL_NUMBER_OF_TILES];
-        int idx = 0;
-        for (int i = 8; i >= 1; i--) {
-            for (char j = 'a'; j <= 'h'; j++) {
-                notation[idx++] = j + "" + i;
-            }
-        }
-        return notation;
-    }
-
-    private static Map<String, Integer> initializePositionToCoordinateMap() {
-        Map<String, Integer> positionToCoordinate = new HashMap<>();
-        for (int i = 0; i < TOTAL_NUMBER_OF_TILES; i++) {
-            positionToCoordinate.put(ALGEBRAIC_NOTATION[i], i);
-        }
-        return ImmutableMap.copyOf(positionToCoordinate);
-    }
-
     public static boolean isValidTileCoordinate(int coordinate) {
-        return coordinate >= 0 && coordinate < TOTAL_NUMBER_OF_TILES;
+        return 0 <= coordinate && coordinate < TOTAL_NUMBER_OF_TILES;
     }
 
     public static int getCoordinateAtPosition(String position) {
@@ -62,5 +43,24 @@ public final class BoardUtils {
     public static boolean isEndGame(Board board) {
         return board.getBlackPlayer().isResigned() || board.getWhitePlayer().isResigned() ||
                board.getCurrentPlayer().isInCheckMate() || board.getCurrentPlayer().isInStaleMate();
+    }
+
+    private static String[] initializeAlgebraicNotation() {
+        String[] notation = new String[TOTAL_NUMBER_OF_TILES];
+        int idx = 0;
+        for (int i = 8; i >= 1; i--) {
+            for (char j = 'a'; j <= 'h'; j++) {
+                notation[idx++] = j + "" + i;
+            }
+        }
+        return notation;
+    }
+
+    private static Map<String, Integer> initializePositionToCoordinateMap() {
+        Map<String, Integer> positionToCoordinate = new HashMap<>();
+        for (int i = 0; i < TOTAL_NUMBER_OF_TILES; i++) {
+            positionToCoordinate.put(ALGEBRAIC_NOTATION[i], i);
+        }
+        return ImmutableMap.copyOf(positionToCoordinate);
     }
 }

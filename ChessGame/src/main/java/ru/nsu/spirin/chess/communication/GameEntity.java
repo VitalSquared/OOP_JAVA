@@ -17,7 +17,7 @@ public abstract class GameEntity {
     private final    MoveLog moveLog;
 
     private String   playerName;
-    private Alliance playerTeam;
+    private Alliance playerAlliance;
 
     private final List<Entry<String, Integer>> scoreTexts;
 
@@ -37,10 +37,6 @@ public abstract class GameEntity {
         return this.board;
     }
 
-    protected void setBoard(Board board) {
-        this.board = board;
-    }
-
     public MoveLog getMoveLog() {
         return this.moveLog;
     }
@@ -50,7 +46,15 @@ public abstract class GameEntity {
     }
 
     public Alliance getPlayerAlliance() {
-        return this.playerTeam;
+        return this.playerAlliance;
+    }
+
+    public List<Entry<String, Integer>> getScoreTexts() {
+        return this.scoreTexts;
+    }
+
+    protected void setBoard(Board board) {
+        this.board = board;
     }
 
     public void setPlayerName(String playerName) {
@@ -58,11 +62,7 @@ public abstract class GameEntity {
     }
 
     public void setPlayerAlliance(Alliance playerTeam) {
-        this.playerTeam = playerTeam;
-    }
-
-    public List<Entry<String, Integer>> getScoreTexts() {
-        return this.scoreTexts;
+        this.playerAlliance = playerTeam;
     }
 
     public void addScoreText(String text, int score) {
@@ -72,15 +72,9 @@ public abstract class GameEntity {
     protected void calculateScore(Move move) {
         try {
             if (move.getMovedPiece() != null && move.getMovedPiece().getAlliance() == getPlayerAlliance()) {
-                if (move.isAttack()) {
-                    addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());
-                }
-                if (move.isCastlingMove()) {
-                    addScoreText("Castling", 100);
-                }
-                if (move instanceof PawnPromotion) {
-                    addScoreText("Promoted pawn", 200);
-                }
+                if (move.isAttack()) addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());
+                if (move.isCastlingMove()) addScoreText("Castling", 100);
+                if (move instanceof PawnPromotion) addScoreText("Promoted pawn", 200);
             }
         }
         catch (Exception ignored) {

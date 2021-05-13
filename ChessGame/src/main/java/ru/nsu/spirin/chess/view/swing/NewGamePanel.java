@@ -3,7 +3,6 @@ package ru.nsu.spirin.chess.view.swing;
 import com.google.common.net.InetAddresses;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.properties.SettingsFile;
-import ru.nsu.spirin.chess.scene.Scene;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -102,7 +101,7 @@ public final class NewGamePanel extends JPanel {
         setVisible(true);
     }
 
-    public void updatePanel(Scene scene) {
+    public void updatePanel() {
         try {
             startButton.setEnabled(playerNameInput.getText().length() != 0);
             hostButton.setEnabled(playerNameInput.getText().length() != 0 && isIPInputValid(hostIPInput) && isPortInputValid(hostPortInput));
@@ -112,10 +111,11 @@ public final class NewGamePanel extends JPanel {
                     Color.RED);
         }
         catch (NullPointerException ignored) {
-            updatePanel(scene);
+            updatePanel();
         }
     }
 
+    //TODO: change IP validation method
     private boolean isIPInputValid(JTextField input) {
         return InetAddresses.isInetAddress(input.getText()) || input.getText().equals("localhost");
     }

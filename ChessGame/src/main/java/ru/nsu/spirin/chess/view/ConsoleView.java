@@ -58,7 +58,7 @@ public final class ConsoleView extends GameView {
 
     private void updateMainMenuPanel() {
         if (getScene().getSceneState() == SceneState.MAIN_MENU) {
-            System.out.println("MAIN MENU");
+            System.out.println("CHESS\n");
             System.out.println("new_game \tenter new game menu");
             System.out.println("high_scores \tenter high scores menu");
             System.out.println("about \tenter about menu");
@@ -194,9 +194,7 @@ public final class ConsoleView extends GameView {
             }
         }
         builder.append(" +");
-        for (char i = 0; i < 8; i++) {
-            builder.append("--");
-        }
+        for (char i = 0; i < 8; i++) builder.append("--");
         builder.append(System.lineSeparator());
         builder.append("   ");
         for (char i = 'a'; i <= 'h'; i++) {

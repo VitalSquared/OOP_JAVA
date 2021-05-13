@@ -21,7 +21,7 @@ import java.io.IOException;
 
 public final class SwingView extends GameView {
 
-    private final JFrame           gameFrame;
+    private final JFrame gameFrame;
 
     private final MainMenuPanel   mainMenuPanel;
     private final NewGamePanel    newGamePanel;
@@ -52,7 +52,7 @@ public final class SwingView extends GameView {
         LayoutManager overlay = new OverlayLayout(panel);
         panel.setLayout(overlay);
 
-        this.mainMenuPanel = new MainMenuPanel(controller);
+        this.mainMenuPanel = new MainMenuPanel(controller, imageFactory);
         this.newGamePanel = new NewGamePanel(controller);
         this.highScoresPanel = new HighScoresPanel(this, controller);
         this.aboutPanel = new AboutPanel(this, controller);
@@ -97,7 +97,7 @@ public final class SwingView extends GameView {
     private void updateNewGamePanel(Scene scene) {
         newGamePanel.setVisible(scene.getSceneState() == SceneState.NEW_GAME_MENU);
         if (scene.getSceneState() == SceneState.NEW_GAME_MENU) {
-            newGamePanel.updatePanel(scene);
+            newGamePanel.updatePanel();
         }
     }
 
@@ -131,20 +131,5 @@ public final class SwingView extends GameView {
         if (scene.getSceneState() == SceneState.RESULTS_MENU) {
             resultsPanel.updatePanel();
         }
-    }
-
-    @Override
-    protected boolean viewChanged() {
-        boolean changed = super.viewChanged();
-        if (changed) return true;
-
-        if (mainMenuPanel.isVisible() != (getScene().getSceneState() == SceneState.MAIN_MENU)) return true;
-        if (newGamePanel.isVisible() != (getScene().getSceneState() == SceneState.NEW_GAME_MENU)) return true;
-        if (highScoresPanel.isVisible() != (getScene().getSceneState() == SceneState.HIGH_SCORES_MENU)) return true;
-        if (aboutPanel.isVisible() != (getScene().getSceneState() == SceneState.ABOUT_MENU)) return true;
-        if (connectionPanel.isVisible() != (getScene().getSceneState() == SceneState.CONNECTION_MENU)) return true;
-        if (boardPanel.isVisible() != (getScene().getSceneState() == SceneState.BOARD_MENU)) return true;
-
-        return resultsPanel.isVisible() != (getScene().getSceneState() == SceneState.RESULTS_MENU);
     }
 }

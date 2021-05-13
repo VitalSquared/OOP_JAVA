@@ -18,8 +18,9 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class Player implements Serializable {
-    private final Board   board;
-    private final King    playerKing;
+    private final Board board;
+    private final King  playerKing;
+
     private final boolean isInCheck;
     private       boolean resigned;
     private       int     promotedPawns;
@@ -32,6 +33,11 @@ public abstract class Player implements Serializable {
         this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves, calculateKingCastles(legalMoves, opponentMoves)));
         this.isInCheck = !Player.calculateAttacksOnTile(this.playerKing.getCoordinate(), opponentMoves).isEmpty();
         this.promotedPawns = 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerKing, isInCheck, resigned, promotedPawns);
     }
 
     public abstract Collection<Piece> getActivePieces();
@@ -52,10 +58,6 @@ public abstract class Player implements Serializable {
 
     public Collection<Move> getLegalMoves() {
         return this.legalMoves;
-    }
-
-    private boolean isMoveLegal(Move move, boolean checkForTurn) {
-        return (!checkForTurn || board.getCurrentPlayer() == this) && this.legalMoves.contains(move);
     }
 
     public boolean isInCheck() {
@@ -95,29 +97,12 @@ public abstract class Player implements Serializable {
     }
 
     public MoveTransition makeMove(Move move) {
-        return makeMovePrivileged(move, true);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(playerKing, isInCheck, resigned, promotedPawns);
-    }
-
-    private MoveTransition makeMovePrivileged(Move move, boolean checkForTurn) {
-        if (move instanceof ResignMove) {
-            return new MoveTransition(move.execute(), move, MoveStatus.DONE);
-        }
-        if (!isMoveLegal(move, checkForTurn)) return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
-        Board transitionBoard = move.execute();
-        Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getPlayerKing().getCoordinate(), transitionBoard.getCurrentPlayer().getLegalMoves());
-        if (!kingAttacks.isEmpty()) return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
-        if (move instanceof PawnPromotion) this.promotedPawns++;
-        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
+        return makeMoveAdvanced(move, true);
     }
 
     protected boolean noEscapeMoves() {
         for (Move move : legalMoves) {
-            MoveTransition transition = makeMovePrivileged(move, false);
+            MoveTransition transition = makeMoveAdvanced(move, false);
             if (transition.getMoveStatus().isDone()) return false;
         }
         return true;
@@ -135,6 +120,20 @@ public abstract class Player implements Serializable {
             }
         }
         return ImmutableList.copyOf(attackMoves);
+    }
+
+    private MoveTransition makeMoveAdvanced(Move move, boolean checkForTurn) {
+        if (move instanceof ResignMove) return new MoveTransition(move.execute(), move, MoveStatus.DONE);
+        if (!isMoveLegal(move, checkForTurn)) return new MoveTransition(this.board, move, MoveStatus.ILLEGAL_MOVE);
+        Board transitionBoard = move.execute();
+        Collection<Move> kingAttacks = Player.calculateAttacksOnTile(transitionBoard.getCurrentPlayer().getOpponent().getPlayerKing().getCoordinate(), transitionBoard.getCurrentPlayer().getLegalMoves());
+        if (!kingAttacks.isEmpty()) return new MoveTransition(this.board, move, MoveStatus.LEAVES_PLAYER_IN_CHECK);
+        if (move instanceof PawnPromotion) this.promotedPawns++;
+        return new MoveTransition(transitionBoard, move, MoveStatus.DONE);
+    }
+
+    private boolean isMoveLegal(Move move, boolean checkForTurn) {
+        return (!checkForTurn || board.getCurrentPlayer() == this) && this.legalMoves.contains(move);
     }
 
     private King establishKing() {
