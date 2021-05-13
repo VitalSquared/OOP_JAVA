@@ -165,9 +165,11 @@ public final class ConsoleView extends GameView {
 
     private void updateResultsPanel() {
         if (getScene().getSceneState() == SceneState.RESULTS_MENU) {
+            System.out.println("############################################################");
             System.out.println("RESULTS");
             System.out.println(getResultScores());
             System.out.println("\n\nback \treturn to main menu");
+            System.out.println("############################################################");
         }
     }
 

@@ -1,6 +1,5 @@
 package ru.nsu.spirin.chess.view.swing.board;
 
-import ru.nsu.spirin.chess.board.Board;
 import ru.nsu.spirin.chess.move.Move;
 import ru.nsu.spirin.chess.move.MoveLog;
 import ru.nsu.spirin.chess.utils.Pair;
@@ -93,7 +92,7 @@ class GameHistoryPanel extends JPanel {
         }
 
         @Override
-        public Object getValueAt(final int row, final int column) {
+        public Object getValueAt(int row, int column) {
             final Row currentRow = this.values.get(row);
             if (column == 0) {
                 return currentRow.getWhiteMove();
@@ -105,7 +104,7 @@ class GameHistoryPanel extends JPanel {
         }
 
         @Override
-        public void setValueAt(final Object aValue, final int row, final int column) {
+        public void setValueAt(Object aValue, int row, int column) {
             final Row currentRow;
             if (this.values.size() <= row) {
                 currentRow = new Row();
@@ -128,12 +127,12 @@ class GameHistoryPanel extends JPanel {
         }
 
         @Override
-        public Class<?> getColumnClass(final int column) {
+        public Class<?> getColumnClass(int column) {
             return Move.class;
         }
 
         @Override
-        public String getColumnName(final int column) {
+        public String getColumnName(int column) {
             return NAMES[column];
         }
     }
@@ -152,11 +151,11 @@ class GameHistoryPanel extends JPanel {
             return this.blackMove;
         }
 
-        public void setWhiteMove(final String move) {
+        public void setWhiteMove(String move) {
             this.whiteMove = move;
         }
 
-        public void setBlackMove(final String move) {
+        public void setBlackMove(String move) {
             this.blackMove = move;
         }
     }

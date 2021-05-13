@@ -58,7 +58,7 @@ public final class SwingView extends GameView {
         this.aboutPanel = new AboutPanel(this, controller);
         this.connectionPanel = new ConnectionPanel(scene, controller);
         this.boardPanel = new BoardPanel(this, scene, controller, imageFactory);
-        this.resultsPanel = new ResultsPanel(this, controller);
+        this.resultsPanel = new ResultsPanel(this, scene, controller);
 
         panel.add(this.mainMenuPanel);
         panel.add(this.newGamePanel);

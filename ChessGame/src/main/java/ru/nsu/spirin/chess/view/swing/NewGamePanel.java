@@ -66,7 +66,8 @@ public final class NewGamePanel extends JPanel {
         add(hostInfo);
 
         hostButton = new JButton("Host");
-        hostButton.addActionListener(e -> controller.execute("host " + hostIPInput.getText() + " " + hostPortInput.getText() + " " + playerNameInput.getText()));
+        hostButton.addActionListener(e -> controller.execute(
+                "host " + hostIPInput.getText() + " " + hostPortInput.getText() + " " + playerNameInput.getText()));
         add(hostButton);
 
         JLabel joinGameCategoryLabel = new JLabel("--------------------JOIN GAME--------------------");
@@ -87,7 +88,8 @@ public final class NewGamePanel extends JPanel {
         add(joinInfo);
 
         joinButton = new JButton("Join");
-        joinButton.addActionListener(e -> controller.execute("join " + joinIPInput.getText() + " " + joinPortInput.getText() + " " + playerNameInput.getText()));
+        joinButton.addActionListener(e -> controller.execute(
+                "join " + joinIPInput.getText() + " " + joinPortInput.getText() + " " + playerNameInput.getText()));
         add(joinButton);
 
         JLabel backCategory = new JLabel("----------------------------------------");
@@ -104,8 +106,10 @@ public final class NewGamePanel extends JPanel {
     public void updatePanel() {
         try {
             startButton.setEnabled(playerNameInput.getText().length() != 0);
-            hostButton.setEnabled(playerNameInput.getText().length() != 0 && isIPInputValid(hostIPInput) && isPortInputValid(hostPortInput));
-            joinButton.setEnabled(playerNameInput.getText().length() != 0 && isIPInputValid(joinIPInput) && isPortInputValid(joinPortInput));
+            hostButton.setEnabled(playerNameInput.getText().length() != 0 && isIPInputValid(hostIPInput) &&
+                                  isPortInputValid(hostPortInput));
+            joinButton.setEnabled(playerNameInput.getText().length() != 0 && isIPInputValid(joinIPInput) &&
+                                  isPortInputValid(joinPortInput));
             playerNamePrompt.setForeground(playerNameInput.getText().length() != 0 ?
                     Color.BLACK :
                     Color.RED);

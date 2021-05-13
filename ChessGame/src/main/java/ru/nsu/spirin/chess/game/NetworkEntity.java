@@ -23,8 +23,8 @@ public abstract class NetworkEntity extends GameEntity {
     private          String             opponentName;
     private          Alliance           opponentTeam;
     private volatile boolean            opponentReady;
-    private ObjectOutputStream objectOutputStream;
-    private Scene              scene;
+    private          ObjectOutputStream objectOutputStream;
+    private final    Scene              scene;
 
     protected NetworkEntity(Scene scene, String playerName) {
         super();
@@ -137,9 +137,7 @@ public abstract class NetworkEntity extends GameEntity {
 
         private void manageMessages(Message message) {
             switch (message.getType()) {
-                case PLAYER_NAME -> {
-                    opponentName = (String) message.getContent();
-                }
+                case PLAYER_NAME -> opponentName = (String) message.getContent();
                 case PLAYER_TEAM -> {
                     opponentTeam = (Alliance) message.getContent();
                     if (opponentTeam == getPlayerAlliance()) {

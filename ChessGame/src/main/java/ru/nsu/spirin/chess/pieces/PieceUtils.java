@@ -33,8 +33,8 @@ final class PieceUtils {
     }
 
     private static Table<Alliance, Integer, Pawn> createAllPossibleMovedPawns() {
-        final ImmutableTable.Builder<Alliance, Integer, Pawn> pieces = ImmutableTable.builder();
-        for (final Alliance alliance : Alliance.values()) {
+        ImmutableTable.Builder<Alliance, Integer, Pawn> pieces = ImmutableTable.builder();
+        for (Alliance alliance : Alliance.values()) {
             for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
                 pieces.put(alliance, i, new Pawn(alliance, i, false));
             }
@@ -43,8 +43,8 @@ final class PieceUtils {
     }
 
     private static Table<Alliance, Integer, Knight> createAllPossibleMovedKnights() {
-        final ImmutableTable.Builder<Alliance, Integer, Knight> pieces = ImmutableTable.builder();
-        for (final Alliance alliance : Alliance.values()) {
+        ImmutableTable.Builder<Alliance, Integer, Knight> pieces = ImmutableTable.builder();
+        for (Alliance alliance : Alliance.values()) {
             for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
                 pieces.put(alliance, i, new Knight(alliance, i, false));
             }
@@ -53,8 +53,8 @@ final class PieceUtils {
     }
 
     private static Table<Alliance, Integer, Bishop> createAllPossibleMovedBishops() {
-        final ImmutableTable.Builder<Alliance, Integer, Bishop> pieces = ImmutableTable.builder();
-        for (final Alliance alliance : Alliance.values()) {
+        ImmutableTable.Builder<Alliance, Integer, Bishop> pieces = ImmutableTable.builder();
+        for (Alliance alliance : Alliance.values()) {
             for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
                 pieces.put(alliance, i, new Bishop(alliance, i, false));
             }
@@ -63,8 +63,8 @@ final class PieceUtils {
     }
 
     private static Table<Alliance, Integer, Rook> createAllPossibleMovedRooks() {
-        final ImmutableTable.Builder<Alliance, Integer, Rook> pieces = ImmutableTable.builder();
-        for (final Alliance alliance : Alliance.values()) {
+        ImmutableTable.Builder<Alliance, Integer, Rook> pieces = ImmutableTable.builder();
+        for (Alliance alliance : Alliance.values()) {
             for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
                 pieces.put(alliance, i, new Rook(alliance, i, false));
             }
@@ -73,8 +73,8 @@ final class PieceUtils {
     }
 
     private static Table<Alliance, Integer, Queen> createAllPossibleMovedQueens() {
-        final ImmutableTable.Builder<Alliance, Integer, Queen> pieces = ImmutableTable.builder();
-        for (final Alliance alliance : Alliance.values()) {
+        ImmutableTable.Builder<Alliance, Integer, Queen> pieces = ImmutableTable.builder();
+        for (Alliance alliance : Alliance.values()) {
             for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
                 pieces.put(alliance, i, new Queen(alliance, i, false));
             }
