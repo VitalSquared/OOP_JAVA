@@ -1,7 +1,7 @@
 package ru.nsu.spirin.chess.game;
 
-import ru.nsu.spirin.chess.model.server.ServerMatch;
-import ru.nsu.spirin.chess.model.server.ConnectedPlayer;
+import ru.nsu.spirin.chess.model.match.server.ServerMatch;
+import ru.nsu.spirin.chess.model.match.server.ConnectedPlayer;
 import ru.nsu.spirin.chess.utils.ThreadPool;
 
 import java.net.InetAddress;

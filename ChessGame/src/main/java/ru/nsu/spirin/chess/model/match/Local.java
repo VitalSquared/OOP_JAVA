@@ -9,7 +9,7 @@ import ru.nsu.spirin.chess.model.move.ResignMove;
 import ru.nsu.spirin.chess.model.player.Alliance;
 import ru.nsu.spirin.chess.model.player.ai.MiniMax;
 import ru.nsu.spirin.chess.model.player.ai.MoveStrategy;
-import ru.nsu.spirin.chess.model.server.ConnectionStatus;
+import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
 import ru.nsu.spirin.chess.utils.ThreadPool;
 
 public final class Local extends MatchEntity {

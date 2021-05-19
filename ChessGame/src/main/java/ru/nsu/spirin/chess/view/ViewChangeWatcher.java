@@ -1,7 +1,7 @@
 package ru.nsu.spirin.chess.view;
 
 import ru.nsu.spirin.chess.model.board.Board;
-import ru.nsu.spirin.chess.model.server.ConnectionStatus;
+import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
 import ru.nsu.spirin.chess.model.match.MatchEntity;
 import ru.nsu.spirin.chess.model.player.Alliance;
 import ru.nsu.spirin.chess.model.scene.Scene;

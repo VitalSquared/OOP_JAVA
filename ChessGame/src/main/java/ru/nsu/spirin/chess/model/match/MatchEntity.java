@@ -6,7 +6,7 @@ import ru.nsu.spirin.chess.model.move.MoveLog;
 import ru.nsu.spirin.chess.model.move.MoveTransition;
 import ru.nsu.spirin.chess.model.move.PawnPromotion;
 import ru.nsu.spirin.chess.model.player.Alliance;
-import ru.nsu.spirin.chess.model.server.ConnectionStatus;
+import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public abstract class MatchEntity {
     private volatile Board   board;
     private final    MoveLog moveLog;
 
-    private volatile String   playerName;
+    private final    String   playerName;
     private volatile Alliance playerAlliance;
 
     private final List<Entry<String, Integer>> scoreTexts;
@@ -67,10 +67,6 @@ public abstract class MatchEntity {
 
     protected void setBoard(Board board) {
         this.board = board;
-    }
-
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
     }
 
     public void setPlayerAlliance(Alliance playerTeam) {

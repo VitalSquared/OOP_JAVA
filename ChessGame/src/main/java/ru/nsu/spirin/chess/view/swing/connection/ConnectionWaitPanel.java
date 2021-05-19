@@ -2,7 +2,7 @@ package ru.nsu.spirin.chess.view.swing.connection;
 
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.model.match.MatchEntity;
-import ru.nsu.spirin.chess.model.server.ConnectionStatus;
+import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
 import ru.nsu.spirin.chess.model.scene.Scene;
 
 import javax.swing.JButton;

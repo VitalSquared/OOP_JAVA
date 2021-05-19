@@ -61,10 +61,10 @@ public final class ConsoleView extends GameView {
         if (getScene().getSceneState() == SceneState.MAIN_MENU) {
             System.out.println("############################################################");
             System.out.println("CHESS\n");
-            System.out.println("new_game \tenter new match menu");
+            System.out.println("new_game \tenter new game menu");
             System.out.println("high_scores \tenter high scores menu");
             System.out.println("about \tenter about menu");
-            System.out.println("exit \texit match");
+            System.out.println("exit \texit game");
             System.out.println("############################################################");
         }
     }
@@ -73,8 +73,8 @@ public final class ConsoleView extends GameView {
         if (getScene().getSceneState() == SceneState.NEW_GAME_MENU) {
             System.out.println("############################################################");
             System.out.println("NEW GAME\n");
-            System.out.println("start <player team: [white | black]> <player name>\tplay match with ai");
-            System.out.println("join <ip> <port> <player name> \tjoin match");
+            System.out.println("start <player team: [white | black]> <player name>\tplay game with ai");
+            System.out.println("join <ip> <port> <player name> \tjoin game");
             System.out.println("back \treturn to previous menu");
             System.out.println("############################################################");
         }

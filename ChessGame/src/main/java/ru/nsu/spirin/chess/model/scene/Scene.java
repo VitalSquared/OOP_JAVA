@@ -1,6 +1,6 @@
 package ru.nsu.spirin.chess.model.scene;
 
-import ru.nsu.spirin.chess.model.match.Client;
+import ru.nsu.spirin.chess.model.match.server.Client;
 import ru.nsu.spirin.chess.model.match.MatchEntity;
 import ru.nsu.spirin.chess.model.match.Local;
 import ru.nsu.spirin.chess.model.player.Alliance;

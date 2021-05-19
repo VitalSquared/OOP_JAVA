@@ -1,6 +1,6 @@
 package ru.nsu.spirin.chess.controller.commands;
 
-import ru.nsu.spirin.chess.model.server.ConnectionStatus;
+import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
 import ru.nsu.spirin.chess.utils.ScoresFile;
