@@ -2,12 +2,12 @@ package ru.nsu.spirin.chess.view.swing.board;
 
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
-import ru.nsu.spirin.chess.board.Board;
-import ru.nsu.spirin.chess.board.BoardUtils;
+import ru.nsu.spirin.chess.model.board.Board;
+import ru.nsu.spirin.chess.model.board.BoardUtils;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.factory.Factory;
-import ru.nsu.spirin.chess.move.Move;
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.move.Move;
+import ru.nsu.spirin.chess.model.scene.Scene;
 import ru.nsu.spirin.chess.view.swing.SwingView;
 
 import javax.swing.ImageIcon;

@@ -1,7 +1,7 @@
 package ru.nsu.spirin.chess.view.swing.board;
 
-import ru.nsu.spirin.chess.move.Move;
-import ru.nsu.spirin.chess.move.MoveLog;
+import ru.nsu.spirin.chess.model.move.Move;
+import ru.nsu.spirin.chess.model.move.MoveLog;
 import ru.nsu.spirin.chess.utils.Pair;
 
 import javax.swing.JPanel;

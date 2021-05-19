@@ -1,12 +1,11 @@
 package ru.nsu.spirin.chess.controller.commands;
 
-import ru.nsu.spirin.chess.game.ConnectionStatus;
-import ru.nsu.spirin.chess.game.NetworkEntity;
+import ru.nsu.spirin.chess.model.server.ConnectionStatus;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
 import ru.nsu.spirin.chess.utils.ScoresFile;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 
 import java.util.Arrays;
 
@@ -21,8 +20,7 @@ public final class BackCommand extends Command {
     public CommandStatus execute(String[] args) {
         if (!Arrays.asList(allowed).contains(getScene().getSceneState())) return CommandStatus.INVALID_MENU;
         if (getScene().getSceneState() == SceneState.CONNECTION_MENU) {
-            NetworkEntity networkEntity = (NetworkEntity) getScene().getActiveGame();
-            if (networkEntity.connected() != ConnectionStatus.FAILED) return CommandStatus.INVALID_MENU;
+            if (getScene().getActiveGame().connected() != ConnectionStatus.FAILED) return CommandStatus.INVALID_MENU;
         }
         if (args.length != 0) return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
         if (getScene().getSceneState() == SceneState.RESULTS_MENU) {

@@ -1,9 +1,9 @@
 package ru.nsu.spirin.chess.view.swing.connection;
 
-import ru.nsu.spirin.chess.game.ConnectionStatus;
-import ru.nsu.spirin.chess.game.NetworkEntity;
+import ru.nsu.spirin.chess.model.match.MatchEntity;
+import ru.nsu.spirin.chess.model.server.ConnectionStatus;
 import ru.nsu.spirin.chess.controller.Controller;
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.Scene;
 
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
@@ -29,7 +29,7 @@ public final class ConnectionPanel extends JPanel {
         LayoutManager overlay = new OverlayLayout(panel);
         panel.setLayout(overlay);
 
-        this.connectionWaitPanel = new ConnectionWaitPanel(controller);
+        this.connectionWaitPanel = new ConnectionWaitPanel(scene, controller);
         this.connectionFailedPanel = new ConnectionFailedPanel(controller);
         this.connectionSetupPanel = new ConnectionSetupPanel(scene, controller);
 
@@ -43,12 +43,16 @@ public final class ConnectionPanel extends JPanel {
     }
 
     public void updatePanel() {
-        NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
+        MatchEntity matchEntity = scene.getActiveGame();
         try {
-            ConnectionStatus status = networkEntity.connected();
-            this.connectionWaitPanel.setVisible(status == ConnectionStatus.NOT_CONNECTED);
+            ConnectionStatus status = matchEntity.connected();
+            this.connectionWaitPanel.setVisible(status == ConnectionStatus.NOT_CONNECTED || status == ConnectionStatus.WAITING_FOR_PLAYER);
             this.connectionSetupPanel.setVisible(status == ConnectionStatus.CONNECTED);
             this.connectionFailedPanel.setVisible(status == ConnectionStatus.FAILED);
+
+            if (status == ConnectionStatus.NOT_CONNECTED || status == ConnectionStatus.WAITING_FOR_PLAYER) {
+                this.connectionWaitPanel.updatePanel();
+            }
 
             if (status == ConnectionStatus.CONNECTED) {
                 this.connectionSetupPanel.updatePanel();

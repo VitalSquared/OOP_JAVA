@@ -1,7 +1,5 @@
 package ru.nsu.spirin.chess.factory;
 
-import ru.nsu.spirin.chess.exceptions.FactoryException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;

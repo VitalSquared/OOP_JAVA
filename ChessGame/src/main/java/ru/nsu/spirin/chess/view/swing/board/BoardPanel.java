@@ -1,11 +1,11 @@
 package ru.nsu.spirin.chess.view.swing.board;
 
-import ru.nsu.spirin.chess.board.BoardUtils;
-import ru.nsu.spirin.chess.board.tile.Tile;
+import ru.nsu.spirin.chess.model.board.BoardUtils;
+import ru.nsu.spirin.chess.model.board.tile.Tile;
 import ru.nsu.spirin.chess.controller.Controller;
 import ru.nsu.spirin.chess.factory.Factory;
-import ru.nsu.spirin.chess.pieces.Piece;
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.pieces.Piece;
+import ru.nsu.spirin.chess.model.scene.Scene;
 import ru.nsu.spirin.chess.view.GameView;
 import ru.nsu.spirin.chess.view.swing.SwingView;
 

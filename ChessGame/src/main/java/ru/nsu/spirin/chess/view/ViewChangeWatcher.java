@@ -1,16 +1,15 @@
 package ru.nsu.spirin.chess.view;
 
-import ru.nsu.spirin.chess.board.Board;
-import ru.nsu.spirin.chess.game.ConnectionStatus;
-import ru.nsu.spirin.chess.game.GameEntity;
-import ru.nsu.spirin.chess.game.NetworkEntity;
-import ru.nsu.spirin.chess.player.Alliance;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.board.Board;
+import ru.nsu.spirin.chess.model.server.ConnectionStatus;
+import ru.nsu.spirin.chess.model.match.MatchEntity;
+import ru.nsu.spirin.chess.model.player.Alliance;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 
 public final class ViewChangeWatcher {
-    private SceneState prevSceneState;
-    private GameEntity prevGameEntity;
+    private SceneState  prevSceneState;
+    private MatchEntity prevMatchEntity;
 
     private ConnectionStatus prevConnected;
 
@@ -30,7 +29,7 @@ public final class ViewChangeWatcher {
 
     public void nullEverything() {
         this.prevSceneState = null;
-        this.prevGameEntity = null;
+        this.prevMatchEntity = null;
         this.prevConnected = null;
         this.prevOpponentName = null;
         this.prevOpponentTeam = null;
@@ -44,40 +43,37 @@ public final class ViewChangeWatcher {
     public void updateContent(Scene scene) {
         if (scene.getActiveGame() == null) nullEverything();
         else {
-            this.prevBoard = scene.getActiveGame().getBoard();
-            this.prevPlayerTeam = scene.getActiveGame().getPlayerAlliance();
-            this.prevPlayerName = scene.getActiveGame().getPlayerName();
-            if (scene.getActiveGame() instanceof NetworkEntity) {
-                NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
-                this.prevConnected = networkEntity.connected();
-                this.prevOpponentTeam = networkEntity.getOpponentAlliance();
-                this.prevOpponentName = networkEntity.getOpponentName();
-                this.prevOpponentReady = networkEntity.isOpponentReady();
-                this.prevPlayerReady = networkEntity.isPlayerReady();
-            }
+            MatchEntity matchEntity = scene.getActiveGame();
+            this.prevBoard = matchEntity.getBoard();
+            this.prevPlayerTeam = matchEntity.getPlayerAlliance();
+            this.prevPlayerName = matchEntity.getPlayerName();
+            this.prevConnected = matchEntity.connected();
+            this.prevOpponentTeam = matchEntity.getOpponentAlliance();
+            this.prevOpponentName = matchEntity.getOpponentName();
+            this.prevOpponentReady = matchEntity.isOpponentReady();
+            this.prevPlayerReady = matchEntity.isPlayerReady();
         }
-        this.prevGameEntity = scene.getActiveGame();
+        this.prevMatchEntity = scene.getActiveGame();
         this.prevSceneState = scene.getSceneState();
     }
 
     public boolean anyDifference(Scene scene) {
         if (this.prevSceneState != scene.getSceneState()) return true;
-        if (this.prevGameEntity != scene.getActiveGame()) return true;
-        if (this.prevGameEntity == null) return false;
-        if (this.prevGameEntity.getPlayerAlliance() != scene.getActiveGame().getPlayerAlliance()) return true;
-        if (this.prevGameEntity instanceof NetworkEntity) {
-            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
-            if (this.prevConnected != networkEntity.connected()) return true;
+        if (this.prevMatchEntity != scene.getActiveGame()) return true;
+        if (this.prevMatchEntity == null) return false;
 
-            if (this.prevOpponentTeam != networkEntity.getOpponentAlliance()) return true;
-            if (!this.prevOpponentName.equals(networkEntity.getOpponentName())) return true;
-            if (this.prevOpponentReady != networkEntity.isOpponentReady()) return true;
+        MatchEntity matchEntity = scene.getActiveGame();
 
-            if (this.prevPlayerTeam != networkEntity.getPlayerAlliance()) return true;
-            if (!this.prevPlayerName.equals(networkEntity.getPlayerName())) return true;
-            if (this.prevPlayerReady != networkEntity.isPlayerReady()) return true;
-        }
-        if (this.prevGameEntity.getBoard() == null && scene.getActiveGame().getBoard() == null) return false;
-        return this.prevBoard != scene.getActiveGame().getBoard();
+        if (this.prevMatchEntity.getPlayerAlliance() != matchEntity.getPlayerAlliance()) return true;
+        if (this.prevConnected != matchEntity.connected()) return true;
+        if (this.prevOpponentTeam != matchEntity.getOpponentAlliance()) return true;
+        if (!this.prevOpponentName.equals(matchEntity.getOpponentName())) return true;
+        if (this.prevOpponentReady != matchEntity.isOpponentReady()) return true;
+        if (this.prevPlayerTeam != matchEntity.getPlayerAlliance()) return true;
+        if (!this.prevPlayerName.equals(matchEntity.getPlayerName())) return true;
+        if (this.prevPlayerReady != matchEntity.isPlayerReady()) return true;
+
+        if (this.prevMatchEntity.getBoard() == null && matchEntity.getBoard() == null) return false;
+        return this.prevBoard != matchEntity.getBoard();
     }
 }

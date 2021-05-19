@@ -1,7 +1,5 @@
 package ru.nsu.spirin.chess.factory;
 
-import ru.nsu.spirin.chess.exceptions.FactoryException;
-
 import javax.imageio.ImageIO;
 import java.awt.Image;
 import java.awt.image.BufferedImage;

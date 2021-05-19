@@ -2,10 +2,10 @@ package ru.nsu.spirin.chess.view;
 
 import com.google.common.collect.Lists;
 import ru.nsu.spirin.chess.controller.Controller;
-import ru.nsu.spirin.chess.player.Alliance;
-import ru.nsu.spirin.chess.player.Player;
+import ru.nsu.spirin.chess.model.player.Alliance;
+import ru.nsu.spirin.chess.model.player.Player;
 import ru.nsu.spirin.chess.utils.ScoresFile;
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.Scene;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public abstract class GameView {
     }
 
     public String getAbout() {
-        return "This is a chess game\nCreated by Vitaly Spirin\n";
+        return "This is a chess match\nCreated by Vitaly Spirin\n";
     }
 
     public String getRoundResult() {

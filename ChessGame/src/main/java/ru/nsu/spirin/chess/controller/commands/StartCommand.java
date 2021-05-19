@@ -2,10 +2,10 @@ package ru.nsu.spirin.chess.controller.commands;
 
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
-import ru.nsu.spirin.chess.player.Alliance;
+import ru.nsu.spirin.chess.model.player.Alliance;
 import ru.nsu.spirin.chess.utils.SettingsFile;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 
 public final class StartCommand extends Command {
     public StartCommand(Scene scene) {

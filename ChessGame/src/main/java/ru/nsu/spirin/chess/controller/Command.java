@@ -1,6 +1,6 @@
 package ru.nsu.spirin.chess.controller;
 
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.Scene;
 
 public abstract class Command {
     private final Scene scene;

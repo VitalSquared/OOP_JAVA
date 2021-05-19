@@ -1,12 +1,12 @@
 package ru.nsu.spirin.chess.controller.commands;
 
-import ru.nsu.spirin.chess.game.ConnectionStatus;
-import ru.nsu.spirin.chess.game.NetworkEntity;
+import ru.nsu.spirin.chess.model.match.MatchEntity;
+import ru.nsu.spirin.chess.model.server.ConnectionStatus;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
-import ru.nsu.spirin.chess.player.Alliance;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.player.Alliance;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 
 public final class TeamSelectionCommand extends Command {
     public TeamSelectionCommand(Scene scene) {
@@ -16,8 +16,8 @@ public final class TeamSelectionCommand extends Command {
     @Override
     public CommandStatus execute(String[] args) {
         if (getScene().getSceneState() != SceneState.CONNECTION_MENU) return CommandStatus.INVALID_MENU;
-        NetworkEntity networkEntity = (NetworkEntity) getScene().getActiveGame();
-        if (networkEntity.connected() != ConnectionStatus.CONNECTED) return CommandStatus.INVALID_MENU;
+        MatchEntity matchEntity = getScene().getActiveGame();
+        if (matchEntity.connected() != ConnectionStatus.CONNECTED) return CommandStatus.INVALID_MENU;
         if (args.length != 1) return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
         Alliance alliance;
         switch (args[0].toUpperCase()) {
@@ -28,7 +28,7 @@ public final class TeamSelectionCommand extends Command {
                 return CommandStatus.INVALID_ARGUMENTS;
             }
         }
-        networkEntity.setPlayerAlliance(alliance);
+        matchEntity.setPlayerAlliance(alliance);
         return CommandStatus.NORMAL;
     }
 }

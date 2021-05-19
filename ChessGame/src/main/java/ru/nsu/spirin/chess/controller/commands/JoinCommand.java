@@ -4,8 +4,8 @@ import org.apache.commons.validator.routines.InetAddressValidator;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
 import ru.nsu.spirin.chess.utils.SettingsFile;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 
 import java.io.IOException;
 
@@ -33,7 +33,7 @@ public final class JoinCommand extends Command {
             return CommandStatus.INVALID_PORT;
         }
         catch (IOException e) {
-            System.out.println("Error while joining a game: " + e.getLocalizedMessage());
+            System.out.println("Error while joining a match: " + e.getLocalizedMessage());
             return CommandStatus.EXCEPTION;
         }
 

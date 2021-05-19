@@ -1,6 +1,6 @@
 package ru.nsu.spirin.chess.utils;
 
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.Scene;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

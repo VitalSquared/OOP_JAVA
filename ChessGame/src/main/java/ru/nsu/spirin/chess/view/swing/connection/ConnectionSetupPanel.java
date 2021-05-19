@@ -1,9 +1,9 @@
 package ru.nsu.spirin.chess.view.swing.connection;
 
-import ru.nsu.spirin.chess.game.NetworkEntity;
+import ru.nsu.spirin.chess.model.match.MatchEntity;
 import ru.nsu.spirin.chess.controller.Controller;
-import ru.nsu.spirin.chess.player.Alliance;
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.player.Alliance;
+import ru.nsu.spirin.chess.model.scene.Scene;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -61,8 +61,7 @@ final class ConnectionSetupPanel extends JPanel {
         JButton whiteToNone = new JButton(">");
         whiteToNone.addActionListener(e -> {
             controller.execute("team none");
-            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
-            if (networkEntity.isPlayerReady()) {
+            if (scene.getActiveGame().isPlayerReady()) {
                 controller.execute("ready");
             }
         });
@@ -98,15 +97,13 @@ final class ConnectionSetupPanel extends JPanel {
         JButton noneToBlack = new JButton(">");
         noneToWhite.addActionListener(e -> {
             controller.execute("team white");
-            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
-            if (networkEntity.isPlayerReady()) {
+            if (scene.getActiveGame().isPlayerReady()) {
                 controller.execute("ready");
             }
         });
         noneToBlack.addActionListener(e -> {
             controller.execute("team black");
-            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
-            if (networkEntity.isPlayerReady()) {
+            if (scene.getActiveGame().isPlayerReady()) {
                 controller.execute("ready");
             }
         });
@@ -141,8 +138,7 @@ final class ConnectionSetupPanel extends JPanel {
         JButton blackToNone = new JButton("<");
         blackToNone.addActionListener(e -> {
             controller.execute("team none");
-            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
-            if (networkEntity.isPlayerReady()) {
+            if (scene.getActiveGame().isPlayerReady()) {
                 controller.execute("ready");
             }
         });
@@ -165,8 +161,7 @@ final class ConnectionSetupPanel extends JPanel {
 
         JButton disconnectButton = new JButton("Disconnect");
         disconnectButton.addActionListener(e -> {
-            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
-            if (networkEntity.isPlayerReady()) {
+            if (scene.getActiveGame().isPlayerReady()) {
                 controller.execute("ready");
             }
             controller.execute("disconnect");
@@ -177,39 +172,39 @@ final class ConnectionSetupPanel extends JPanel {
 
     public void updatePanel() {
         try {
-            NetworkEntity networkEntity = (NetworkEntity) scene.getActiveGame();
+            MatchEntity matchEntity = scene.getActiveGame();
 
             //update white panel
-            opponentNameWhite.setVisible(networkEntity.getOpponentAlliance() == Alliance.WHITE);
-            opponentNameWhite.setText(networkEntity.getOpponentName());
+            opponentNameWhite.setVisible(matchEntity.getOpponentAlliance() == Alliance.WHITE);
+            opponentNameWhite.setText(matchEntity.getOpponentName());
 
-            playerNameWhitePanel.setVisible(networkEntity.getPlayerAlliance() == Alliance.WHITE);
-            playerNameWhite.setText(networkEntity.getPlayerName());
+            playerNameWhitePanel.setVisible(matchEntity.getPlayerAlliance() == Alliance.WHITE);
+            playerNameWhite.setText(matchEntity.getPlayerName());
 
-            opponentWhiteReady.setVisible(networkEntity.getOpponentAlliance() == Alliance.WHITE && networkEntity.getPlayerAlliance() != Alliance.WHITE);
-            opponentWhiteReady.setText(networkEntity.isOpponentReady() ? "Ready" : "Not Ready");
+            opponentWhiteReady.setVisible(matchEntity.getOpponentAlliance() == Alliance.WHITE && matchEntity.getPlayerAlliance() != Alliance.WHITE);
+            opponentWhiteReady.setText(matchEntity.isOpponentReady() ? "Ready" : "Not Ready");
 
-            playerWhiteReady.setVisible(networkEntity.getOpponentAlliance() != Alliance.WHITE && networkEntity.getPlayerAlliance() == Alliance.WHITE);
-            playerWhiteReady.setText(networkEntity.isPlayerReady() ? "Unready" : "Ready");
+            playerWhiteReady.setVisible(matchEntity.getOpponentAlliance() != Alliance.WHITE && matchEntity.getPlayerAlliance() == Alliance.WHITE);
+            playerWhiteReady.setText(matchEntity.isPlayerReady() ? "Unready" : "Ready");
             //update none panel
-            opponentNameNone.setVisible(networkEntity.getOpponentAlliance() == null);
-            opponentNameNone.setText(networkEntity.getOpponentName());
+            opponentNameNone.setVisible(matchEntity.getOpponentAlliance() == null);
+            opponentNameNone.setText(matchEntity.getOpponentName());
 
-            playerNameNonePanel.setVisible(networkEntity.getPlayerAlliance() == null);
-            playerNameNone.setText(networkEntity.getPlayerName());
+            playerNameNonePanel.setVisible(matchEntity.getPlayerAlliance() == null);
+            playerNameNone.setText(matchEntity.getPlayerName());
 
             //update black panel
-            opponentNameBlack.setVisible(networkEntity.getOpponentAlliance() == Alliance.BLACK);
-            opponentNameBlack.setText(networkEntity.getOpponentName());
+            opponentNameBlack.setVisible(matchEntity.getOpponentAlliance() == Alliance.BLACK);
+            opponentNameBlack.setText(matchEntity.getOpponentName());
 
-            playerNameBlackPanel.setVisible(networkEntity.getPlayerAlliance() == Alliance.BLACK);
-            playerNameBlack.setText(networkEntity.getPlayerName());
+            playerNameBlackPanel.setVisible(matchEntity.getPlayerAlliance() == Alliance.BLACK);
+            playerNameBlack.setText(matchEntity.getPlayerName());
 
-            opponentBlackReady.setVisible(networkEntity.getOpponentAlliance() == Alliance.BLACK && networkEntity.getPlayerAlliance() != Alliance.BLACK);
-            opponentBlackReady.setText(networkEntity.isOpponentReady() ? "Ready" : "Not Ready");
+            opponentBlackReady.setVisible(matchEntity.getOpponentAlliance() == Alliance.BLACK && matchEntity.getPlayerAlliance() != Alliance.BLACK);
+            opponentBlackReady.setText(matchEntity.isOpponentReady() ? "Ready" : "Not Ready");
 
-            playerBlackReady.setVisible(networkEntity.getOpponentAlliance() != Alliance.BLACK && networkEntity.getPlayerAlliance() == Alliance.BLACK);
-            playerBlackReady.setText(networkEntity.isPlayerReady() ? "Unready" : "Ready");
+            playerBlackReady.setVisible(matchEntity.getOpponentAlliance() != Alliance.BLACK && matchEntity.getPlayerAlliance() == Alliance.BLACK);
+            playerBlackReady.setText(matchEntity.isPlayerReady() ? "Unready" : "Ready");
         }
         catch (Exception ignored) {}
     }

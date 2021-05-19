@@ -1,16 +1,16 @@
 package ru.nsu.spirin.chess.view;
 
 import com.google.common.primitives.Ints;
-import ru.nsu.spirin.chess.board.BoardUtils;
-import ru.nsu.spirin.chess.game.NetworkEntity;
+import ru.nsu.spirin.chess.model.board.BoardUtils;
+import ru.nsu.spirin.chess.model.match.MatchEntity;
 import ru.nsu.spirin.chess.controller.Controller;
-import ru.nsu.spirin.chess.move.Move;
-import ru.nsu.spirin.chess.pieces.Piece;
-import ru.nsu.spirin.chess.player.Alliance;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.move.Move;
+import ru.nsu.spirin.chess.model.pieces.Piece;
+import ru.nsu.spirin.chess.model.player.Alliance;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 import ru.nsu.spirin.chess.utils.Pair;
-import ru.nsu.spirin.chess.utils.ThreadUtils;
+import ru.nsu.spirin.chess.utils.ThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public final class ConsoleView extends GameView {
         super(scene, controller);
         this.scanner = new Scanner(System.in);
 
-        ThreadUtils.submitThread(new Thread(() -> {
+        ThreadPool.submitThread(new Thread(() -> {
             while (getScene().getSceneState() != SceneState.NONE) {
                 String command = scanner.nextLine();
                 String extra = "";
@@ -61,10 +61,10 @@ public final class ConsoleView extends GameView {
         if (getScene().getSceneState() == SceneState.MAIN_MENU) {
             System.out.println("############################################################");
             System.out.println("CHESS\n");
-            System.out.println("new_game \tenter new game menu");
+            System.out.println("new_game \tenter new match menu");
             System.out.println("high_scores \tenter high scores menu");
             System.out.println("about \tenter about menu");
-            System.out.println("exit \texit game");
+            System.out.println("exit \texit match");
             System.out.println("############################################################");
         }
     }
@@ -73,9 +73,8 @@ public final class ConsoleView extends GameView {
         if (getScene().getSceneState() == SceneState.NEW_GAME_MENU) {
             System.out.println("############################################################");
             System.out.println("NEW GAME\n");
-            System.out.println("start <player team: [white | black]> <player name>\tplay game with ai");
-            System.out.println("host <ip> <port> <player name> \thost game");
-            System.out.println("join <ip> <port> <player name> \tjoin game");
+            System.out.println("start <player team: [white | black]> <player name>\tplay match with ai");
+            System.out.println("join <ip> <port> <player name> \tjoin match");
             System.out.println("back \treturn to previous menu");
             System.out.println("############################################################");
         }
@@ -104,8 +103,8 @@ public final class ConsoleView extends GameView {
     private void updateConnectionPanel() {
         if (getScene().getSceneState() == SceneState.CONNECTION_MENU) {
             System.out.println("############################################################");
-            NetworkEntity networkEntity = (NetworkEntity) getScene().getActiveGame();
-            switch (networkEntity.connected()) {
+            MatchEntity matchEntity = getScene().getActiveGame();
+            switch (matchEntity.connected()) {
                 case FAILED -> {
                     System.out.println("Failed to connect");
                     System.out.println("\n\nback \treturn to previous menu");
@@ -114,34 +113,38 @@ public final class ConsoleView extends GameView {
                     System.out.println("Awaiting connection");
                     System.out.println("\n\ncancel \tCancel connection and return to previous menu");
                 }
+                case WAITING_FOR_PLAYER -> {
+                    System.out.println("Waiting for other player");
+                    System.out.println("\n\ncancel \tCancel connection and return to previous menu");
+                }
                 case CONNECTED -> {
                     System.out.printf("%15s ", "WHITE TEAM");
                     System.out.printf("%15s ", "");
                     System.out.printf("%15s\n", "BLACK TEAM");
 
-                    System.out.printf("%15s ", (networkEntity.getOpponentAlliance() == Alliance.WHITE ? networkEntity.getOpponentName() : ""));
-                    System.out.printf("%15s ", (networkEntity.getOpponentAlliance() == null ? networkEntity.getOpponentName() : ""));
-                    System.out.printf("%15s\n", (networkEntity.getOpponentAlliance() == Alliance.BLACK ? networkEntity.getOpponentName() : ""));
+                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == Alliance.WHITE ? matchEntity.getOpponentName() : ""));
+                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == null ? matchEntity.getOpponentName() : ""));
+                    System.out.printf("%15s\n", (matchEntity.getOpponentAlliance() == Alliance.BLACK ? matchEntity.getOpponentName() : ""));
 
-                    System.out.printf("%15s ", (networkEntity.getPlayerAlliance() == Alliance.WHITE ? networkEntity.getPlayerName() : ""));
-                    System.out.printf("%15s ", (networkEntity.getPlayerAlliance() == null ? networkEntity.getPlayerName() : ""));
-                    System.out.printf("%15s\n", (networkEntity.getPlayerAlliance() == Alliance.BLACK ? networkEntity.getPlayerName() : ""));
+                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == Alliance.WHITE ? matchEntity.getPlayerName() : ""));
+                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == null ? matchEntity.getPlayerName() : ""));
+                    System.out.printf("%15s\n", (matchEntity.getPlayerAlliance() == Alliance.BLACK ? matchEntity.getPlayerName() : ""));
 
                     System.out.println();
 
-                    System.out.printf("%15s ", (networkEntity.getOpponentAlliance() == Alliance.WHITE && networkEntity.getPlayerAlliance() != Alliance.WHITE ? (networkEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == Alliance.WHITE && matchEntity.getPlayerAlliance() != Alliance.WHITE ? (matchEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
                     System.out.printf("%15s ", "");
-                    System.out.printf("%15s\n", (networkEntity.getOpponentAlliance() == Alliance.BLACK && networkEntity.getPlayerAlliance() != Alliance.BLACK ? (networkEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s\n", (matchEntity.getOpponentAlliance() == Alliance.BLACK && matchEntity.getPlayerAlliance() != Alliance.BLACK ? (matchEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
 
-                    System.out.printf("%15s ", (networkEntity.getPlayerAlliance() == Alliance.WHITE && networkEntity.getOpponentAlliance() != Alliance.WHITE ? (networkEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == Alliance.WHITE && matchEntity.getOpponentAlliance() != Alliance.WHITE ? (matchEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
                     System.out.printf("%15s ", "");
-                    System.out.printf("%15s\n", (networkEntity.getPlayerAlliance() == Alliance.BLACK && networkEntity.getOpponentAlliance() != Alliance.BLACK ? (networkEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s\n", (matchEntity.getPlayerAlliance() == Alliance.BLACK && matchEntity.getOpponentAlliance() != Alliance.BLACK ? (matchEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
 
                     System.out.println("\n\nteam <[white | none | black] \tchoose team");
-                    if (networkEntity.getPlayerAlliance() != null && networkEntity.getPlayerAlliance() != networkEntity.getOpponentAlliance()) {
+                    if (matchEntity.getPlayerAlliance() != null && matchEntity.getPlayerAlliance() != matchEntity.getOpponentAlliance()) {
                         System.out.println("ready \tset ready state");
                     }
-                    System.out.println("disconnect \tdisconnect from game and return to previous menu");
+                    System.out.println("disconnect \tdisconnect from match and return to previous menu");
                 }
             }
             System.out.println("############################################################");

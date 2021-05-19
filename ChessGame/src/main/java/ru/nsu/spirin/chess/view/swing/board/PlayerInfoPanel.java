@@ -2,10 +2,10 @@ package ru.nsu.spirin.chess.view.swing.board;
 
 import com.google.common.primitives.Ints;
 import ru.nsu.spirin.chess.factory.Factory;
-import ru.nsu.spirin.chess.move.Move;
-import ru.nsu.spirin.chess.move.MoveLog;
-import ru.nsu.spirin.chess.pieces.Piece;
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.move.Move;
+import ru.nsu.spirin.chess.model.move.MoveLog;
+import ru.nsu.spirin.chess.model.pieces.Piece;
+import ru.nsu.spirin.chess.model.scene.Scene;
 import ru.nsu.spirin.chess.utils.Pair;
 
 import javax.swing.ImageIcon;

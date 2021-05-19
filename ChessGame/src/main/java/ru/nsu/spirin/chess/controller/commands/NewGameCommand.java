@@ -2,8 +2,8 @@ package ru.nsu.spirin.chess.controller.commands;
 
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 
 public final class NewGameCommand extends Command {
     public NewGameCommand(Scene scene) {

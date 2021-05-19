@@ -1,8 +1,8 @@
 package ru.nsu.spirin.chess.view.swing;
 
 import ru.nsu.spirin.chess.controller.Controller;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 import ru.nsu.spirin.chess.view.GameView;
 
 import javax.swing.JButton;

@@ -1,11 +1,10 @@
 package ru.nsu.spirin.chess.controller.commands;
 
-import ru.nsu.spirin.chess.game.NetworkEntity;
 import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
-import ru.nsu.spirin.chess.player.Player;
-import ru.nsu.spirin.chess.scene.Scene;
-import ru.nsu.spirin.chess.scene.SceneState;
+import ru.nsu.spirin.chess.model.player.Player;
+import ru.nsu.spirin.chess.model.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.SceneState;
 
 public final class ProceedToResultsCommand extends Command {
     public ProceedToResultsCommand(Scene scene) {
@@ -19,11 +18,7 @@ public final class ProceedToResultsCommand extends Command {
 
         calculateScore();
         getScene().setSceneState(SceneState.RESULTS_MENU);
-        try {
-            ((NetworkEntity) getScene().getActiveGame()).closeConnection();
-        }
-        catch (Exception ignored) {
-        }
+        getScene().getActiveGame().closeConnection();
         return CommandStatus.NORMAL;
     }
 

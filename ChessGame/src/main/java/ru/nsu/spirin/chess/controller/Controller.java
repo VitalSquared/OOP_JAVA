@@ -2,7 +2,7 @@ package ru.nsu.spirin.chess.controller;
 
 import ru.nsu.spirin.chess.factory.CommandFactory;
 import ru.nsu.spirin.chess.factory.Factory;
-import ru.nsu.spirin.chess.scene.Scene;
+import ru.nsu.spirin.chess.model.scene.Scene;
 import ru.nsu.spirin.chess.utils.Pair;
 
 import java.io.IOException;
