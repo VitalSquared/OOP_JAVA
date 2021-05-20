@@ -3,7 +3,7 @@ package ru.nsu.spirin.chess.model.match;
 import ru.nsu.spirin.chess.model.board.Board;
 import ru.nsu.spirin.chess.model.move.Move;
 import ru.nsu.spirin.chess.model.move.MoveLog;
-import ru.nsu.spirin.chess.model.move.MoveTransition;
+import ru.nsu.spirin.chess.model.move.MoveStatus;
 import ru.nsu.spirin.chess.model.move.PawnPromotion;
 import ru.nsu.spirin.chess.model.player.Alliance;
 import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 public abstract class MatchEntity {
     private volatile Board   board;
-    private final    MoveLog moveLog;
+    private          MoveLog moveLog;
 
     private final    String   playerName;
     private volatile Alliance playerAlliance;
@@ -39,7 +39,7 @@ public abstract class MatchEntity {
 
     public abstract void setPlayerReady(boolean playerReady);
 
-    public abstract void makeMove(Move move, MoveTransition transition);
+    public abstract MoveStatus makeMove(Move move);
 
     public abstract ConnectionStatus connected();
 
@@ -69,6 +69,10 @@ public abstract class MatchEntity {
         this.board = board;
     }
 
+    protected void setMoveLog(MoveLog moveLog) {
+        this.moveLog = moveLog;
+    }
+
     public void setPlayerAlliance(Alliance playerTeam) {
         this.playerAlliance = playerTeam;
     }
@@ -78,6 +82,7 @@ public abstract class MatchEntity {
     }
 
     protected void calculateScore(Move move) {
+        if (move == null) return;
         try {
             if (move.getMovedPiece() != null && move.getMovedPiece().getAlliance() == getPlayerAlliance()) {
                 if (move.isAttack()) addScoreText("Piece attack: " + move.getAttackedPiece().getType().toString(), move.getAttackedPiece().getType().getPieceValue());

@@ -2,6 +2,7 @@ package ru.nsu.spirin.chess.model.match.server;
 
 import ru.nsu.spirin.chess.model.match.server.message.Message;
 import ru.nsu.spirin.chess.model.match.server.message.MessageType;
+import ru.nsu.spirin.chess.model.player.Alliance;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,12 +14,16 @@ public final class ConnectedPlayer {
     private final ObjectInputStream  objectInputStream;
     private final ObjectOutputStream objectOutputStream;
     private String playerName;
+    private Alliance playerAlliance;
+    private boolean isReady;
 
     public ConnectedPlayer(Socket socket) throws IOException, ClassNotFoundException {
         this.socket = socket;
         this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         this.playerName = null;
+        this.playerAlliance = null;
+        this.isReady = false;
         Message message = (Message) readData();
         if (message.getType() == MessageType.PLAYER_NAME) {
             this.playerName = (String) message.getContent();
@@ -40,5 +45,21 @@ public final class ConnectedPlayer {
 
     public String getPlayerName() {
         return this.playerName;
+    }
+
+    public Alliance getPlayerAlliance() {
+        return this.playerAlliance;
+    }
+
+    public boolean isReady() {
+        return this.isReady;
+    }
+
+    public void setPlayerAlliance(Alliance alliance) {
+        this.playerAlliance = alliance;
+    }
+
+    public void setReady(boolean isReady) {
+        this.isReady = isReady;
     }
 }

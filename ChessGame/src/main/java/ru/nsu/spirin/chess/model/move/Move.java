@@ -31,7 +31,7 @@ public abstract class Move implements Serializable {
         Move otherMove = (Move) other;
         return this.getCurrentCoordinate() == otherMove.getCurrentCoordinate() &&
                this.getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
-               this.getMovedPiece() == otherMove.getMovedPiece();
+               this.getMovedPiece().equals(otherMove.getMovedPiece());
     }
 
     public Board getBoard() {

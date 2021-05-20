@@ -2,6 +2,7 @@ package ru.nsu.spirin.chess.view.swing.board;
 
 import com.google.common.primitives.Ints;
 import ru.nsu.spirin.chess.factory.Factory;
+import ru.nsu.spirin.chess.model.board.BoardUtils;
 import ru.nsu.spirin.chess.model.move.Move;
 import ru.nsu.spirin.chess.model.move.MoveLog;
 import ru.nsu.spirin.chess.model.pieces.Piece;
@@ -67,7 +68,8 @@ public final class PlayerInfoPanel extends JPanel {
 
     public void updatePanel(Scene scene, String playerName, MoveLog moveLog) {
         this.playerNameLabel.setText(playerName);
-        this.playerNameLabel.setForeground(
+        this.playerNameLabel.setForeground(BoardUtils.isEndGame(scene.getActiveGame().getBoard()) ?
+                Color.BLACK :
                 scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance().isWhite() == isWhite ?
                         Color.RED :
                         Color.BLACK);

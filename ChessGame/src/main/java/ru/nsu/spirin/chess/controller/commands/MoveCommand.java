@@ -5,9 +5,8 @@ import ru.nsu.spirin.chess.controller.Command;
 import ru.nsu.spirin.chess.controller.CommandStatus;
 import ru.nsu.spirin.chess.model.move.Move;
 import ru.nsu.spirin.chess.model.move.MoveFactory;
-import ru.nsu.spirin.chess.model.move.MoveTransition;
+import ru.nsu.spirin.chess.model.move.MoveStatus;
 import ru.nsu.spirin.chess.model.player.Alliance;
-import ru.nsu.spirin.chess.model.player.Player;
 import ru.nsu.spirin.chess.model.scene.Scene;
 import ru.nsu.spirin.chess.model.scene.SceneState;
 
@@ -29,32 +28,23 @@ public final class MoveCommand extends Command {
             return CommandStatus.EXCEPTION;
         }
 
-        Player alliancePlayer = alliance.choosePlayer(getScene().getActiveGame().getBoard().getWhitePlayer(), getScene().getActiveGame().getBoard().getBlackPlayer());
+        Move move;
 
         if (length == 2) {
             int sourceCoordinate = BoardUtils.getCoordinateAtPosition(args[0]);
             int destinationCoordinate = BoardUtils.getCoordinateAtPosition(args[1]);
-
             if (sourceCoordinate == -1 || destinationCoordinate == -1) return CommandStatus.INVALID_ARGUMENTS;
-
-            Move move = MoveFactory.createMove(getScene().getActiveGame().getBoard(), sourceCoordinate, destinationCoordinate);
-            MoveTransition transition = alliancePlayer.makeMove(move);
-            if (transition.getMoveStatus().isDone()) {
-                getScene().getActiveGame().makeMove(move, transition);
-                return CommandStatus.NORMAL;
-            }
-            return CommandStatus.INVALID_MOVE;
+            move = MoveFactory.createMove(getScene().getActiveGame().getBoard(), sourceCoordinate, destinationCoordinate);
         }
         else if (length == 1) {
             if (!args[0].equalsIgnoreCase("resign")) return CommandStatus.INVALID_ARGUMENTS;
-            Move move = MoveFactory.createResignMove(getScene().getActiveGame().getBoard(), alliance);
-            MoveTransition transition = alliancePlayer.makeMove(move);
-            if (transition.getMoveStatus().isDone()) {
-                getScene().getActiveGame().makeMove(move, transition);
-                return CommandStatus.NORMAL;
-            }
-            return CommandStatus.INVALID_MOVE;
+            move = MoveFactory.createResignMove(getScene().getActiveGame().getBoard(), alliance);
         }
-        return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
+        else return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
+
+        MoveStatus status = getScene().getActiveGame().makeMove(move);
+        if (status.isDone()) return CommandStatus.NORMAL;
+
+        return CommandStatus.INVALID_MOVE;
     }
 }

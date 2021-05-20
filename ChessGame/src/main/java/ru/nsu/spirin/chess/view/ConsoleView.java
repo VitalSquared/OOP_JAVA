@@ -211,12 +211,16 @@ public final class ConsoleView extends GameView {
 
     private void printBoardPanel() {
         Scene scene = getScene();
-        String opponentTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getOpponentAlliance() ?
-                " - makes a move" :
-                "";
-        String playerTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getPlayerAlliance() ?
-                " - makes a move" :
-                "";
+        String opponentTurn = BoardUtils.isEndGame(scene.getActiveGame().getBoard()) ?
+                "" :
+                scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getOpponentAlliance() ?
+                        " - makes a move" :
+                        "";
+        String playerTurn = BoardUtils.isEndGame(scene.getActiveGame().getBoard()) ?
+                "" :
+                scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getPlayerAlliance() ?
+                        " - makes a move" :
+                        "";
         System.out.println("############################################################");
         printMoveLog(scene);
         System.out.println("------------------------------------------------------------");

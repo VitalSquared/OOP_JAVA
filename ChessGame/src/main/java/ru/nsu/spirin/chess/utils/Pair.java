@@ -1,6 +1,8 @@
 package ru.nsu.spirin.chess.utils;
 
-public final class Pair<First, Second> {
+import java.io.Serializable;
+
+public final class Pair<First, Second> implements Serializable {
     private final First  first;
     private final Second second;
 

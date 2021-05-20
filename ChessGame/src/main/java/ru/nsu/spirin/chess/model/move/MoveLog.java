@@ -3,10 +3,11 @@ package ru.nsu.spirin.chess.model.move;
 import ru.nsu.spirin.chess.model.board.Board;
 import ru.nsu.spirin.chess.utils.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class MoveLog {
+public final class MoveLog implements Serializable {
     private final List<Pair<Move, String>> moves;
 
     public MoveLog() {

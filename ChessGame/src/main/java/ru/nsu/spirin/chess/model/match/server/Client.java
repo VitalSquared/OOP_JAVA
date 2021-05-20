@@ -4,8 +4,8 @@ import ru.nsu.spirin.chess.model.board.Board;
 import ru.nsu.spirin.chess.model.board.BoardUtils;
 import ru.nsu.spirin.chess.model.match.MatchEntity;
 import ru.nsu.spirin.chess.model.move.Move;
-import ru.nsu.spirin.chess.model.move.MoveTransition;
-import ru.nsu.spirin.chess.model.move.ResignMove;
+import ru.nsu.spirin.chess.model.move.MoveLog;
+import ru.nsu.spirin.chess.model.move.MoveStatus;
 import ru.nsu.spirin.chess.model.player.Alliance;
 import ru.nsu.spirin.chess.model.scene.SceneState;
 import ru.nsu.spirin.chess.model.match.server.message.Message;
@@ -13,12 +13,10 @@ import ru.nsu.spirin.chess.model.match.server.message.MessageType;
 import ru.nsu.spirin.chess.model.scene.Scene;
 import ru.nsu.spirin.chess.thread.ThreadPool;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 public final class Client extends MatchEntity {
     private volatile boolean foundOpponent;
@@ -29,6 +27,8 @@ public final class Client extends MatchEntity {
     private volatile boolean            opponentReady;
     private          ObjectOutputStream objectOutputStream;
     private final Scene scene;
+
+    private volatile MoveStatus serverEvaluatedMove;
 
     private Socket  socket;
     private int     errors;
@@ -48,6 +48,7 @@ public final class Client extends MatchEntity {
         this.opponentTeam = null;
         this.opponentReady = false;
         this.playerReady = false;
+        this.serverEvaluatedMove = null;
         listenForConnections();
     }
 
@@ -75,10 +76,6 @@ public final class Client extends MatchEntity {
     public void setPlayerReady(boolean playerReady) {
         this.playerReady = playerReady;
         sendMessage(MessageType.PLAYER_READY, playerReady);
-        if (opponentReady && playerReady) {
-            setBoard(Board.createStandardBoard());
-            scene.setSceneState(SceneState.BOARD_MENU);
-        }
     }
 
     @Override
@@ -146,17 +143,45 @@ public final class Client extends MatchEntity {
     }
 
     @Override
-    public void makeMove(Move move, MoveTransition transition) {
-        applyMove(move, transition);
-        sendMessage(MessageType.PLAYER_MOVE, transition);
+    public MoveStatus makeMove(Move move) {
+        serverEvaluatedMove = null;
+        sendMessage(MessageType.PLAYER_MOVE, move);
+        while (serverEvaluatedMove == null) {
+            Thread.onSpinWait();
+        }
+        MoveStatus status = serverEvaluatedMove;
+        if (status.isDone()) calculateScore(move);
+        serverEvaluatedMove = null;
+        return status;
     }
 
-    private void applyMove(Move move, MoveTransition transition) {
-        calculateScore(move);
-        if (!(move instanceof ResignMove)) {
-            getMoveLog().addMove(transition.getTransitionBoard(), move);
+    private void manageMessages(Message message) {
+        switch (message.getType()) {
+            case PLAYER_FOUND -> foundOpponent = true;
+            case PLAYER_NAME -> opponentName = (String) message.getContent();
+            case PLAYER_TEAM -> {
+                opponentTeam = (Alliance) message.getContent();
+                if (opponentTeam == getPlayerAlliance()) {
+                    playerReady = false;
+                    sendMessage(MessageType.PLAYER_READY, playerReady);
+                }
+            }
+            case PLAYER_READY -> opponentReady = (Boolean) message.getContent();
+            case NEW_BOARD -> {
+                if (scene.getSceneState() != SceneState.BOARD_MENU) scene.setSceneState(SceneState.BOARD_MENU);
+
+                Object[] content = (Object[]) message.getContent();
+                Board board = (Board) content[0];
+                MoveLog moveLog = (MoveLog) content[1];
+
+                setBoard(board);
+                setMoveLog(moveLog);
+
+                serverEvaluatedMove = MoveStatus.DONE;
+            }
+            case ILLEGAL_MOVE -> serverEvaluatedMove = (MoveStatus) message.getContent();
+            default -> System.out.println("Shouldn't receive such message: " + message.getType());
         }
-        setBoard(transition.getTransitionBoard());
     }
 
     private final class ConnectionHandler implements Runnable {
@@ -178,34 +203,6 @@ public final class Client extends MatchEntity {
                 }
             }
             closeConnection();
-        }
-
-        private void manageMessages(Message message) {
-            switch (message.getType()) {
-                case PLAYER_FOUND -> foundOpponent = true;
-                case PLAYER_NAME -> opponentName = (String) message.getContent();
-                case PLAYER_TEAM -> {
-                    opponentTeam = (Alliance) message.getContent();
-                    if (opponentTeam == getPlayerAlliance()) {
-                        playerReady = false;
-                        sendMessage(MessageType.PLAYER_READY, playerReady);
-                    }
-                }
-                case PLAYER_READY -> {
-                    opponentReady = (Boolean) message.getContent();
-                    if (opponentReady && playerReady) {
-                        setBoard(Board.createStandardBoard());
-                        scene.setSceneState(SceneState.BOARD_MENU);
-                    }
-                }
-                case PLAYER_MOVE -> {
-                    MoveTransition transition = (MoveTransition) message.getContent();
-                    if (getBoard().getCurrentPlayer().getAlliance() == getPlayerAlliance()) {
-                        if (!(transition.getMove() instanceof ResignMove)) return;
-                    }
-                    applyMove(transition.getMove(), transition);
-                }
-            }
         }
     }
 }

@@ -4,12 +4,14 @@ import ru.nsu.spirin.chess.model.board.Board;
 import ru.nsu.spirin.chess.model.board.BoardUtils;
 import ru.nsu.spirin.chess.model.move.Move;
 import ru.nsu.spirin.chess.model.move.MoveFactory;
+import ru.nsu.spirin.chess.model.move.MoveStatus;
 import ru.nsu.spirin.chess.model.move.MoveTransition;
 import ru.nsu.spirin.chess.model.move.ResignMove;
 import ru.nsu.spirin.chess.model.player.Alliance;
 import ru.nsu.spirin.chess.model.ai.MiniMax;
 import ru.nsu.spirin.chess.model.ai.MoveStrategy;
 import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
+import ru.nsu.spirin.chess.model.player.Player;
 import ru.nsu.spirin.chess.thread.ThreadPool;
 
 public final class Local extends MatchEntity {
@@ -48,15 +50,20 @@ public final class Local extends MatchEntity {
     }
 
     @Override
-    public void makeMove(Move move, MoveTransition transition) {
-        calculateScore(move);
-        if (!(move instanceof ResignMove)) {
-            getMoveLog().addMove(transition.getTransitionBoard(), move);
+    public MoveStatus makeMove(Move move) {
+        Player alliancePlayer = getPlayerAlliance().choosePlayer(getBoard().getWhitePlayer(), getBoard().getBlackPlayer());
+        MoveTransition transition = alliancePlayer.makeMove(move);
+        if (transition.getMoveStatus().isDone()) {
+            calculateScore(move);
+            if (!(move instanceof ResignMove)) {
+                getMoveLog().addMove(transition.getTransitionBoard(), move);
+            }
+            setBoard(transition.getTransitionBoard());
+            if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
+                ThreadPool.INSTANCE.submitTask(new AIMoveEvaluatorThread());
+            }
         }
-        setBoard(transition.getTransitionBoard());
-        if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
-            ThreadPool.INSTANCE.submitTask(new AIMoveEvaluatorThread());
-        }
+        return transition.getMoveStatus();
     }
 
     @Override
@@ -78,9 +85,9 @@ public final class Local extends MatchEntity {
                 if (aiMove == null) {
                     aiMove = MoveFactory.createResignMove(getBoard(), getBoard().getCurrentPlayer().getAlliance());
                 }
-                MoveTransition transition = getBoard().getCurrentPlayer().makeMove(aiMove);
-                if (transition.getMoveStatus().isDone() && !BoardUtils.isEndGame(getBoard())) {
-                    makeMove(aiMove, transition);
+                if (!BoardUtils.isEndGame(getBoard())) {
+                    MoveTransition transition = getBoard().getCurrentPlayer().makeMove(aiMove);
+                    setBoard(transition.getTransitionBoard());
                 }
             }
             catch (Exception e) {

@@ -5,5 +5,7 @@ public enum MessageType {
     PLAYER_TEAM,
     PLAYER_READY,
     PLAYER_MOVE,
-    PLAYER_FOUND
+    PLAYER_FOUND,
+    NEW_BOARD,
+    ILLEGAL_MOVE
 }
