@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 public abstract class MatchEntity {
     private volatile Board   board;
-    private          MoveLog moveLog;
+    private volatile MoveLog moveLog;
 
     private final    String   playerName;
     private volatile Alliance playerAlliance;
@@ -43,7 +43,7 @@ public abstract class MatchEntity {
 
     public abstract ConnectionStatus connected();
 
-    public abstract void closeConnection();
+    public abstract void closeConnection(boolean notify);
 
     public Board getBoard() {
         return this.board;

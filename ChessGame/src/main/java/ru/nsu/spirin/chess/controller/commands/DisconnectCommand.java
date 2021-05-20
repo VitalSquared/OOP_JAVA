@@ -18,7 +18,7 @@ public final class DisconnectCommand extends Command {
         MatchEntity matchEntity = getScene().getActiveGame();
         if (matchEntity.connected() != ConnectionStatus.CONNECTED) return CommandStatus.INVALID_MENU;
         if (args.length != 0) return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
-        matchEntity.closeConnection();
+        matchEntity.closeConnection(true);
         getScene().setSceneState(SceneState.NEW_GAME_MENU);
         return CommandStatus.NORMAL;
     }

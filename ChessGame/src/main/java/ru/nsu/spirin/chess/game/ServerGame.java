@@ -72,6 +72,18 @@ public final class ServerGame implements GameEntity {
                             serverMatchList.remove(match);
                             break;
                         }
+                        if (match.needAnotherPlayer()) {
+                            ConnectedPlayer player1 = match.getPlayer1();
+                            if (player1.getSocket() != null && !player1.getSocket().isClosed() && player1.getSocket().isConnected()) {
+                                connectedPlayerList.add(player1);
+                            }
+                            ConnectedPlayer player2 = match.getPlayer2();
+                            if (player2.getSocket() != null && !player2.getSocket().isClosed() && player2.getSocket().isConnected()) {
+                                connectedPlayerList.add(player2);
+                            }
+                            serverMatchList.remove(match);
+                            break;
+                        }
                     }
                 }
                 catch (Exception e) {

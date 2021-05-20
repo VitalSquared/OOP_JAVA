@@ -142,6 +142,7 @@ ru/nsu/spirin/chess/utils/ScoresFile.java
  ru.nsu.spirin.chess.utils.ScoresFile
 ru/nsu/spirin/chess/model/match/server/ServerMatch.java
  ru.nsu.spirin.chess.model.match.server.ServerMatch
+ ru.nsu.spirin.chess.model.match.server.ServerMatch$1
  ru.nsu.spirin.chess.model.match.server.ServerMatch$PlayerThread
 ru/nsu/spirin/chess/model/match/server/ConnectionStatus.java
  ru.nsu.spirin.chess.model.match.server.ConnectionStatus

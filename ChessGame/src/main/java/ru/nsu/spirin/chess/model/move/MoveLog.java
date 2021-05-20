@@ -14,6 +14,10 @@ public final class MoveLog implements Serializable {
         this.moves = new ArrayList<>();
     }
 
+    public MoveLog(MoveLog moveLog) {
+        this.moves = new ArrayList<>(moveLog.getMoves());
+    }
+
     public List<Pair<Move, String>> getMoves() {
         return this.moves;
     }

@@ -23,16 +23,16 @@ public final class Client extends MatchEntity {
 
     private volatile boolean            playerReady;
     private volatile String             opponentName;
-    private volatile Alliance           opponentTeam;
+    private volatile Alliance           opponentAlliance;
     private volatile boolean            opponentReady;
     private          ObjectOutputStream objectOutputStream;
-    private final Scene scene;
+    private final    Scene              scene;
 
     private volatile MoveStatus serverEvaluatedMove;
 
-    private Socket  socket;
-    private int     errors;
-    private boolean closed;
+    private volatile Socket  socket;
+    private          int     errors;
+    private          boolean closed;
 
     private final String ipAddress;
     private final int    port;
@@ -45,7 +45,7 @@ public final class Client extends MatchEntity {
         this.closed = false;
         this.foundOpponent = false;
         this.opponentName = "";
-        this.opponentTeam = null;
+        this.opponentAlliance = null;
         this.opponentReady = false;
         this.playerReady = false;
         this.serverEvaluatedMove = null;
@@ -59,7 +59,7 @@ public final class Client extends MatchEntity {
 
     @Override
     public Alliance getOpponentAlliance() {
-        return this.opponentTeam;
+        return this.opponentAlliance;
     }
 
     @Override
@@ -98,8 +98,9 @@ public final class Client extends MatchEntity {
     }
 
     @Override
-    public void closeConnection() {
+    public void closeConnection(boolean notify) {
         try {
+            if (notify) sendMessage(MessageType.PLAYER_FOUND, false);
             if (this.socket != null) this.socket.close();
             this.socket = null;
             this.closed = true;
@@ -117,7 +118,7 @@ public final class Client extends MatchEntity {
                 try {
                     socket = new Socket(ipAddress, port);
                     setObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
-                    ThreadPool.INSTANCE.submitTask((new ConnectionHandler(socket)));
+                    ThreadPool.INSTANCE.submitTask(new ConnectionHandler(socket));
                     sendMessage(MessageType.PLAYER_NAME, getPlayerName());
                 }
                 catch (IOException e) {
@@ -157,11 +158,20 @@ public final class Client extends MatchEntity {
 
     private void manageMessages(Message message) {
         switch (message.getType()) {
-            case PLAYER_FOUND -> foundOpponent = true;
+            case PLAYER_FOUND -> {
+                foundOpponent = (Boolean) message.getContent();
+                if (!foundOpponent) {
+                    playerReady = false;
+                    setPlayerAlliance(null);
+                    opponentReady = false;
+                    opponentAlliance = null;
+                    sendMessage(MessageType.PLAYER_FOUND, false);
+                }
+            }
             case PLAYER_NAME -> opponentName = (String) message.getContent();
             case PLAYER_TEAM -> {
-                opponentTeam = (Alliance) message.getContent();
-                if (opponentTeam == getPlayerAlliance()) {
+                opponentAlliance = (Alliance) message.getContent();
+                if (opponentAlliance == getPlayerAlliance()) {
                     playerReady = false;
                     sendMessage(MessageType.PLAYER_READY, playerReady);
                 }
@@ -171,11 +181,8 @@ public final class Client extends MatchEntity {
                 if (scene.getSceneState() != SceneState.BOARD_MENU) scene.setSceneState(SceneState.BOARD_MENU);
 
                 Object[] content = (Object[]) message.getContent();
-                Board board = (Board) content[0];
-                MoveLog moveLog = (MoveLog) content[1];
-
-                setBoard(board);
-                setMoveLog(moveLog);
+                setMoveLog((MoveLog) content[1]);
+                setBoard((Board) content[0]);
 
                 serverEvaluatedMove = MoveStatus.DONE;
             }
@@ -202,7 +209,7 @@ public final class Client extends MatchEntity {
                     e.printStackTrace();
                 }
             }
-            closeConnection();
+            closeConnection(false);
         }
     }
 }

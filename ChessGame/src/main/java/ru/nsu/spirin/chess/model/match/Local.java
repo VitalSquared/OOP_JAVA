@@ -72,7 +72,7 @@ public final class Local extends MatchEntity {
     }
 
     @Override
-    public void closeConnection() {
+    public void closeConnection(boolean notify) {
 
     }
 
