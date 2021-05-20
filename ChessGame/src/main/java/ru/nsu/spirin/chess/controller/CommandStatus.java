@@ -9,6 +9,7 @@ public enum CommandStatus {
     INVALID_IP("Invalid IP address\n"),
     INVALID_PORT("Invalid port\n"),
     INVALID_MOVE("This move can't be done\n"),
+    INVALID_TEAM("Team not selected or two players are in the same team\n"),
     EXCEPTION("");
 
     private final String message;

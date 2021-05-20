@@ -18,6 +18,8 @@ public final class ReadyCommand extends Command {
         MatchEntity matchEntity = getScene().getActiveGame();
         if (matchEntity.connected() != ConnectionStatus.CONNECTED) return CommandStatus.INVALID_MENU;
         if (args.length != 0) return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
+        if (matchEntity.getPlayerAlliance() == null ||
+            matchEntity.getPlayerAlliance() == matchEntity.getOpponentAlliance()) return CommandStatus.INVALID_TEAM;
         matchEntity.setPlayerReady(!matchEntity.isPlayerReady());
         return CommandStatus.NORMAL;
     }

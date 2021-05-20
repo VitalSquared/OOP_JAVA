@@ -61,6 +61,13 @@ public final class ServerGame implements GameEntity {
         ThreadPool.INSTANCE.submitTask(new Thread(() -> {
             while (isWorking) {
                 try {
+                    for (int i = 0; i < connectedPlayerList.size(); i++) {
+                        if (connectedPlayerList.get(i).getSocket().isClosed()) {
+                            System.out.println("Player " + connectedPlayerList.get(i).getPlayerName() + " disconnected");
+                            connectedPlayerList.remove(i);
+                            i--;
+                        }
+                    }
                     if (connectedPlayerList.size() >= 2) {
                         ServerMatch serverMatch = new ServerMatch(connectedPlayerList.get(0), connectedPlayerList.get(1));
                         connectedPlayerList.remove(0);
@@ -77,9 +84,15 @@ public final class ServerGame implements GameEntity {
                             if (player1.getSocket() != null && !player1.getSocket().isClosed() && player1.getSocket().isConnected()) {
                                 connectedPlayerList.add(player1);
                             }
+                            else {
+                                System.out.println("Player " + player1.getPlayerName() + " disconnected");
+                            }
                             ConnectedPlayer player2 = match.getPlayer2();
                             if (player2.getSocket() != null && !player2.getSocket().isClosed() && player2.getSocket().isConnected()) {
                                 connectedPlayerList.add(player2);
+                            }
+                            else {
+                                System.out.println("Player " + player2.getPlayerName() + " disconnected");
                             }
                             serverMatchList.remove(match);
                             break;

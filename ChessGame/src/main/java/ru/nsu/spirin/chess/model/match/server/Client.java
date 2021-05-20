@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 public final class Client extends MatchEntity {
     private volatile boolean foundOpponent;
@@ -204,6 +205,9 @@ public final class Client extends MatchEntity {
                 try {
                     Object message = objectInputStream.readObject();
                     manageMessages((Message) message);
+                }
+                catch(SocketException e) {
+                    return;
                 }
                 catch (Exception e) {
                     e.printStackTrace();

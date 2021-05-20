@@ -59,7 +59,7 @@ public final class Local extends MatchEntity {
                 getMoveLog().addMove(transition.getTransitionBoard(), move);
             }
             setBoard(transition.getTransitionBoard());
-            if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
+            if (!(move instanceof ResignMove) && getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
                 ThreadPool.INSTANCE.submitTask(new AIMoveEvaluatorThread());
             }
         }
@@ -87,6 +87,9 @@ public final class Local extends MatchEntity {
                 }
                 if (!BoardUtils.isEndGame(getBoard())) {
                     MoveTransition transition = getBoard().getCurrentPlayer().makeMove(aiMove);
+                    if (!(aiMove instanceof ResignMove)) {
+                        getMoveLog().addMove(transition.getTransitionBoard(), aiMove);
+                    }
                     setBoard(transition.getTransitionBoard());
                 }
             }
