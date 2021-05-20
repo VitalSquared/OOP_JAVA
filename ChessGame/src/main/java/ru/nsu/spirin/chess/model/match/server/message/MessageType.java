@@ -7,5 +7,6 @@ public enum MessageType {
     PLAYER_MOVE,
     PLAYER_FOUND,
     NEW_BOARD,
-    ILLEGAL_MOVE
+    ILLEGAL_MOVE,
+    CANCEL_WAITING
 }

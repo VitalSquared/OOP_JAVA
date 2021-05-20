@@ -102,6 +102,7 @@ public final class Client extends MatchEntity {
     public void closeConnection(boolean notify) {
         try {
             if (notify) sendMessage(MessageType.PLAYER_FOUND, false);
+            sendMessage(MessageType.CANCEL_WAITING, null);
             if (this.socket != null) this.socket.close();
             this.socket = null;
             this.closed = true;
@@ -167,6 +168,9 @@ public final class Client extends MatchEntity {
                     opponentReady = false;
                     opponentAlliance = null;
                     sendMessage(MessageType.PLAYER_FOUND, false);
+                }
+                else {
+                    sendMessage(MessageType.PLAYER_FOUND, true);
                 }
             }
             case PLAYER_NAME -> opponentName = (String) message.getContent();

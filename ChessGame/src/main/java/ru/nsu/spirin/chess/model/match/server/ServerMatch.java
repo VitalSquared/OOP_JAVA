@@ -14,10 +14,10 @@ import ru.nsu.spirin.chess.model.player.Player;
 import ru.nsu.spirin.chess.thread.ThreadPool;
 
 public final class ServerMatch {
-    private boolean isMatchOver;
-    private boolean needAnotherPlayer;
+    private          boolean isMatchOver;
+    private          boolean needAnotherPlayer;
     private volatile Board   board;
-    private final MoveLog moveLog;
+    private final    MoveLog moveLog;
 
     private final ConnectedPlayer player1;
     private final ConnectedPlayer player2;
@@ -30,6 +30,7 @@ public final class ServerMatch {
         this.needAnotherPlayer = false;
         this.moveLog = new MoveLog();
         this.board = null;
+
         ThreadPool.INSTANCE.submitTask(new PlayerThread(player1, player2));
         ThreadPool.INSTANCE.submitTask(new PlayerThread(player2, player1));
     }
@@ -62,20 +63,23 @@ public final class ServerMatch {
         @Override
         public void run() {
             try {
-                otherPlayer.writeData(MessageType.PLAYER_FOUND, true);
                 otherPlayer.writeData(MessageType.PLAYER_NAME, connectedPlayer.getPlayerName());
             }
-            catch (Exception ignored) {}
+            catch (Exception ignored) {
+            }
             while (!isMatchOver) {
                 try {
                     Message message = (Message) connectedPlayer.readData();
-                    if (message == null || message.getType() == MessageType.ILLEGAL_MOVE || message.getType() == MessageType.NEW_BOARD) continue;
+                    if (message == null || message.getType() == MessageType.ILLEGAL_MOVE ||
+                        message.getType() == MessageType.NEW_BOARD ||
+                        message.getType() == MessageType.CANCEL_WAITING) continue;
 
                     if (message.getType() != MessageType.PLAYER_MOVE) {
                         try {
                             otherPlayer.writeData(message.getType(), message.getContent());
                         }
-                        catch (Exception ignored) {}
+                        catch (Exception ignored) {
+                        }
                         switch (message.getType()) {
                             case PLAYER_TEAM -> connectedPlayer.setPlayerAlliance((Alliance) message.getContent());
                             case PLAYER_READY -> {
@@ -101,7 +105,8 @@ public final class ServerMatch {
                     else {
                         Move move = (Move) message.getContent();
                         MoveStatus moveStatus = MoveStatus.ILLEGAL_MOVE;
-                        if (move instanceof ResignMove || board.getCurrentPlayer().getAlliance() == connectedPlayer.getPlayerAlliance()) {
+                        if (move instanceof ResignMove ||
+                            board.getCurrentPlayer().getAlliance() == connectedPlayer.getPlayerAlliance()) {
                             Player alliancePlayer = connectedPlayer.getPlayerAlliance().choosePlayer(board.getWhitePlayer(), board.getBlackPlayer());
                             MoveTransition transition = alliancePlayer.makeMove(move);
                             if (transition.getMoveStatus().isDone()) {

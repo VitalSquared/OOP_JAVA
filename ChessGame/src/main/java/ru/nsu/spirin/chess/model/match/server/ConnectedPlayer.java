@@ -16,6 +16,7 @@ public final class ConnectedPlayer {
     private String playerName;
     private Alliance playerAlliance;
     private boolean isReady;
+    private volatile boolean foundOpponent;
 
     public ConnectedPlayer(Socket socket) throws IOException, ClassNotFoundException {
         this.socket = socket;
@@ -24,6 +25,7 @@ public final class ConnectedPlayer {
         this.playerName = null;
         this.playerAlliance = null;
         this.isReady = false;
+        this.foundOpponent = false;
         Message message = (Message) readData();
         if (message.getType() == MessageType.PLAYER_NAME) {
             this.playerName = (String) message.getContent();
@@ -55,11 +57,19 @@ public final class ConnectedPlayer {
         return this.isReady;
     }
 
+    public boolean foundOpponent() {
+        return this.foundOpponent;
+    }
+
     public void setPlayerAlliance(Alliance alliance) {
         this.playerAlliance = alliance;
     }
 
     public void setReady(boolean isReady) {
         this.isReady = isReady;
+    }
+
+    public void setFoundOpponent(boolean foundOpponent) {
+        this.foundOpponent = foundOpponent;
     }
 }
