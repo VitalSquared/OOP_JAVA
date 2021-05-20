@@ -8,8 +8,8 @@ import java.util.Properties;
 
 public abstract class Factory<Type> {
     private final Map<String, String> mapNameToPath;
-    private final Map<String, Type> mapNameToInstance;
-    private final Type              nullTypeCache;
+    private final Map<String, Type>   mapNameToInstance;
+    private final Type                nullTypeCache;
 
     protected Factory(String pathToProperties, Type nullTypeCache) throws IOException {
         InputStream stream = ClassLoader.getSystemResourceAsStream(pathToProperties);

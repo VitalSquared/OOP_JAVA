@@ -57,6 +57,4 @@ public final class MoveCommand extends Command {
         }
         return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
     }
-
-
 }

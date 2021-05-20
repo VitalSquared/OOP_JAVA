@@ -10,20 +10,20 @@ import ru.nsu.spirin.chess.model.player.Alliance;
 import ru.nsu.spirin.chess.model.scene.Scene;
 import ru.nsu.spirin.chess.model.scene.SceneState;
 import ru.nsu.spirin.chess.utils.Pair;
-import ru.nsu.spirin.chess.utils.ThreadPool;
+import ru.nsu.spirin.chess.thread.ThreadPool;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public final class ConsoleView extends GameView {
-    private final Scanner    scanner;
+    private final Scanner scanner;
 
     public ConsoleView(Scene scene, Controller controller) {
         super(scene, controller);
         this.scanner = new Scanner(System.in);
 
-        ThreadPool.submitThread(new Thread(() -> {
+        ThreadPool.INSTANCE.submitTask(new Thread(() -> {
             while (getScene().getSceneState() != SceneState.NONE) {
                 String command = scanner.nextLine();
                 String extra = "";
@@ -122,26 +122,59 @@ public final class ConsoleView extends GameView {
                     System.out.printf("%15s ", "");
                     System.out.printf("%15s\n", "BLACK TEAM");
 
-                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == Alliance.WHITE ? matchEntity.getOpponentName() : ""));
-                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == null ? matchEntity.getOpponentName() : ""));
-                    System.out.printf("%15s\n", (matchEntity.getOpponentAlliance() == Alliance.BLACK ? matchEntity.getOpponentName() : ""));
+                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == Alliance.WHITE ?
+                            matchEntity.getOpponentName() :
+                            ""));
+                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == null ?
+                            matchEntity.getOpponentName() :
+                            ""));
+                    System.out.printf("%15s\n", (matchEntity.getOpponentAlliance() == Alliance.BLACK ?
+                            matchEntity.getOpponentName() :
+                            ""));
 
-                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == Alliance.WHITE ? matchEntity.getPlayerName() : ""));
-                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == null ? matchEntity.getPlayerName() : ""));
-                    System.out.printf("%15s\n", (matchEntity.getPlayerAlliance() == Alliance.BLACK ? matchEntity.getPlayerName() : ""));
+                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == Alliance.WHITE ?
+                            matchEntity.getPlayerName() :
+                            ""));
+                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == null ?
+                            matchEntity.getPlayerName() :
+                            ""));
+                    System.out.printf("%15s\n", (matchEntity.getPlayerAlliance() == Alliance.BLACK ?
+                            matchEntity.getPlayerName() :
+                            ""));
 
                     System.out.println();
 
-                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == Alliance.WHITE && matchEntity.getPlayerAlliance() != Alliance.WHITE ? (matchEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s ", (matchEntity.getOpponentAlliance() == Alliance.WHITE &&
+                                                matchEntity.getPlayerAlliance() != Alliance.WHITE ?
+                            (matchEntity.isOpponentReady() ?
+                                    "Ready" :
+                                    "Not Ready") :
+                            ""));
                     System.out.printf("%15s ", "");
-                    System.out.printf("%15s\n", (matchEntity.getOpponentAlliance() == Alliance.BLACK && matchEntity.getPlayerAlliance() != Alliance.BLACK ? (matchEntity.isOpponentReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s\n", (matchEntity.getOpponentAlliance() == Alliance.BLACK &&
+                                                 matchEntity.getPlayerAlliance() != Alliance.BLACK ?
+                            (matchEntity.isOpponentReady() ?
+                                    "Ready" :
+                                    "Not Ready") :
+                            ""));
 
-                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == Alliance.WHITE && matchEntity.getOpponentAlliance() != Alliance.WHITE ? (matchEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s ", (matchEntity.getPlayerAlliance() == Alliance.WHITE &&
+                                                matchEntity.getOpponentAlliance() != Alliance.WHITE ?
+                            (matchEntity.isPlayerReady() ?
+                                    "Ready" :
+                                    "Not Ready") :
+                            ""));
                     System.out.printf("%15s ", "");
-                    System.out.printf("%15s\n", (matchEntity.getPlayerAlliance() == Alliance.BLACK && matchEntity.getOpponentAlliance() != Alliance.BLACK ? (matchEntity.isPlayerReady() ? "Ready" : "Not Ready") : ""));
+                    System.out.printf("%15s\n", (matchEntity.getPlayerAlliance() == Alliance.BLACK &&
+                                                 matchEntity.getOpponentAlliance() != Alliance.BLACK ?
+                            (matchEntity.isPlayerReady() ?
+                                    "Ready" :
+                                    "Not Ready") :
+                            ""));
 
                     System.out.println("\n\nteam <[white | none | black] \tchoose team");
-                    if (matchEntity.getPlayerAlliance() != null && matchEntity.getPlayerAlliance() != matchEntity.getOpponentAlliance()) {
+                    if (matchEntity.getPlayerAlliance() != null &&
+                        matchEntity.getPlayerAlliance() != matchEntity.getOpponentAlliance()) {
                         System.out.println("ready \tset ready state");
                     }
                     System.out.println("disconnect \tdisconnect from match and return to previous menu");
@@ -178,8 +211,12 @@ public final class ConsoleView extends GameView {
 
     private void printBoardPanel() {
         Scene scene = getScene();
-        String opponentTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getOpponentAlliance() ? " - makes a move" : "";
-        String playerTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getPlayerAlliance() ? " - makes a move" : "";
+        String opponentTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getOpponentAlliance() ?
+                " - makes a move" :
+                "";
+        String playerTurn = scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance() == scene.getActiveGame().getPlayerAlliance() ?
+                " - makes a move" :
+                "";
         System.out.println("############################################################");
         printMoveLog(scene);
         System.out.println("------------------------------------------------------------");
@@ -187,15 +224,21 @@ public final class ConsoleView extends GameView {
         printPlayerTakenPieces(scene, scene.getActiveGame().getOpponentAlliance().isWhite());
         printBoard(scene);
         printPlayerTakenPieces(scene, scene.getActiveGame().getPlayerAlliance().isWhite());
-        System.out.println(scene.getActiveGame().getPlayerAlliance().toString() + ": " + scene.getActiveGame().getPlayerName() + playerTurn);
+        System.out.println(
+                scene.getActiveGame().getPlayerAlliance().toString() + ": " + scene.getActiveGame().getPlayerName() +
+                playerTurn);
         System.out.println("############################################################");
     }
 
     private void printBoard(Scene scene) {
         StringBuilder builder = new StringBuilder();
-        builder.append(scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE ? "8| " : "1| ");
+        builder.append(scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE ?
+                "8| " :
+                "1| ");
         for (int i = 0; i < BoardUtils.TOTAL_NUMBER_OF_TILES; i++) {
-            int index = scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE ? i : BoardUtils.TOTAL_NUMBER_OF_TILES - 1 - i;
+            int index = scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE ?
+                    i :
+                    BoardUtils.TOTAL_NUMBER_OF_TILES - 1 - i;
             String tileText = scene.getActiveGame().getBoard().getTile(index).toString();
             builder.append(tileText).append(" ");
             if ((i + 1) % BoardUtils.NUMBER_OF_TILES_IN_ROW == 0) {
@@ -217,7 +260,9 @@ public final class ConsoleView extends GameView {
         builder.append(System.lineSeparator());
         builder.append("   ");
         for (char i = 'a'; i <= 'h'; i++) {
-            char letter = scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE ? i : (char) ('a' + 'h' - i);
+            char letter = scene.getActiveGame().getPlayerAlliance() == Alliance.WHITE ?
+                    i :
+                    (char) ('a' + 'h' - i);
             builder.append(letter).append(" ");
         }
         builder.append(System.lineSeparator());
@@ -230,10 +275,7 @@ public final class ConsoleView extends GameView {
             Move move = logEntry.getFirst();
             if (move.isAttack()) {
                 Piece takenPiece = move.getAttackedPiece();
-                if (takenPiece.getAlliance().isWhite() && !isWhite) {
-                    takenPieces.add(takenPiece);
-                }
-                else if (takenPiece.getAlliance().isBlack() && isWhite) {
+                if (takenPiece.getAlliance().isWhite() != isWhite) {
                     takenPieces.add(takenPiece);
                 }
             }

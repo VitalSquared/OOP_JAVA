@@ -75,12 +75,22 @@ public abstract class Move implements Serializable {
     }
 
     protected String disambiguationSolver() {
+        char curFile = BoardUtils.getPositionAtCoordinate(this.movedPiece.getCoordinate()).charAt(0);
+        char curRank = BoardUtils.getPositionAtCoordinate(this.movedPiece.getCoordinate()).charAt(1);
+
+        boolean anySimilarFiles = false;
+        boolean anySimilarRanks = false;
         for (Move move : this.board.getCurrentPlayer().getLegalMoves()) {
-            if (move.getDestinationCoordinate() == this.destinationCoordinate && !this.equals(move) &&
-               this.movedPiece.getType().equals(move.getMovedPiece().getType())) {
-                return BoardUtils.getPositionAtCoordinate(this.movedPiece.getCoordinate()).substring(0, 1);
+            if (move.getDestinationCoordinate() == this.destinationCoordinate && !this.equals(move) && this.movedPiece.getType().equals(move.getMovedPiece().getType())) {
+                char otherFile = BoardUtils.getPositionAtCoordinate(move.getCurrentCoordinate()).charAt(0);
+                char otherRank = BoardUtils.getPositionAtCoordinate(move.getCurrentCoordinate()).charAt(1);
+                if (curFile == otherFile) anySimilarFiles = true;
+                if (curRank == otherRank) anySimilarRanks = true;
             }
         }
+        if (anySimilarFiles && anySimilarRanks) return curFile + "" + curRank;
+        if (anySimilarFiles) return curRank + "";
+        if (anySimilarRanks) return curFile + "";
         return "";
     }
 }

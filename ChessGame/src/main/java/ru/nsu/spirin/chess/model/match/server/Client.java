@@ -11,7 +11,7 @@ import ru.nsu.spirin.chess.model.scene.SceneState;
 import ru.nsu.spirin.chess.model.match.server.message.Message;
 import ru.nsu.spirin.chess.model.match.server.message.MessageType;
 import ru.nsu.spirin.chess.model.scene.Scene;
-import ru.nsu.spirin.chess.utils.ThreadPool;
+import ru.nsu.spirin.chess.thread.ThreadPool;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -115,12 +115,12 @@ public final class Client extends MatchEntity {
     public void listenForConnections() {
         this.errors = 0;
         this.socket = null;
-        ThreadPool.submitThread(new Thread(() -> {
+        ThreadPool.INSTANCE.submitTask(new Thread(() -> {
             do {
                 try {
                     socket = new Socket(ipAddress, port);
                     setObjectOutputStream(new ObjectOutputStream(socket.getOutputStream()));
-                    ThreadPool.submitThread((new ConnectionHandler(socket)));
+                    ThreadPool.INSTANCE.submitTask((new ConnectionHandler(socket)));
                     sendMessage(MessageType.PLAYER_NAME, getPlayerName());
                 }
                 catch (IOException e) {
@@ -161,10 +161,8 @@ public final class Client extends MatchEntity {
 
     private final class ConnectionHandler implements Runnable {
         private final ObjectInputStream objectInputStream;
-        private final Socket            socket;
 
         public ConnectionHandler(Socket socket) throws IOException {
-            this.socket = socket;
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         }
 
@@ -172,20 +170,14 @@ public final class Client extends MatchEntity {
         public void run() {
             while (getBoard() == null || !BoardUtils.isEndGame(getBoard())) {
                 try {
-                    if (socket.isClosed() || !socket.isConnected()) {
-                        throw new SocketException("");
-                    }
                     Object message = objectInputStream.readObject();
                     manageMessages((Message) message);
                 }
-                catch (EOFException | SocketException e) {
-                    listenForConnections();
-                    break;
-                }
-                catch (IOException | ClassNotFoundException e) {
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+            closeConnection();
         }
 
         private void manageMessages(Message message) {

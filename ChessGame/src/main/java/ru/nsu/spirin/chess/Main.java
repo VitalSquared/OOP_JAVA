@@ -3,7 +3,7 @@ package ru.nsu.spirin.chess;
 import ru.nsu.spirin.chess.game.ChessGame;
 import ru.nsu.spirin.chess.game.GameEntity;
 import ru.nsu.spirin.chess.game.ServerGame;
-import ru.nsu.spirin.chess.utils.ThreadPool;
+import ru.nsu.spirin.chess.thread.ThreadPool;
 
 public final class Main {
     public static void main(String[] args) {
@@ -29,6 +29,6 @@ public final class Main {
             if (chessGame != null) chessGame.close();
         }
 
-        ThreadPool.shutdown();
+        ThreadPool.INSTANCE.shutdown();
     }
 }

@@ -7,43 +7,19 @@ import ru.nsu.spirin.chess.model.move.MoveFactory;
 import ru.nsu.spirin.chess.model.move.MoveTransition;
 import ru.nsu.spirin.chess.model.move.ResignMove;
 import ru.nsu.spirin.chess.model.player.Alliance;
-import ru.nsu.spirin.chess.model.player.ai.MiniMax;
-import ru.nsu.spirin.chess.model.player.ai.MoveStrategy;
+import ru.nsu.spirin.chess.model.ai.MiniMax;
+import ru.nsu.spirin.chess.model.ai.MoveStrategy;
 import ru.nsu.spirin.chess.model.match.server.ConnectionStatus;
-import ru.nsu.spirin.chess.utils.ThreadPool;
+import ru.nsu.spirin.chess.thread.ThreadPool;
 
 public final class Local extends MatchEntity {
     public Local(String playerName, Alliance playerTeam) {
         super(playerName);
         setBoard(Board.createStandardBoard());
         setPlayerAlliance(playerTeam);
-
-        ThreadPool.submitThread(new Thread(() -> {
-            while (true) {
-                boolean shouldStop = false;
-                try {
-                    while (!BoardUtils.isEndGame(getBoard())) {
-                        if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
-                            MoveStrategy miniMax = new MiniMax(4);
-                            Move aiMove = miniMax.execute(getBoard());
-                            if (aiMove == null) {
-                                aiMove = MoveFactory.createResignMove(getBoard(), getBoard().getCurrentPlayer().getAlliance());
-                            }
-                            MoveTransition transition = getBoard().getCurrentPlayer().makeMove(aiMove);
-                            if (transition.getMoveStatus().isDone() && !BoardUtils.isEndGame(getBoard())) {
-                                makeMove(aiMove, transition);
-                            }
-                        }
-                    }
-                    if (BoardUtils.isEndGame(getBoard())) {
-                        shouldStop = true;
-                    }
-                }
-                catch (Exception ignored) {
-                }
-                if (shouldStop || getBoard() == null) break;
-            }
-        }));
+        if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
+            ThreadPool.INSTANCE.submitTask(new AIMoveEvaluatorThread());
+        }
     }
 
     @Override
@@ -78,6 +54,9 @@ public final class Local extends MatchEntity {
             getMoveLog().addMove(transition.getTransitionBoard(), move);
         }
         setBoard(transition.getTransitionBoard());
+        if (getBoard().getCurrentPlayer().getAlliance() != getPlayerAlliance()) {
+            ThreadPool.INSTANCE.submitTask(new AIMoveEvaluatorThread());
+        }
     }
 
     @Override
@@ -88,5 +67,26 @@ public final class Local extends MatchEntity {
     @Override
     public void closeConnection() {
 
+    }
+
+    private final class AIMoveEvaluatorThread extends Thread {
+        @Override
+        public void run() {
+            try {
+                MoveStrategy miniMax = new MiniMax(4);
+                Move aiMove = miniMax.execute(getBoard());
+                if (aiMove == null) {
+                    aiMove = MoveFactory.createResignMove(getBoard(), getBoard().getCurrentPlayer().getAlliance());
+                }
+                MoveTransition transition = getBoard().getCurrentPlayer().makeMove(aiMove);
+                if (transition.getMoveStatus().isDone() && !BoardUtils.isEndGame(getBoard())) {
+                    makeMove(aiMove, transition);
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Error while evaluating AI move");
+                e.printStackTrace();
+            }
+        }
     }
 }

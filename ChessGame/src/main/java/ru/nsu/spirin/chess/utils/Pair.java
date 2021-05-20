@@ -1,7 +1,7 @@
 package ru.nsu.spirin.chess.utils;
 
 public final class Pair<First, Second> {
-    private final First first;
+    private final First  first;
     private final Second second;
 
     public Pair(First first, Second second) {

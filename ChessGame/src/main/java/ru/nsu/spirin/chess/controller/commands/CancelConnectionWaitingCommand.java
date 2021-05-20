@@ -16,7 +16,8 @@ public final class CancelConnectionWaitingCommand extends Command {
     public CommandStatus execute(String[] args) {
         if (getScene().getSceneState() != SceneState.CONNECTION_MENU) return CommandStatus.INVALID_MENU;
         MatchEntity matchEntity = getScene().getActiveGame();
-        if (matchEntity.connected() != ConnectionStatus.NOT_CONNECTED && matchEntity.connected() != ConnectionStatus.WAITING_FOR_PLAYER) return CommandStatus.INVALID_MENU;
+        if (matchEntity.connected() != ConnectionStatus.NOT_CONNECTED &&
+            matchEntity.connected() != ConnectionStatus.WAITING_FOR_PLAYER) return CommandStatus.INVALID_MENU;
         if (args.length != 0) return CommandStatus.WRONG_NUMBER_OF_ARGUMENTS;
         matchEntity.closeConnection();
         getScene().setSceneState(SceneState.NEW_GAME_MENU);

@@ -3,11 +3,17 @@ ru/nsu/spirin/chess/model/board/BoardBuilder.java
  ru.nsu.spirin.chess.model.board.BoardBuilder$1
 ru/nsu/spirin/chess/factory/CommandFactory.java
  ru.nsu.spirin.chess.factory.CommandFactory
+ru/nsu/spirin/chess/model/match/server/message/MessageType.java
+ ru.nsu.spirin.chess.model.match.server.message.MessageType
+ru/nsu/spirin/chess/model/match/server/message/Message.java
+ ru.nsu.spirin.chess.model.match.server.message.Message
 ru/nsu/spirin/chess/model/move/MoveStatus.java
  ru.nsu.spirin.chess.model.move.MoveStatus
  ru.nsu.spirin.chess.model.move.MoveStatus$1
  ru.nsu.spirin.chess.model.move.MoveStatus$2
  ru.nsu.spirin.chess.model.move.MoveStatus$3
+ru/nsu/spirin/chess/model/ai/StandardBoardEvaluator.java
+ ru.nsu.spirin.chess.model.ai.StandardBoardEvaluator
 ru/nsu/spirin/chess/model/move/MoveLog.java
  ru.nsu.spirin.chess.model.move.MoveLog
 ru/nsu/spirin/chess/model/player/WhitePlayer.java
@@ -24,6 +30,7 @@ ru/nsu/spirin/chess/game/GameEntity.java
  ru.nsu.spirin.chess.game.GameEntity
 ru/nsu/spirin/chess/model/match/Local.java
  ru.nsu.spirin.chess.model.match.Local
+ ru.nsu.spirin.chess.model.match.Local$AIMoveEvaluatorThread
 ru/nsu/spirin/chess/model/move/PawnJump.java
  ru.nsu.spirin.chess.model.move.PawnJump
 ru/nsu/spirin/chess/model/pieces/Pawn.java
@@ -34,8 +41,6 @@ ru/nsu/spirin/chess/factory/Factory.java
  ru.nsu.spirin.chess.factory.Factory
 ru/nsu/spirin/chess/view/swing/connection/ConnectionSetupPanel.java
  ru.nsu.spirin.chess.view.swing.connection.ConnectionSetupPanel
-ru/nsu/spirin/chess/model/server/ConnectedPlayer.java
- ru.nsu.spirin.chess.model.server.ConnectedPlayer
 ru/nsu/spirin/chess/model/move/QueenSideCastleMove.java
  ru.nsu.spirin.chess.model.move.QueenSideCastleMove
 ru/nsu/spirin/chess/view/swing/SwingView.java
@@ -45,6 +50,10 @@ ru/nsu/spirin/chess/model/board/tile/Tile.java
  ru.nsu.spirin.chess.model.board.tile.Tile
 ru/nsu/spirin/chess/controller/commands/BackCommand.java
  ru.nsu.spirin.chess.controller.commands.BackCommand
+ru/nsu/spirin/chess/model/match/server/Client.java
+ ru.nsu.spirin.chess.model.match.server.Client
+ ru.nsu.spirin.chess.model.match.server.Client$1
+ ru.nsu.spirin.chess.model.match.server.Client$ConnectionHandler
 ru/nsu/spirin/chess/view/swing/connection/ConnectionWaitPanel.java
  ru.nsu.spirin.chess.view.swing.connection.ConnectionWaitPanel
 ru/nsu/spirin/chess/game/ChessGame.java
@@ -59,14 +68,10 @@ ru/nsu/spirin/chess/view/swing/board/GameHistoryPanel.java
  ru.nsu.spirin.chess.view.swing.board.GameHistoryPanel
  ru.nsu.spirin.chess.view.swing.board.GameHistoryPanel$DataModel
  ru.nsu.spirin.chess.view.swing.board.GameHistoryPanel$Row
-ru/nsu/spirin/chess/model/player/ai/MiniMax.java
- ru.nsu.spirin.chess.model.player.ai.MiniMax
 ru/nsu/spirin/chess/model/move/ResignMove.java
  ru.nsu.spirin.chess.model.move.ResignMove
-ru/nsu/spirin/chess/model/match/Client.java
- ru.nsu.spirin.chess.model.match.Client
- ru.nsu.spirin.chess.model.match.Client$1
- ru.nsu.spirin.chess.model.match.Client$ConnectionHandler
+ru/nsu/spirin/chess/model/ai/MoveStrategy.java
+ ru.nsu.spirin.chess.model.ai.MoveStrategy
 ru/nsu/spirin/chess/model/move/NullMove.java
  ru.nsu.spirin.chess.model.move.NullMove
 ru/nsu/spirin/chess/factory/ImageFactory.java
@@ -78,6 +83,8 @@ ru/nsu/spirin/chess/game/ServerGame.java
  ru.nsu.spirin.chess.game.ServerGame
 ru/nsu/spirin/chess/controller/commands/AboutCommand.java
  ru.nsu.spirin.chess.controller.commands.AboutCommand
+ru/nsu/spirin/chess/model/match/server/ConnectedPlayer.java
+ ru.nsu.spirin.chess.model.match.server.ConnectedPlayer
 ru/nsu/spirin/chess/view/swing/board/TilePanel.java
  ru.nsu.spirin.chess.view.swing.board.TilePanel
  ru.nsu.spirin.chess.view.swing.board.TilePanel$TileMouseListener
@@ -89,6 +96,10 @@ ru/nsu/spirin/chess/controller/CommandStatus.java
  ru.nsu.spirin.chess.controller.CommandStatus
 ru/nsu/spirin/chess/view/swing/HighScoresPanel.java
  ru.nsu.spirin.chess.view.swing.HighScoresPanel
+ru/nsu/spirin/chess/factory/FactoryException.java
+ ru.nsu.spirin.chess.factory.FactoryException
+ru/nsu/spirin/chess/thread/ThreadPool.java
+ ru.nsu.spirin.chess.thread.ThreadPool
 ru/nsu/spirin/chess/controller/commands/StartCommand.java
  ru.nsu.spirin.chess.controller.commands.StartCommand
 ru/nsu/spirin/chess/controller/commands/ReadyCommand.java
@@ -115,8 +126,6 @@ ru/nsu/spirin/chess/model/scene/Scene.java
  ru.nsu.spirin.chess.model.scene.Scene
 ru/nsu/spirin/chess/controller/commands/NewGameCommand.java
  ru.nsu.spirin.chess.controller.commands.NewGameCommand
-ru/nsu/spirin/chess/model/server/message/Message.java
- ru.nsu.spirin.chess.model.server.message.Message
 ru/nsu/spirin/chess/controller/commands/TeamSelectionCommand.java
  ru.nsu.spirin.chess.controller.commands.TeamSelectionCommand
 ru/nsu/spirin/chess/controller/Command.java
@@ -129,12 +138,13 @@ ru/nsu/spirin/chess/model/move/CastleMove.java
  ru.nsu.spirin.chess.model.move.CastleMove
 ru/nsu/spirin/chess/model/player/Player.java
  ru.nsu.spirin.chess.model.player.Player
-ru/nsu/spirin/chess/model/player/ai/MoveStrategy.java
- ru.nsu.spirin.chess.model.player.ai.MoveStrategy
 ru/nsu/spirin/chess/utils/ScoresFile.java
  ru.nsu.spirin.chess.utils.ScoresFile
-ru/nsu/spirin/chess/model/player/ai/StandardBoardEvaluator.java
- ru.nsu.spirin.chess.model.player.ai.StandardBoardEvaluator
+ru/nsu/spirin/chess/model/match/server/ServerMatch.java
+ ru.nsu.spirin.chess.model.match.server.ServerMatch
+ ru.nsu.spirin.chess.model.match.server.ServerMatch$PlayerThread
+ru/nsu/spirin/chess/model/match/server/ConnectionStatus.java
+ ru.nsu.spirin.chess.model.match.server.ConnectionStatus
 ru/nsu/spirin/chess/Main.java
  ru.nsu.spirin.chess.Main
 ru/nsu/spirin/chess/model/move/Move.java
@@ -145,8 +155,6 @@ ru/nsu/spirin/chess/view/GameView.java
  ru.nsu.spirin.chess.view.GameView
 ru/nsu/spirin/chess/model/move/PawnMove.java
  ru.nsu.spirin.chess.model.move.PawnMove
-ru/nsu/spirin/chess/model/player/ai/BoardEvaluator.java
- ru.nsu.spirin.chess.model.player.ai.BoardEvaluator
 ru/nsu/spirin/chess/controller/commands/CancelConnectionWaitingCommand.java
  ru.nsu.spirin.chess.controller.commands.CancelConnectionWaitingCommand
 ru/nsu/spirin/chess/controller/commands/JoinCommand.java
@@ -159,6 +167,8 @@ ru/nsu/spirin/chess/model/pieces/PieceType.java
  ru.nsu.spirin.chess.model.pieces.PieceType$4
  ru.nsu.spirin.chess.model.pieces.PieceType$5
  ru.nsu.spirin.chess.model.pieces.PieceType$6
+ru/nsu/spirin/chess/thread/BlockingQueue.java
+ ru.nsu.spirin.chess.thread.BlockingQueue
 ru/nsu/spirin/chess/model/pieces/Rook.java
  ru.nsu.spirin.chess.model.pieces.Rook
 ru/nsu/spirin/chess/model/move/PawnEnPassantAttackMove.java
@@ -181,27 +191,21 @@ ru/nsu/spirin/chess/model/move/MoveFactory.java
  ru.nsu.spirin.chess.model.move.MoveFactory
 ru/nsu/spirin/chess/controller/commands/NullCommand.java
  ru.nsu.spirin.chess.controller.commands.NullCommand
-ru/nsu/spirin/chess/utils/ThreadPool.java
- ru.nsu.spirin.chess.utils.ThreadPool
-ru/nsu/spirin/chess/model/server/message/MessageType.java
- ru.nsu.spirin.chess.model.server.message.MessageType
 ru/nsu/spirin/chess/controller/commands/ExitCommand.java
  ru.nsu.spirin.chess.controller.commands.ExitCommand
-ru/nsu/spirin/chess/model/server/ConnectionStatus.java
- ru.nsu.spirin.chess.model.server.ConnectionStatus
+ru/nsu/spirin/chess/thread/TaskExecutor.java
+ ru.nsu.spirin.chess.thread.TaskExecutor
 ru/nsu/spirin/chess/model/pieces/King.java
  ru.nsu.spirin.chess.model.pieces.King
 ru/nsu/spirin/chess/view/swing/board/BoardPanel.java
  ru.nsu.spirin.chess.view.swing.board.BoardPanel
-ru/nsu/spirin/chess/model/server/ServerMatch.java
- ru.nsu.spirin.chess.model.server.ServerMatch
- ru.nsu.spirin.chess.model.server.ServerMatch$PlayerThread
+ ru.nsu.spirin.chess.view.swing.board.BoardPanel$UpdateFunction
 ru/nsu/spirin/chess/view/swing/board/TileCaptionPanel.java
  ru.nsu.spirin.chess.view.swing.board.TileCaptionPanel
+ru/nsu/spirin/chess/model/ai/MiniMax.java
+ ru.nsu.spirin.chess.model.ai.MiniMax
 ru/nsu/spirin/chess/model/move/KingSideCastleMove.java
  ru.nsu.spirin.chess.model.move.KingSideCastleMove
-ru/nsu/spirin/chess/exceptions/FactoryException.java
- ru.nsu.spirin.chess.exceptions.FactoryException
 ru/nsu/spirin/chess/model/board/tile/OccupiedTile.java
  ru.nsu.spirin.chess.model.board.tile.OccupiedTile
 ru/nsu/spirin/chess/utils/Pair.java
@@ -215,6 +219,8 @@ ru/nsu/spirin/chess/model/board/tile/EmptyTile.java
  ru.nsu.spirin.chess.model.board.tile.EmptyTile
 ru/nsu/spirin/chess/view/swing/PlayerTeamPanel.java
  ru.nsu.spirin.chess.view.swing.PlayerTeamPanel
+ru/nsu/spirin/chess/model/ai/BoardEvaluator.java
+ ru.nsu.spirin.chess.model.ai.BoardEvaluator
 ru/nsu/spirin/chess/model/player/BlackPlayer.java
  ru.nsu.spirin.chess.model.player.BlackPlayer
 ru/nsu/spirin/chess/view/swing/connection/ConnectionFailedPanel.java

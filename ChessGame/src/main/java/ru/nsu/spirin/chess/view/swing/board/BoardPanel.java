@@ -87,47 +87,17 @@ public class BoardPanel extends JPanel {
     }
 
     public void updatePanel() {
-        boolean exception = false;
-        try {
-            drawBoard();
-        }
-        catch (Exception e) {
-            exception = true;
-        }
-
-        try {
-            gameResultsPanel.updatePanel();
-        }
-        catch (Exception e) {
-            exception = true;
-        }
-
-        try {
-            gameHistoryPanel.updatePanel(scene.getActiveGame().getMoveLog());
-        }
-        catch (Exception e) {
-            exception = true;
-        }
-
-        try {
+        updateHandleExceptions(this::drawBoard);
+        updateHandleExceptions(gameResultsPanel::updatePanel);
+        updateHandleExceptions(() -> gameHistoryPanel.updatePanel(scene.getActiveGame().getMoveLog()));
+        updateHandleExceptions(() -> {
             topPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isBlack());
             topPlayerInfo.updatePanel(scene, scene.getActiveGame().getOpponentName(), scene.getActiveGame().getMoveLog());
-        }
-        catch (Exception e) {
-            exception = true;
-        }
-
-        try {
+        });
+        updateHandleExceptions(() -> {
             bottomPlayerInfo.setIsWhite(scene.getActiveGame().getPlayerAlliance().isWhite());
             bottomPlayerInfo.updatePanel(scene, scene.getActiveGame().getPlayerName(), scene.getActiveGame().getMoveLog());
-        }
-        catch (Exception e) {
-            exception = true;
-        }
-
-        if (exception && !BoardUtils.isEndGame(scene.getActiveGame().getBoard())) {
-            updatePanel();
-        }
+        });
     }
 
     private void drawBoard() {
@@ -163,5 +133,23 @@ public class BoardPanel extends JPanel {
 
     public Piece getHumanMovedPiece() {
         return this.humanMovedPiece;
+    }
+
+    private void updateHandleExceptions(UpdateFunction func) {
+        boolean exception;
+        do {
+            try {
+                func.run();
+                exception = false;
+            }
+            catch (Exception e) {
+                exception = true;
+            }
+        }
+        while (exception);
+    }
+
+    private interface UpdateFunction {
+        void run();
     }
 }

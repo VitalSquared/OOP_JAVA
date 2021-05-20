@@ -2,7 +2,7 @@ package ru.nsu.spirin.chess.game;
 
 import ru.nsu.spirin.chess.model.match.server.ServerMatch;
 import ru.nsu.spirin.chess.model.match.server.ConnectedPlayer;
-import ru.nsu.spirin.chess.utils.ThreadPool;
+import ru.nsu.spirin.chess.thread.ThreadPool;
 
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -43,7 +43,7 @@ public final class ServerGame implements GameEntity {
         this.connectedPlayerList = new ArrayList<>();
         this.serverMatchList = new ArrayList<>();
 
-        ThreadPool.submitThread(new Thread(() -> {
+        ThreadPool.INSTANCE.submitTask(new Thread(() -> {
             while (isWorking) {
                 try {
                     Socket socket = serverSocket.accept();
@@ -58,7 +58,7 @@ public final class ServerGame implements GameEntity {
             }
         }));
 
-        ThreadPool.submitThread(new Thread(() -> {
+        ThreadPool.INSTANCE.submitTask(new Thread(() -> {
             while (isWorking) {
                 try {
                     if (connectedPlayerList.size() >= 2) {

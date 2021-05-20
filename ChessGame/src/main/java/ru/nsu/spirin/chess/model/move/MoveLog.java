@@ -19,8 +19,8 @@ public final class MoveLog {
 
     public void addMove(Board board, Move move) {
         String moveString = move.toString();
-        if (board.getCurrentPlayer().isInCheck()) moveString += "+";
-        else if (board.getCurrentPlayer().isInCheckMate())  moveString += "#";
+        if (board.getCurrentPlayer().isInCheckMate()) moveString += "#";
+        else if (board.getCurrentPlayer().isInCheck()) moveString += "+";
         this.moves.add(new Pair<>(move, moveString));
     }
 

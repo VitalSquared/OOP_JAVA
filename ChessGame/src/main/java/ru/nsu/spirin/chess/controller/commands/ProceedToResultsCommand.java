@@ -18,14 +18,13 @@ public final class ProceedToResultsCommand extends Command {
 
         calculateScore();
         getScene().setSceneState(SceneState.RESULTS_MENU);
-        getScene().getActiveGame().closeConnection();
         return CommandStatus.NORMAL;
     }
 
     private void calculateScore() {
         Player player = getScene().getActiveGame().getPlayerAlliance().choosePlayer(getScene().getActiveGame().getBoard().getWhitePlayer(), getScene().getActiveGame().getBoard().getBlackPlayer());
-        if (getScene().getActiveGame().getBoard().getWhitePlayer().isInStaleMate() || getScene().getActiveGame().getBoard().getBlackPlayer().isInStaleMate()) {
-            getScene().getActiveGame().addScoreText("DRAW", 500);
+        if (getScene().getActiveGame().getBoard().getCurrentPlayer().isInStaleMate()) {
+            getScene().getActiveGame().addScoreText("Draw", 500);
         }
         else if (player.isInCheckMate() || player.isResigned()) {
             getScene().getActiveGame().addScoreText("Lost", -500);

@@ -110,11 +110,11 @@ public final class Board implements Serializable {
     }
 
     public Player getWhitePlayer() {
-        return whitePlayer;
+        return this.whitePlayer;
     }
 
     public Player getBlackPlayer() {
-        return blackPlayer;
+        return this.blackPlayer;
     }
 
     public Player getCurrentPlayer() {

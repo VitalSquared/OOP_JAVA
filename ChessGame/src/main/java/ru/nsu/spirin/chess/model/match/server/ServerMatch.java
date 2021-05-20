@@ -4,15 +4,15 @@ import ru.nsu.spirin.chess.model.board.BoardUtils;
 import ru.nsu.spirin.chess.model.match.server.message.Message;
 import ru.nsu.spirin.chess.model.match.server.message.MessageType;
 import ru.nsu.spirin.chess.model.move.MoveTransition;
-import ru.nsu.spirin.chess.utils.ThreadPool;
+import ru.nsu.spirin.chess.thread.ThreadPool;
 
 public final class ServerMatch {
     private boolean isMatchOver;
 
     public ServerMatch(ConnectedPlayer player1, ConnectedPlayer player2) {
         this.isMatchOver = false;
-        ThreadPool.submitThread(new PlayerThread(player1, player2));
-        ThreadPool.submitThread(new PlayerThread(player2, player1));
+        ThreadPool.INSTANCE.submitTask(new PlayerThread(player1, player2));
+        ThreadPool.INSTANCE.submitTask(new PlayerThread(player2, player1));
     }
 
     public boolean isMatchOver() {

@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class PlayerInfoPanel extends JPanel {
-    private final JLabel  playerNameLabel;
-    private final JPanel  playerTakenPieces;
-    private       boolean isWhite;
+    private final JLabel      playerNameLabel;
+    private final List<JLabel> playerTakenPieces;
+    private       boolean     isWhite;
 
     private final Factory<BufferedImage> imageFactory;
 
@@ -40,14 +40,23 @@ public final class PlayerInfoPanel extends JPanel {
         setBackground(PANEL_COLOR);
         setBorder(PANEL_BORDER);
         JPanel playerNamePanel = new JPanel(new GridLayout(1, 1));
-        this.playerTakenPieces = new JPanel(new GridLayout(1, 16));
-        this.playerTakenPieces.setDoubleBuffered(false);
+
+        JPanel playerTakenPieces = new JPanel(new GridLayout(1, 15));
+        playerTakenPieces.setDoubleBuffered(false);
+
+        this.playerTakenPieces = new ArrayList<>();
+        for (int i = 0; i < 15; i++) {
+            JLabel label = new JLabel("");
+            this.playerTakenPieces.add(0, label);
+            playerTakenPieces.add(label);
+        }
+
         this.playerNameLabel = new JLabel("");
         playerNamePanel.setBackground(PANEL_COLOR);
-        this.playerTakenPieces.setBackground(PANEL_COLOR);
+        playerTakenPieces.setBackground(PANEL_COLOR);
         playerNamePanel.add(this.playerNameLabel, BorderLayout.WEST);
         add(playerNamePanel, BorderLayout.WEST);
-        add(this.playerTakenPieces, BorderLayout.EAST);
+        add(playerTakenPieces, BorderLayout.EAST);
         this.isWhite = true;
         setPreferredSize(TAKEN_PIECES_DIMENSION);
     }
@@ -58,8 +67,10 @@ public final class PlayerInfoPanel extends JPanel {
 
     public void updatePanel(Scene scene, String playerName, MoveLog moveLog) {
         this.playerNameLabel.setText(playerName);
-        this.playerNameLabel.setForeground(scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance().isWhite() == isWhite ? Color.RED : Color.BLACK);
-        this.playerTakenPieces.removeAll();
+        this.playerNameLabel.setForeground(
+                scene.getActiveGame().getBoard().getCurrentPlayer().getAlliance().isWhite() == isWhite ?
+                        Color.RED :
+                        Color.BLACK);
 
         List<Piece> takenPieces = new ArrayList<>();
 
@@ -67,10 +78,7 @@ public final class PlayerInfoPanel extends JPanel {
             Move move = logEntry.getFirst();
             if (move.isAttack()) {
                 Piece takenPiece = move.getAttackedPiece();
-                if (takenPiece.getAlliance().isWhite() && !isWhite) {
-                    takenPieces.add(takenPiece);
-                }
-                else if (takenPiece.getAlliance().isBlack() && isWhite) {
+                if (takenPiece.getAlliance().isWhite() != isWhite) {
                     takenPieces.add(takenPiece);
                 }
             }
@@ -78,12 +86,13 @@ public final class PlayerInfoPanel extends JPanel {
 
         takenPieces.sort((o1, o2) -> Ints.compare(o1.getType().getPieceValue(), o2.getType().getPieceValue()));
 
+        int idx = 0;
         for (Piece takenPiece : takenPieces) {
-            BufferedImage image = imageFactory.get(
-                    takenPiece.getAlliance().toString().charAt(0) + takenPiece.toString());
-            ImageIcon icon = new ImageIcon(image);
-            JLabel imageLabel = new JLabel(icon);
-            this.playerTakenPieces.add(imageLabel);
+            BufferedImage image = imageFactory.get(takenPiece.getAlliance().toString().charAt(0) + takenPiece.toString());
+            this.playerTakenPieces.get(idx++).setIcon(new ImageIcon(image));
+        }
+        for (int i = idx; i < 15; i++) {
+            this.playerTakenPieces.get(i).setIcon(null);
         }
 
         validate();
