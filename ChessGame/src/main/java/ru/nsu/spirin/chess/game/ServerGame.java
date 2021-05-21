@@ -75,16 +75,13 @@ public final class ServerGame implements GameEntity {
                         connectedPlayerList.get(0).writeData(MessageType.PLAYER_FOUND, true);
                         connectedPlayerList.get(1).writeData(MessageType.PLAYER_FOUND, true);
                         ServerMatch serverMatch = new ServerMatch(connectedPlayerList.get(0), connectedPlayerList.get(1));
+                        System.out.printf("Created match between '%s' and '%s'\n", connectedPlayerList.get(0).getPlayerName(), connectedPlayerList.get(1).getPlayerName());
                         connectedPlayerList.remove(0);
                         connectedPlayerList.remove(0);
                         serverMatchList.add(serverMatch);
                     }
                     for (var match : serverMatchList) {
-                        if (match.isMatchOver()) {
-                            serverMatchList.remove(match);
-                            break;
-                        }
-                        if (match.needAnotherPlayer()) {
+                        if (match.isMatchOver() || match.needAnotherPlayer()) {
                             ConnectedPlayer player1 = match.getPlayer1();
                             if (player1.getSocket() != null && !player1.getSocket().isClosed() && player1.getSocket().isConnected()) {
                                 connectedPlayerList.add(player1);
@@ -104,6 +101,9 @@ public final class ServerGame implements GameEntity {
                                 System.out.println("Player " + player2.getPlayerName() + " disconnected");
                             }
                             serverMatchList.remove(match);
+                            if (match.isMatchOver()) {
+                                System.out.printf("Match finished between '%s' and '%s'\n", player1.getPlayerName(), player2.getPlayerName());
+                            }
                             break;
                         }
                     }

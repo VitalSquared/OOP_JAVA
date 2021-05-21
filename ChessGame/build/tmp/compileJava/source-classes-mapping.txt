@@ -81,6 +81,7 @@ ru/nsu/spirin/chess/view/ConsoleView.java
  ru.nsu.spirin.chess.view.ConsoleView$1
 ru/nsu/spirin/chess/game/ServerGame.java
  ru.nsu.spirin.chess.game.ServerGame
+ ru.nsu.spirin.chess.game.ServerGame$PlayerThread
 ru/nsu/spirin/chess/controller/commands/AboutCommand.java
  ru.nsu.spirin.chess.controller.commands.AboutCommand
 ru/nsu/spirin/chess/model/match/server/ConnectedPlayer.java

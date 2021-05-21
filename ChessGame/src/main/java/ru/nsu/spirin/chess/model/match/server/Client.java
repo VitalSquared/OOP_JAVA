@@ -101,10 +101,13 @@ public final class Client extends MatchEntity {
     @Override
     public void closeConnection(boolean notify) {
         try {
-            if (notify) sendMessage(MessageType.PLAYER_FOUND, false);
-            sendMessage(MessageType.CANCEL_WAITING, null);
-            if (this.socket != null) this.socket.close();
-            this.socket = null;
+            if (this.socket != null) {
+                if (notify) sendMessage(MessageType.PLAYER_FOUND, false);
+                if (getBoard() == null) sendMessage(MessageType.CANCEL_WAITING, null);
+
+                this.socket.close();
+                this.socket = null;
+            }
             this.closed = true;
         }
         catch (IOException e) {
@@ -205,7 +208,7 @@ public final class Client extends MatchEntity {
 
         @Override
         public void run() {
-            while (getBoard() == null || !BoardUtils.isEndGame(getBoard())) {
+            while (socket != null && (getBoard() == null || !BoardUtils.isEndGame(getBoard()))) {
                 try {
                     Object message = objectInputStream.readObject();
                     manageMessages((Message) message);

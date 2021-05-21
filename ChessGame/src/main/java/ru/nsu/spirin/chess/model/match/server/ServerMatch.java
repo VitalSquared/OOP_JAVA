@@ -14,7 +14,7 @@ import ru.nsu.spirin.chess.model.player.Player;
 import ru.nsu.spirin.chess.thread.ThreadPool;
 
 public final class ServerMatch {
-    private          boolean isMatchOver;
+    private volatile boolean isMatchOver;
     private          boolean needAnotherPlayer;
     private volatile Board   board;
     private final    MoveLog moveLog;
@@ -114,8 +114,11 @@ public final class ServerMatch {
                                 if (!(move instanceof ResignMove)) moveLog.addMove(board, move);
                                 connectedPlayer.writeData(MessageType.NEW_BOARD, new Object[] { board, new MoveLog(moveLog) });
                                 otherPlayer.writeData(MessageType.NEW_BOARD, new Object[] { board, new MoveLog(moveLog) });
-                                if (BoardUtils.isEndGame(transition.getTransitionBoard())) {
+                                if (BoardUtils.isEndGame(board)) {
                                     isMatchOver = true;
+                                    connectedPlayer.getSocket().close();
+                                    otherPlayer.getSocket().close();
+                                    return;
                                 }
                                 continue;
                             }
