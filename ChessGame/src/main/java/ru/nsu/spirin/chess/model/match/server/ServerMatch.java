@@ -15,7 +15,7 @@ import ru.nsu.spirin.chess.thread.ThreadPool;
 
 public final class ServerMatch {
     private volatile boolean isMatchOver;
-    private          boolean needAnotherPlayer;
+    private volatile boolean needAnotherPlayer;
     private volatile Board   board;
     private final    MoveLog moveLog;
 

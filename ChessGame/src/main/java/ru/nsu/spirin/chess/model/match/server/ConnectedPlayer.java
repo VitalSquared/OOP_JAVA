@@ -15,7 +15,7 @@ public final class ConnectedPlayer {
     private final ObjectOutputStream objectOutputStream;
     private String playerName;
     private Alliance playerAlliance;
-    private boolean isReady;
+    private volatile boolean isReady;
     private volatile boolean foundOpponent;
 
     public ConnectedPlayer(Socket socket) throws IOException, ClassNotFoundException {

@@ -81,7 +81,16 @@ public final class ServerGame implements GameEntity {
                         serverMatchList.add(serverMatch);
                     }
                     for (var match : serverMatchList) {
-                        if (match.isMatchOver() || match.needAnotherPlayer()) {
+                        if (match.isMatchOver()){
+                            ConnectedPlayer player1 = match.getPlayer1();
+                            ConnectedPlayer player2 = match.getPlayer2();
+                            System.out.printf("Match finished between '%s' and '%s'\n", player1.getPlayerName(), player2.getPlayerName());
+                            System.out.println("Player " + player1.getPlayerName() + " disconnected");
+                            System.out.println("Player " + player2.getPlayerName() + " disconnected");
+                            serverMatchList.remove(match);
+                            break;
+                        }
+                        else if (match.needAnotherPlayer()) {
                             ConnectedPlayer player1 = match.getPlayer1();
                             if (player1.getSocket() != null && !player1.getSocket().isClosed() && player1.getSocket().isConnected()) {
                                 connectedPlayerList.add(player1);
@@ -101,9 +110,6 @@ public final class ServerGame implements GameEntity {
                                 System.out.println("Player " + player2.getPlayerName() + " disconnected");
                             }
                             serverMatchList.remove(match);
-                            if (match.isMatchOver()) {
-                                System.out.printf("Match finished between '%s' and '%s'\n", player1.getPlayerName(), player2.getPlayerName());
-                            }
                             break;
                         }
                     }
@@ -158,7 +164,7 @@ public final class ServerGame implements GameEntity {
                     }
                 }
                 catch (Exception e) {
-                    System.out.println("Error in server match: " + e.getLocalizedMessage());
+                    System.out.println("Error in server lobby: " + e.getLocalizedMessage());
                 }
             }
         }
