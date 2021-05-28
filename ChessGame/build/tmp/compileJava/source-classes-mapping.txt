@@ -147,8 +147,8 @@ ru/nsu/spirin/chess/model/match/server/ServerMatch.java
  ru.nsu.spirin.chess.model.match.server.ServerMatch$PlayerThread
 ru/nsu/spirin/chess/model/match/server/ConnectionStatus.java
  ru.nsu.spirin.chess.model.match.server.ConnectionStatus
-ru/nsu/spirin/chess/Main.java
- ru.nsu.spirin.chess.Main
+ru/nsu/spirin/chess/view/swing/connection/ConnectionFailedPanel.java
+ ru.nsu.spirin.chess.view.swing.connection.ConnectionFailedPanel
 ru/nsu/spirin/chess/model/move/Move.java
  ru.nsu.spirin.chess.model.move.Move
 ru/nsu/spirin/chess/controller/commands/DisconnectCommand.java
@@ -225,5 +225,5 @@ ru/nsu/spirin/chess/model/ai/BoardEvaluator.java
  ru.nsu.spirin.chess.model.ai.BoardEvaluator
 ru/nsu/spirin/chess/model/player/BlackPlayer.java
  ru.nsu.spirin.chess.model.player.BlackPlayer
-ru/nsu/spirin/chess/view/swing/connection/ConnectionFailedPanel.java
- ru.nsu.spirin.chess.view.swing.connection.ConnectionFailedPanel
+ru/nsu/spirin/chess/Main.java
+ ru.nsu.spirin.chess.Main
