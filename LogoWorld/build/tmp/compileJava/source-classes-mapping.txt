@@ -13,26 +13,24 @@ ru/nsu/spirin/logoworld/math/Direction.java
  ru.nsu.spirin.logoworld.math.Direction$1
 ru/nsu/spirin/logoworld/input/ProgramInput.java
  ru.nsu.spirin.logoworld.input.ProgramInput
-ru/nsu/spirin/logoworld/exceptions/RenderException.java
- ru.nsu.spirin.logoworld.exceptions.RenderException
-ru/nsu/spirin/logoworld/Main.java
- ru.nsu.spirin.logoworld.Main
+ru/nsu/spirin/logoworld/commands/IfJmpCommand.java
+ ru.nsu.spirin.logoworld.commands.IfJmpCommand
+ru/nsu/spirin/logoworld/logic/World.java
+ ru.nsu.spirin.logoworld.logic.World
 ru/nsu/spirin/logoworld/drawing/Texture.java
  ru.nsu.spirin.logoworld.drawing.Texture
 ru/nsu/spirin/logoworld/math/Pair.java
  ru.nsu.spirin.logoworld.math.Pair
-ru/nsu/spirin/logoworld/input/Input.java
- ru.nsu.spirin.logoworld.input.Input
-ru/nsu/spirin/logoworld/exceptions/CommandFactoryException.java
- ru.nsu.spirin.logoworld.exceptions.CommandFactoryException
-ru/nsu/spirin/logoworld/commands/CommandError.java
- ru.nsu.spirin.logoworld.commands.CommandError
 ru/nsu/spirin/logoworld/drawing/ConsoleView.java
  ru.nsu.spirin.logoworld.drawing.ConsoleView
 ru/nsu/spirin/logoworld/commands/InitCommand.java
  ru.nsu.spirin.logoworld.commands.InitCommand
+ru/nsu/spirin/logoworld/commands/CommandError.java
+ ru.nsu.spirin.logoworld.commands.CommandError
 ru/nsu/spirin/logoworld/commands/DrawCommand.java
  ru.nsu.spirin.logoworld.commands.DrawCommand
+ru/nsu/spirin/logoworld/exceptions/RenderException.java
+ ru.nsu.spirin.logoworld.exceptions.RenderException
 ru/nsu/spirin/logoworld/commands/TeleportCommand.java
  ru.nsu.spirin.logoworld.commands.TeleportCommand
 ru/nsu/spirin/logoworld/drawing/SwingView.java
@@ -45,13 +43,15 @@ ru/nsu/spirin/logoworld/LogoWorld.java
  ru.nsu.spirin.logoworld.LogoWorld
 ru/nsu/spirin/logoworld/commands/MoveCommand.java
  ru.nsu.spirin.logoworld.commands.MoveCommand
+ru/nsu/spirin/logoworld/exceptions/CommandFactoryException.java
+ ru.nsu.spirin.logoworld.exceptions.CommandFactoryException
 ru/nsu/spirin/logoworld/commands/CommandFactory.java
  ru.nsu.spirin.logoworld.commands.CommandFactory
 ru/nsu/spirin/logoworld/logic/Interpreter.java
  ru.nsu.spirin.logoworld.logic.Interpreter
+ru/nsu/spirin/logoworld/Main.java
+ ru.nsu.spirin.logoworld.Main
 ru/nsu/spirin/logoworld/logic/Turtle.java
  ru.nsu.spirin.logoworld.logic.Turtle
-ru/nsu/spirin/logoworld/commands/IfJmpCommand.java
- ru.nsu.spirin.logoworld.commands.IfJmpCommand
-ru/nsu/spirin/logoworld/logic/World.java
- ru.nsu.spirin.logoworld.logic.World
+ru/nsu/spirin/logoworld/input/Input.java
+ ru.nsu.spirin.logoworld.input.Input

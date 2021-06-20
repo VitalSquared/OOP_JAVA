@@ -1,12 +1,12 @@
-ru/nsu/spirin/logoworld/commands/DrawCommandTest.java
- ru.nsu.spirin.logoworld.commands.DrawCommandTest
-ru/nsu/spirin/logoworld/commands/WardCommandTest.java
- ru.nsu.spirin.logoworld.commands.WardCommandTest
-ru/nsu/spirin/logoworld/commands/TeleportCommandTest.java
- ru.nsu.spirin.logoworld.commands.TeleportCommandTest
+ru/nsu/spirin/logoworld/commands/MoveCommandTest.java
+ ru.nsu.spirin.logoworld.commands.MoveCommandTest
 ru/nsu/spirin/logoworld/commands/IfJmpCommandTest.java
  ru.nsu.spirin.logoworld.commands.IfJmpCommandTest
 ru/nsu/spirin/logoworld/commands/InitCommandTest.java
  ru.nsu.spirin.logoworld.commands.InitCommandTest
-ru/nsu/spirin/logoworld/commands/MoveCommandTest.java
- ru.nsu.spirin.logoworld.commands.MoveCommandTest
+ru/nsu/spirin/logoworld/commands/DrawCommandTest.java
+ ru.nsu.spirin.logoworld.commands.DrawCommandTest
+ru/nsu/spirin/logoworld/commands/TeleportCommandTest.java
+ ru.nsu.spirin.logoworld.commands.TeleportCommandTest
+ru/nsu/spirin/logoworld/commands/WardCommandTest.java
+ ru.nsu.spirin.logoworld.commands.WardCommandTest
