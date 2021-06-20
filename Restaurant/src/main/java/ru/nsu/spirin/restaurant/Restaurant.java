@@ -12,7 +12,14 @@ public class Restaurant {
     }
 
     public void startWorking() {
+        System.out.println("Restaurant started work.");
         waiter.start();
+        try {
+            Thread.sleep(1000);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         chef.start();
 
         try {
@@ -22,5 +29,6 @@ public class Restaurant {
         catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("Restaurant finished work.");
     }
 }

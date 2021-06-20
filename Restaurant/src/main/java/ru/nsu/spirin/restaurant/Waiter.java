@@ -17,13 +17,13 @@ public class Waiter extends Thread {
             e.printStackTrace();
         }
         numOfMealsLeft--;
-        System.out.println("Meal served");
+        System.out.println("Meal served.");
     }
 
     @Override
     public void run() {
-        while (numOfMealsLeft > 0) {
-            synchronized (restaurant.activeMeal) {
+        synchronized (restaurant.activeMeal) {
+            while (numOfMealsLeft > 0) {
                 try {
                     restaurant.activeMeal.wait();
                 }

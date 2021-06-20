@@ -1,9 +1,9 @@
 ru/nsu/spirin/restaurant/Meal.java
  ru.nsu.spirin.restaurant.Meal
-ru/nsu/spirin/restaurant/Main.java
- ru.nsu.spirin.restaurant.Main
 ru/nsu/spirin/restaurant/Restaurant.java
  ru.nsu.spirin.restaurant.Restaurant
+ru/nsu/spirin/restaurant/Main.java
+ ru.nsu.spirin.restaurant.Main
 ru/nsu/spirin/restaurant/Waiter.java
  ru.nsu.spirin.restaurant.Waiter
 ru/nsu/spirin/restaurant/Chef.java

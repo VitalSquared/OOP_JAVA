@@ -17,13 +17,13 @@ public class Chef extends Thread {
             e.printStackTrace();
         }
         numOfMealsLeft--;
-        System.out.println("Meal cooked");
+        System.out.println("Meal cooked. " + numOfMealsLeft + " meals left");
     }
 
     @Override
     public void run() {
-        while (numOfMealsLeft > 0) {
-            synchronized (restaurant.activeMeal) {
+        synchronized (restaurant.activeMeal) {
+            while (numOfMealsLeft > 0) {
                 cookMeal();
                 restaurant.activeMeal.notify();
                 try {
